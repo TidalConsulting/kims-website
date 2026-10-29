@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
+import { postJson } from "@/lib/client";
 import { DELIVERY_FEE, FREE_DELIVERY, VAT_RATE } from "@/lib/data";
 import { money, pickupTimes, vatIncluded } from "@/lib/utils";
 import { cartSubtotal, useShop } from "@/store/shop";
@@ -34,21 +35,15 @@ export default function Checkout() {
     setBusy(true);
     setFailed(false);
     try {
-      const res = await fetch("/api/order", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          mode,
-          name: val("name"),
-          phone: val("phone"),
-          addr: val("addr"),
-          time: val("time"),
-          notes: val("notes"),
-          items: cart.map(({ pid, name, opts, qty, price }) => ({ pid, name, opts, qty, price })),
-        }),
+      const { orderNo } = await postJson<{ orderNo: string }>("/api/order", {
+        mode,
+        name: val("name"),
+        phone: val("phone"),
+        addr: val("addr"),
+        time: val("time"),
+        notes: val("notes"),
+        items: cart.map(({ pid, name, opts, qty, price }) => ({ pid, name, opts, qty, price })),
       });
-      if (!res.ok) throw new Error(await res.text());
-      const { orderNo } = await res.json();
       setDone({ no: orderNo, name: val("name").split(" ")[0], when: val("time"), mode });
       clearCart();
     } catch {

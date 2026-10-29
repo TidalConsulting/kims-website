@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
+import { postJson } from "@/lib/client";
 import { useShop } from "@/store/shop";
 
 export default function Newsletter() {
@@ -13,12 +14,7 @@ export default function Newsletter() {
     const email = String(new FormData(form).get("email") ?? "");
     setBusy(true);
     try {
-      const res = await fetch("/api/newsletter", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
-      });
-      if (!res.ok) throw new Error();
+      await postJson("/api/newsletter", { email });
       showToast("You're in! Check your inbox for a sweet welcome 🍪");
       form.reset();
     } catch {

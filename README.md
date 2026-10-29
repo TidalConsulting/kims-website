@@ -9,6 +9,8 @@ npm run build      # production build
 npm run lint && npm run typecheck
 ```
 
+To make a shareable one-file preview (no server needed; checkout and forms are simulated), run `npm run build:preview`. It writes `preview/index.html`.
+
 Copy `.env.example` to `.env.local` and set `NEXT_PUBLIC_SITE_URL`. The sitemap, OG tags and JSON-LD use it.
 
 ## Where things live

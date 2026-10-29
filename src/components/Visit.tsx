@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
+import { postJson, STATIC_PREVIEW } from "@/lib/client";
 import { BUSINESS, HOURS } from "@/lib/data";
 import { fmtHour, shopNow } from "@/lib/utils";
 import { useShop } from "@/store/shop";
@@ -24,12 +25,7 @@ export default function Visit() {
     }
     setBusy(true);
     try {
-      const res = await fetch("/api/contact", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      });
-      if (!res.ok) throw new Error();
+      await postJson("/api/contact", data);
       showToast(`Thanks ${data.name.trim().split(" ")[0]}! We'll reply within a day.`);
       form.reset();
     } catch {
@@ -64,13 +60,15 @@ export default function Visit() {
               📍 <a href={`https://maps.google.com/?q=${encodeURIComponent(ADDRESS)}`} className="underline-offset-2 hover:underline">{BUSINESS.street}, {BUSINESS.city}</a>
               {" · "}📞 <a href={`tel:${BUSINESS.phone.replace(/[^\d+]/g, "")}`} className="underline-offset-2 hover:underline">{BUSINESS.phone}</a>
             </p>
-            <iframe
-              className="map"
-              title={`Map to ${BUSINESS.name}`}
-              src={`https://maps.google.com/maps?q=${encodeURIComponent(ADDRESS)}&output=embed`}
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-            />
+            {!STATIC_PREVIEW && (
+              <iframe
+                className="map"
+                title={`Map to ${BUSINESS.name}`}
+                src={`https://maps.google.com/maps?q=${encodeURIComponent(ADDRESS)}&output=embed`}
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+              />
+            )}
           </Reveal>
           <Reveal as="form" className="form" onSubmit={submit} noValidate aria-label="Reservation and catering request">
             <div className="two">
