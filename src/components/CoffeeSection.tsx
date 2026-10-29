@@ -20,7 +20,7 @@ export default function CoffeeSection() {
           <Reveal>
             <span className="eyebrow text-mint">Premium coffee &amp; more</span>
             <h2>Good coffee brings<span className="hand">better days</span></h2>
-            <p>Single-origin espresso, slow-steeped cold brew, and house syrups made in our kitchen. Pair any drink with a pastry and save ₱30.</p>
+            <p>Iced, shaken, whipped or hot, made with house syrups from our own kitchen. Pair any drink with a pastry and save ₱30.</p>
             <FilterLink filter="coffee" className="btn btn-mint">View Coffee Menu →</FilterLink>
             <div className="coffee-feats">
               {FEATS.map(([e, t]) => <div key={t}><span aria-hidden="true">{e}</span>{t}</div>)}

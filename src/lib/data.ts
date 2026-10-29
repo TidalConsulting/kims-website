@@ -246,11 +246,11 @@ export const TODAY = {
 // While true, the section is labelled as samples so nobody mistakes them for real customers.
 export const REVIEWS_ARE_SAMPLES = true;
 export const REVIEWS = [
-  { s: 5, t: "The brown butter cookie is the best I have ever had. Crispy edge, gooey center, perfect.", n: "Sample Review" },
-  { s: 5, t: "Cookie Butter cinnamon roll + oat latte is my Saturday ritual now.", n: "Sample Review" },
-  { s: 5, t: "Ordered a custom cake for my mom's birthday. Gorgeous and delicious.", n: "Sample Review" },
-  { s: 4, t: "Cozy spot to work. Cold brew is smooth and strong. Croissants sell out fast!", n: "Sample Review" },
-  { s: 5, t: "The gift box made my whole office happy. Beautiful packaging.", n: "Sample Review" },
+  { s: 5, t: "The Classic Chocolate Chip is unreal. Crispy edge, and that molten white chocolate cream in the middle.", n: "Sample Review" },
+  { s: 5, t: "Cookie Butter cinnamon roll + Brown Sugar Shaken Coffee is my Saturday ritual now.", n: "Sample Review" },
+  { s: 5, t: "Ordered a 9\" Chocolate Salted Caramel cake for my mom's birthday. Gorgeous and delicious.", n: "Sample Review" },
+  { s: 4, t: "Lovely spot in Ayala Triangle. The Peach Refresh is so good, and the croissants sell out fast!", n: "Sample Review" },
+  { s: 5, t: "The Mix & Match cookie box made my whole office happy. Beautiful packaging.", n: "Sample Review" },
 ];
 
 /** Index 0 = Sunday. Hours are 24h, in BUSINESS.timeZone. */
@@ -271,7 +271,7 @@ export const BATCH_TIMES = [7, 11, 15];
 export const SLIDES = [
   { e: "Fresh from the oven", t: ["Baked slow.", "Brewed", "bold."], p: "Golden-edged cookies, soft-centered cinnamon rolls, and coffee pulled by people who care. Order ahead and skip the line.", file: "hero-cookie.jpg", img: IMG.cookie1, emoji: "🍪", video: true },
   { e: "The Swirl Collection", t: ["Nine rolls.", "Zero", "regrets."], p: "From Classic Cinnamon to Rose Pistachio. Rolled by hand every morning, glazed while warm.", file: "roll-cookie-butter.jpg", img: IMG.roll, emoji: "🌀" },
-  { e: "Espresso bar", t: ["Good coffee,", "better", "days."], p: "Single-origin espresso, 18-hour cold brew, and house-made syrups. Pair with a pastry and save ₱30.", file: "coffee-caramel-iced-coffee.jpg", img: IMG.coffee1, emoji: "☕" },
+  { e: "Espresso bar", t: ["Good coffee,", "better", "days."], p: "Brown sugar shaken coffee, whipped dalgona and affogato, made with house syrups. Pair with a pastry and save ₱30.", file: "coffee-caramel-iced-coffee.jpg", img: IMG.coffee1, emoji: "☕" },
 ] as { e: string; t: string[]; p: string; file?: string; img: string; emoji: string; video?: boolean }[];
 
 /** All prices are in this currency. */

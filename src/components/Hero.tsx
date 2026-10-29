@@ -19,6 +19,13 @@ export default function Hero() {
   const [slide, setSlide] = useState(0);
   const [videoReady, setVideoReady] = useState(false);
   const [videoPaused, setVideoPaused] = useState(false);
+  // Only the first slide's photo loads with the page; the others follow a moment later,
+  // so they don't compete with it for bandwidth on slow connections.
+  const [laterSlides, setLaterSlides] = useState(false);
+  useEffect(() => {
+    const t = setTimeout(() => setLaterSlides(true), 2500);
+    return () => clearTimeout(t);
+  }, []);
   const video = useRef<HTMLVideoElement>(null);
   const status = useClientValue(() => liveStatus(), 60_000);
   // Random positions are generated client-side only to avoid a hydration mismatch.
@@ -105,7 +112,7 @@ export default function Hero() {
                 {heroVideo.map((v) => <source key={v.src} src={v.src} type={v.type} />)}
               </video>
             )}
-            {SLIDES.map((sl, i) => (
+            {SLIDES.map((sl, i) => (i > 0 && !laterSlides && i !== slide) ? null : (
               <SmartImage
                 key={i}
                 src={sl.file ? localOr(sl.file, sl.img) : sl.img}

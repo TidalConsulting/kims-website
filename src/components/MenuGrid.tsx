@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { CATS, PRODUCTS, TODAY } from "@/lib/data";
 import { isSold, lowStock } from "@/lib/utils";
 import { useShop, type Sort } from "@/store/shop";
@@ -10,9 +11,16 @@ import { Search } from "./icons";
 
 const TABS = [{ id: "all" as const, name: "All", emoji: "" }, ...CATS];
 
+/** Cards shown at first and added per "Show more". Keeps the page short and fast on phones. */
+const PAGE = 8;
+
 export default function MenuGrid() {
   const { filter, query, sort, favs, setFilter, setQuery, setSort } = useShop();
   const now = useShopNow();
+  // How many cards to show; resets whenever the category, search or sort changes.
+  const view = `${filter}|${query}|${sort}`;
+  const [shown, setShown] = useState({ view, count: PAGE });
+  const count = shown.view === view ? shown.count : PAGE;
 
   const q = query.trim().toLowerCase();
   let list = PRODUCTS.filter(
@@ -25,6 +33,8 @@ export default function MenuGrid() {
   // Sold-out items sink to the bottom (a stable sort keeps the chosen order otherwise).
   list = [...list].sort((a, b) => Number(isSold(a, now)) - Number(isSold(b, now)));
   const soldHere = PRODUCTS.filter((p) => isSold(p, now) && (filter === "all" || p.cat === filter));
+  const visible = list.slice(0, count);
+  const left = list.length - visible.length;
 
   return (
     <section className="section" id="menu">
@@ -79,7 +89,7 @@ export default function MenuGrid() {
         )}
         <div className="grid" aria-live="polite">
           {list.length ? (
-            list.map((p, i) => (
+            visible.map((p, i) => (
               <ProductCard key={p.id} p={p} index={i} sold={isSold(p, now)} low={lowStock(p, now)} />
             ))
           ) : (
@@ -88,6 +98,16 @@ export default function MenuGrid() {
             </div>
           )}
         </div>
+        {left > 0 && (
+          <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+            <button className="btn btn-dark" onClick={() => setShown({ view, count: count + PAGE })}>
+              Show {Math.min(PAGE, left)} more
+            </button>
+            <button className="btn btn-ghost text-plum" onClick={() => setShown({ view, count: list.length })}>
+              Show all {list.length}
+            </button>
+          </div>
+        )}
       </div>
     </section>
   );
