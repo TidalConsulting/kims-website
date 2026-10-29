@@ -36,7 +36,7 @@ export default function MobileNav() {
           <FilterLink key={c.id} filter={c.id}>{c.emoji} {c.name}</FilterLink>
         ))}
       </div>
-      <a href="#cookies" onClick={close}>Meet the Cookies</a>
+      <a href="#cookies" onClick={close}>Meet the Menu</a>
       <a href="#box" onClick={close}>Build a Box</a>
       <a href="#coffee" onClick={close}>Coffee</a>
       <a href="#story" onClick={close}>Our Story</a>

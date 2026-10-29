@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { CATS, OPT, TODAY, type Product } from "@/lib/data";
-import { insidePhoto, isPlate, productPhoto } from "@/lib/photos";
+import { insideLabel, insidePhoto, isPlate, notesLabel, productPhoto } from "@/lib/photos";
 import { calcPrice, emojiFor, isSold, lowStock, money, optLabel, shopNow } from "@/lib/utils";
 import { useShop } from "@/store/shop";
 import SmartImage from "./SmartImage";
@@ -46,7 +46,7 @@ export default function QuickView({ p }: { p: Product }) {
             <div className="view-toggle" role="radiogroup" aria-label="Photo">
               {(["whole", "inside"] as const).map((v) => (
                 <button key={v} role="radio" aria-checked={view === v} className={view === v ? "active" : ""} onClick={() => setView(v)}>
-                  {v === "whole" ? "Whole" : "Inside"}
+                  {v === "whole" ? (p.cat === "cakes" ? "Whole cake" : "Whole") : insideLabel(p)}
                 </button>
               ))}
             </div>
@@ -58,6 +58,12 @@ export default function QuickView({ p }: { p: Product }) {
         <h3 id="modal-title">{p.name}</h3>
         <p className="desc">{p.desc}</p>
         {p.filling && <p className="mt-2 text-[.88rem]"><b className="text-pink">Inside:</b> {p.filling}</p>}
+        {p.notes && (
+          <div className="chips mt-2.5">
+            <b>{notesLabel(p)}</b>
+            {p.notes.map((n) => <span key={n}>{n}</span>)}
+          </div>
+        )}
         {low && <p className="mt-2.5 text-sm font-semibold text-grape">⏳ Only {low} left from this morning&apos;s batch</p>}
         {groups.map((g, gi) => (
           <div className="opt-group" key={g.name} role="radiogroup" aria-label={g.name}>

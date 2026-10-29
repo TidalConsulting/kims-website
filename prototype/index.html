@@ -232,6 +232,7 @@ h2{font-size:clamp(2rem,4vw,3rem)}
 .roll.sold::after{content:"Sold out";position:absolute;top:42%;left:50%;transform:translate(-50%,-50%);font-size:.68rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--cotton);background:rgba(43,19,64,.85);padding:4px 10px;border-radius:999px}
 .sold-strip{display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:var(--cotton);border:1px solid var(--line);border-radius:14px;padding:12px 16px;margin-bottom:22px;font-size:.86rem;color:var(--grape)}
 .sold-strip b{font-weight:700}
+.sold-strip[hidden]{display:none}
 .sold-strip .pill{background:#fff;border:1px solid var(--line);border-radius:999px;padding:3px 10px;font-size:.78rem;text-decoration:line-through;color:var(--muted)}
 /* Cookie "inside" shot: crossfades in on hover */
 .card-img img.inside{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .45s var(--ease),transform .7s var(--ease)}
@@ -253,7 +254,12 @@ h2{font-size:clamp(2rem,4vw,3rem)}
 .lrow .whole{width:200px;height:200px;border-radius:50%;overflow:hidden;background:var(--slate);box-shadow:0 0 0 6px #fff,0 0 0 9px var(--hue,var(--pink-pop))}
 .lrow .whole img,.lrow .in img{width:100%;height:100%;object-fit:cover}
 .lrow .in{height:200px;border-radius:20px;overflow:hidden;background:var(--slate);position:relative}
-.lrow .in span{position:absolute;top:10px;left:10px;background:rgba(255,255,255,.92);font-size:.68rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--plum);padding:4px 10px;border-radius:999px}
+.lrow .in > span{position:absolute;top:10px;left:10px;background:rgba(255,255,255,.92);font-size:.68rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--plum);padding:4px 10px;border-radius:999px}
+.lrow .in.notes{background:var(--cotton);display:flex;flex-direction:column;justify-content:center;gap:12px;padding:20px;border:2px dashed var(--hue,var(--line))}
+.lrow .in.notes > b{font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:var(--hue,var(--plum))}
+.chips{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.chips > b{font-size:.78rem;color:var(--pink);margin-right:4px}
+.chips span{background:#fff;border:2px solid var(--line);border-radius:999px;padding:5px 12px;font-size:.82rem;font-weight:600;color:var(--plum)}
 .lrow .num{font-family:var(--display);font-weight:700;font-size:.85rem;color:var(--muted);letter-spacing:.1em}
 .lrow h3{font-size:clamp(1.6rem,3vw,2.4rem);color:var(--hue,var(--plum));margin:2px 0 6px;font-weight:700}
 .lrow p{color:var(--muted);max-width:44ch;font-size:.95rem}
@@ -265,6 +271,7 @@ h2{font-size:clamp(2rem,4vw,3rem)}
   .lrow{grid-template-columns:110px 1fr;gap:14px;padding:12px}
   .lrow .whole{width:110px;height:110px}
   .lrow .in{grid-column:1/-1;height:180px;order:3}
+  .lrow .in.notes{height:auto}
 }
 .empty{grid-column:1/-1;text-align:center;padding:60px;color:var(--muted)}
 .ph{width:100%;height:100%;display:grid;place-items:center;font-size:3.4rem;background:radial-gradient(120% 90% at 30% 20%,var(--slate-2),var(--slate) 70%)}
@@ -573,15 +580,15 @@ function imgFallback(el, emoji){
         <div class="mega" role="menu">
           <div>
             <h4>Bakery</h4>
-            <a href="#menu" data-filter="cookies"><span class="ico">🍪</span><span>Cookies<em>Chewy, gooey, brown butter</em></span></a>
-            <a href="#menu" data-filter="cakes"><span class="ico">🎂</span><span>Cakes<em>Slices &amp; whole cakes</em></span></a>
-            <a href="#menu" data-filter="pastries"><span class="ico">🥐</span><span>Pastries<em>Laminated daily</em></span></a>
+            <a href="#menu" data-filter="cookies"><span class="ico">🍪</span><span>Cookies<em>8 stuffed cookies</em></span></a>
+            <a href="#menu" data-filter="cakes"><span class="ico">🎂</span><span>Cakes<em>12 flavors · slice or whole</em></span></a>
+            <a href="#menu" data-filter="pastries"><span class="ico">🥐</span><span>Pastries<em>14 baked every morning</em></span></a>
             <a href="#menu" data-filter="rolls"><span class="ico">🌀</span><span>Cinnamon Rolls<em>9 signature swirls</em></span></a>
           </div>
           <div>
             <h4>Café</h4>
-            <a href="#menu" data-filter="coffee"><span class="ico">☕</span><span>Coffee<em>Espresso bar &amp; cold brew</em></span></a>
-            <a href="#menu" data-filter="refreshments"><span class="ico">🍋</span><span>Refreshments<em>Teas, lemonades, smoothies</em></span></a>
+            <a href="#menu" data-filter="coffee"><span class="ico">☕</span><span>Coffee<em>10 iced, shaken &amp; hot</em></span></a>
+            <a href="#menu" data-filter="refreshments"><span class="ico">🍹</span><span>Iced Teas<em>12 fresh-brewed blends</em></span></a>
             <a href="#box"><span class="ico">🎁</span><span>Build a Box<em>Mix 6 or 12 cookies</em></span></a>
             <a href="#menu" data-filter="all"><span class="ico">📋</span><span>Full Menu<em>See everything</em></span></a>
           </div>
@@ -592,7 +599,7 @@ function imgFallback(el, emoji){
           </a>
         </div>
       </li>
-      <li><a href="#cookies">Cookies</a></li>
+      <li><a href="#cookies">Meet the Menu</a></li>
       <li><a href="#box">Build a Box</a></li>
       <li><a href="#coffee">Coffee</a></li>
       <li><a href="#story">Our Story</a></li>
@@ -632,9 +639,9 @@ function imgFallback(el, emoji){
     <a href="#menu" data-filter="pastries">🥐 Pastries</a>
     <a href="#menu" data-filter="rolls">🌀 Cinnamon Rolls</a>
     <a href="#menu" data-filter="coffee">☕ Coffee</a>
-    <a href="#menu" data-filter="refreshments">🍋 Refreshments</a>
+    <a href="#menu" data-filter="refreshments">🍹 Iced Teas</a>
   </div>
-  <a href="#cookies">Meet the Cookies</a>
+  <a href="#cookies">Meet the Menu</a>
   <a href="#box">Build a Box</a>
   <a href="#coffee">Coffee</a>
   <a href="#story">Our Story</a>
@@ -723,12 +730,13 @@ function imgFallback(el, emoji){
   <div class="container">
     <div class="section-head reveal">
       <div>
-        <span class="eyebrow">The cookie lineup</span>
-        <h2>Eight cookies.<br/>Eight gooey centers.</h2>
-        <p>Every cookie is stuffed. Here's what each one looks like on the outside, and what's waiting inside.</p>
+        <span class="eyebrow">Meet the menu</span>
+        <h2 id="lineupTitle">Eight cookies.<br/>Eight gooey centers.</h2>
+        <p id="lineupSub">Every cookie is stuffed. Here's what each one looks like on the outside, and what's waiting inside.</p>
       </div>
       <a href="#box" class="btn btn-primary">Build a box of 6 or 12</a>
     </div>
+    <div class="tabs" id="lineTabs" style="margin-bottom:24px"></div>
     <div class="lineup-list" id="lineup"></div>
   </div>
 </section>
@@ -916,7 +924,7 @@ function imgFallback(el, emoji){
     </ul></div>
     <div><h5>Café</h5><ul>
       <li><a href="#menu" data-filter="coffee">Coffee</a></li>
-      <li><a href="#menu" data-filter="refreshments">Refreshments</a></li>
+      <li><a href="#menu" data-filter="refreshments">Iced Teas</a></li>
       <li><a href="#visit">Reservations</a></li>
       <li><a href="#visit">Catering</a></li>
     </ul></div>
@@ -987,7 +995,7 @@ const IMG = {
    from photoFor() below (e.g. images/cookie-brown-butter-chocolate-chunk.jpg).
    If the file exists it's used; otherwise the stock photo, then an emoji.
    --------------------------------------------------------- */
-const slug = s => s.toLowerCase().replace(/['’]/g,'').replace(/&/g,'and').replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'');
+const slug = s => s.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/['’]/g,'').replace(/&/g,'and').replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'');
 const CAT_PREFIX = {cookies:'cookie', cakes:'cake', pastries:'pastry', rolls:'roll', coffee:'coffee', refreshments:'drink'};
 const photoFor = p => `images/${CAT_PREFIX[p.cat]}-${slug(p.name)}.jpg`;
 
@@ -1005,11 +1013,11 @@ const isSold = p => TODAY.soldOut.includes(p.id);
 
 const CATS = [
   {id:'cookies', name:'Cookies', emoji:'🍪', img:'images/cookie-classic-chocolate-chip.jpg'},
-  {id:'cakes', name:'Cakes', emoji:'🎂', img:IMG.cake1},
-  {id:'pastries', name:'Pastries', emoji:'🥐', img:IMG.pastry1},
+  {id:'cakes', name:'Cakes', emoji:'🎂', img:'images/cake-chocolate-salted-caramel-inside.jpg'},
+  {id:'pastries', name:'Pastries', emoji:'🥐', img:'images/pastry-classic-croissant.jpg'},
   {id:'rolls', name:'Cinnamon Rolls', emoji:'🌀', img:'images/roll-classic-cinnamon.jpg'},
-  {id:'coffee', name:'Coffee', emoji:'☕', img:IMG.coffee1},
-  {id:'refreshments', name:'Refreshments', emoji:'🍋', img:IMG.drink2},
+  {id:'coffee', name:'Coffee', emoji:'☕', img:'images/coffee-caramel-iced-coffee.jpg'},
+  {id:'refreshments', name:'Iced Teas', emoji:'🍹', img:'images/drink-peach-refresh.jpg'},
 ];
 
 // Option presets
@@ -1022,6 +1030,18 @@ const OPT = {
     {name:'Temp', choices:[{l:'Hot',p:0},{l:'Iced',p:0}]},
   ],
   cold: [{name:'Size', choices:[{l:'16 oz',p:0},{l:'24 oz',p:40}]}],
+  iced: [
+    {name:'Size', choices:[{l:'16 oz',p:0},{l:'24 oz',p:40}]},
+    {name:'Milk', choices:[{l:'Whole',p:0},{l:'Oat',p:40},{l:'Almond',p:40}]},
+  ],
+  hot:  [
+    {name:'Size', choices:[{l:'12 oz',p:0},{l:'16 oz',p:20}]},
+    {name:'Milk', choices:[{l:'Whole',p:0},{l:'Oat',p:40},{l:'Almond',p:40}]},
+  ],
+  tea:  [
+    {name:'Size', choices:[{l:'16 oz',p:0},{l:'24 oz',p:30}]},
+    {name:'Sweetness', choices:[{l:'Regular',p:0},{l:'Less sweet',p:0},{l:'No honey',p:0}]},
+  ],
   roll: [{name:'Quantity', choices:[{l:'Single',mult:1},{l:'4-pack',mult:3.6},{l:'Party of 9 (one of each)',fixed:1450}]}],
   none: []
 };
@@ -1036,17 +1056,34 @@ const PRODUCTS = [
   {id:'c6', cat:'cookies', name:'Caramel Pecan', desc:'Salted caramel pools, toasted pecans, dark chocolate chunks.', price:140, img:IMG.cookie1, opt:'cookie', box:true, hue:'#B8681D', filling:'Salted caramel'},
   {id:'c7', cat:'cookies', name:'Pistachio Raspberry', desc:'Pistachio dough, pistachio cream, fresh raspberries.', price:150, img:IMG.cookie3, tag:'New', opt:'cookie', box:true, hue:'#5E7F22', filling:'Silky pistachio cream'},
   {id:'c8', cat:'cookies', name:'Red Velvet White Chocolate', desc:'Crimson cocoa dough with big white chocolate chunks.', price:125, img:IMG.cookie3, opt:'cookie', box:true, hue:'#C8283E', filling:'Cream cheese filling'},
-  // Cakes
-  {id:'k1', cat:'cakes', name:'Belgian Chocolate Cake', desc:'Three layers, ganache drip, chocolate curls.', price:220, img:IMG.cake1, tag:'Bestseller', opt:'cake'},
-  {id:'k2', cat:'cakes', name:'Salted Caramel Cake', desc:'Brown sugar sponge, house caramel, toasted pecans.', price:220, img:IMG.cake3, opt:'cake'},
-  {id:'k3', cat:'cakes', name:'Classic Red Velvet', desc:'Buttermilk red velvet with cream cheese frosting.', price:210, img:IMG.cake2, opt:'cake'},
-  {id:'k4', cat:'cakes', name:'Vanilla Berry Bliss', desc:'Vanilla bean sponge, fresh berries, whipped cream.', price:200, img:IMG.cake2, opt:'cake'},
+  // Cakes — whole cake photo + slice ("inside") photo: images/cake-<name>.jpg and -inside.jpg
+  {id:'k1', cat:'cakes', name:'Chocolate Salted Caramel', desc:'Dark chocolate layers, salted caramel filling, caramel drip.', price:240, tag:'Bestseller', opt:'cake', hue:'#6B3A1E', notes:['Rich','Sweet','Indulgent']},
+  {id:'k2', cat:'cakes', name:'Vanilla Strawberry', desc:'Vanilla sponge, whipped cream and fresh strawberries.', price:220, opt:'cake', hue:'#D63A5A', notes:['Soft','Fruity','Classic']},
+  {id:'k3', cat:'cakes', name:'Lemon Blueberry', desc:'Lemon sponge, blueberry jam, lemon cream cheese frosting.', price:220, opt:'cake', hue:'#4B4FB8', notes:['Fresh','Bright','Fruity']},
+  {id:'k4', cat:'cakes', name:'Chocolate Raspberry', desc:'Dark chocolate sponge, raspberry jam, glossy ganache.', price:240, opt:'cake', hue:'#B0243F', notes:['Decadent','Tart','Elegant']},
+  {id:'k5', cat:'cakes', name:'Pistachio Rose', desc:'Pistachio sponge, pistachio cream, rose petals.', price:250, tag:'New', opt:'cake', hue:'#5E7F22', notes:['Floral','Nutty','Delicate']},
+  {id:'k6', cat:'cakes', name:'Coconut Mango', desc:'Coconut sponge, mango curd, toasted coconut.', price:230, opt:'cake', hue:'#E08A00', notes:['Tropical','Light','Juicy']},
+  {id:'k7', cat:'cakes', name:'Coffee Hazelnut', desc:'Coffee-soaked layers, hazelnut praline, mocha buttercream.', price:240, opt:'cake', hue:'#7A4A26', notes:['Bold','Nutty','Creamy']},
+  {id:'k8', cat:'cakes', name:'Apple Cinnamon', desc:'Spiced sponge with baked cinnamon apples.', price:210, opt:'cake', hue:'#B8681D', notes:['Warm','Cozy','Spiced']},
+  {id:'k9', cat:'cakes', name:'Pumpkin Cream Cheese', desc:'Pumpkin spice layers with cream cheese frosting.', price:220, opt:'cake', hue:'#C4641B', notes:['Fall','Creamy','Spiced']},
+  {id:'k10', cat:'cakes', name:'Red Velvet White Chocolate', desc:'Red velvet layers, cream cheese, white chocolate.', price:230, opt:'cake', hue:'#C8283E', notes:['Velvety','Sweet','Luxe']},
+  {id:'k11', cat:'cakes', name:'Orange Dark Chocolate', desc:'Dark chocolate sponge, orange marmalade, candied orange.', price:240, opt:'cake', hue:'#D9541E', notes:['Citrusy','Rich','Bold']},
+  {id:'k12', cat:'cakes', name:'Pear Almond', desc:'Almond sponge, vanilla cream and poached pears.', price:230, opt:'cake', hue:'#8A7A2B', notes:['Subtle','Nutty','Refined']},
   // Pastries
-  {id:'p1', cat:'pastries', name:'Butter Croissant', desc:'72-hour laminated dough. 27 flaky layers.', price:135, img:IMG.pastry1, opt:'none'},
-  {id:'p2', cat:'pastries', name:'Pain au Chocolat', desc:'Two batons of dark chocolate in buttery pastry.', price:155, img:IMG.pastry1, tag:'Bestseller', opt:'none'},
-  {id:'p3', cat:'pastries', name:'Almond Croissant', desc:'Twice-baked with frangipane and sliced almonds.', price:175, img:IMG.pastry2, opt:'none'},
-  {id:'p4', cat:'pastries', name:'Strawberry Cream Danish', desc:'Vanilla custard, fresh strawberries, glaze.', price:185, img:IMG.pastry1, tag:'New', opt:'none'},
-  {id:'p5', cat:'pastries', name:'Fudgy Walnut Brownie', desc:'Dense, crackly top, toasted walnuts.', price:125, img:IMG.brownie, opt:'none'},
+  {id:'p1', cat:'pastries', name:'Almond Croissant', desc:'Twice-baked with frangipane and toasted sliced almonds.', price:175, opt:'none', hue:'#B8681D', notes:['Flaky','Nutty','Buttery']},
+  {id:'p2', cat:'pastries', name:'Mixed Berry Danish', desc:'Vanilla custard topped with fresh mixed berries.', price:165, opt:'none', hue:'#C8283E', notes:['Fruity','Creamy','Flaky']},
+  {id:'p3', cat:'pastries', name:'Pain au Chocolat', desc:'Two batons of dark chocolate in buttery pastry.', price:155, tag:'Bestseller', opt:'none', hue:'#6B3A1E', notes:['Buttery','Chocolatey','Classic']},
+  {id:'p4', cat:'pastries', name:'Lemon Tart', desc:'Zesty lemon curd under toasted meringue.', price:160, opt:'none', hue:'#C49A00', notes:['Zesty','Tangy','Light']},
+  {id:'p5', cat:'pastries', name:'Chocolate Éclair', desc:'Choux pastry, vanilla cream, chocolate glaze and hazelnuts.', price:150, opt:'none', hue:'#3B2016', notes:['Creamy','Chocolatey','Crisp']},
+  {id:'p6', cat:'pastries', name:'Classic Croissant', desc:'72-hour laminated dough. Shatteringly flaky.', price:135, opt:'none', hue:'#B8681D', notes:['Buttery','Flaky','Golden']},
+  {id:'p7', cat:'pastries', name:'Strawberry Tart', desc:'Vanilla pastry cream and glazed fresh strawberries.', price:175, tag:'New', opt:'none', hue:'#D63A5A', notes:['Fresh','Sweet','Creamy']},
+  {id:'p8', cat:'pastries', name:'Blueberry Muffin', desc:'Bursting with blueberries under a crunchy crumb top.', price:120, opt:'none', hue:'#4B4FB8', notes:['Soft','Fruity','Crumbly']},
+  {id:'p9', cat:'pastries', name:'Palmier', desc:'Caramelized puff pastry hearts.', price:95, opt:'none', hue:'#C4641B', notes:['Crispy','Caramelized','Light']},
+  {id:'p10', cat:'pastries', name:'Raspberry Danish', desc:'Cream cheese center with fresh raspberries.', price:165, opt:'none', hue:'#B0243F', notes:['Tart','Creamy','Flaky']},
+  {id:'p11', cat:'pastries', name:'Chocolate Brownie', desc:'Fudgy, crackly top, chocolate drizzle.', price:125, opt:'none', hue:'#3B2016', notes:['Fudgy','Rich','Chewy']},
+  {id:'p12', cat:'pastries', name:'Custard Danish', desc:'Vanilla custard swirl with crushed pistachios.', price:150, opt:'none', hue:'#C49A00', notes:['Creamy','Buttery','Nutty']},
+  {id:'p13', cat:'pastries', name:'Mille-Feuille', desc:'Crisp puff pastry layers and vanilla cream.', price:185, opt:'none', hue:'#8A7A2B', notes:['Layered','Creamy','Crisp']},
+  {id:'p14', cat:'pastries', name:'Chocolate Tart', desc:'Silky dark chocolate ganache with pistachios.', price:170, opt:'none', hue:'#6B3A1E', notes:['Silky','Rich','Nutty']},
   // Cinnamon rolls (Swirl Collection)
   {id:'r1', cat:'rolls', name:'Classic Cinnamon', desc:'The original. Brown sugar swirl and vanilla glaze.', price:165, img:IMG.roll, tag:'Bestseller', opt:'roll', emoji:'🌀'},
   {id:'r2', cat:'rolls', name:'Chocolate Hazelnut', desc:'Hazelnut spread, chocolate drizzle, toasted hazelnuts.', price:185, img:IMG.roll, opt:'roll', emoji:'🌰'},
@@ -1057,20 +1094,30 @@ const PRODUCTS = [
   {id:'r7', cat:'rolls', name:'Matcha White Chocolate', desc:'Ceremonial matcha glaze, white chocolate pearls.', price:195, img:IMG.roll, tag:'New', opt:'roll', emoji:'🍵'},
   {id:'r8', cat:'rolls', name:'Red Velvet', desc:'Cocoa-red dough, cream cheese icing, velvet crumbs.', price:185, img:IMG.roll, opt:'roll', emoji:'❤️'},
   {id:'r9', cat:'rolls', name:'Rose Pistachio', desc:'Rose water glaze, pistachios, dried petals.', price:195, img:IMG.roll, opt:'roll', emoji:'🌹'},
-  // Coffee
-  {id:'d1', cat:'coffee', name:'Caramel Latte', desc:'Rich espresso, steamed milk, house caramel.', price:185, img:IMG.coffee3, tag:'Bestseller', opt:'drink', signature:true},
-  {id:'d2', cat:'coffee', name:'Cappuccino', desc:'Bold espresso with velvety milk foam.', price:160, img:IMG.coffee1, opt:'drink', signature:true},
-  {id:'d3', cat:'coffee', name:'Cold Brew', desc:'Steeped 18 hours. Smooth, chocolatey, strong.', price:170, img:IMG.coffee4, opt:'cold', signature:true},
-  {id:'d4', cat:'coffee', name:'Honey Oat Latte', desc:'Local honey, oat milk, a dash of cinnamon.', price:195, img:IMG.coffee1, tag:'New', opt:'drink'},
-  {id:'d5', cat:'coffee', name:'Mocha', desc:'Espresso, dark chocolate, whipped cream.', price:190, img:IMG.coffee3, opt:'drink'},
-  {id:'d6', cat:'coffee', name:'Espresso', desc:'Double shot of our seasonal single origin.', price:110, img:IMG.coffee2, opt:'none'},
-  // Refreshments
-  {id:'f1', cat:'refreshments', name:'Iced Matcha Latte', desc:'Ceremonial-grade matcha over milk and ice.', price:190, img:IMG.drink1, opt:'drink'},
-  {id:'f2', cat:'refreshments', name:'Strawberry Lemonade', desc:'Fresh-squeezed lemons, muddled strawberries.', price:150, img:IMG.drink2, tag:'Hot', opt:'cold'},
-  {id:'f3', cat:'refreshments', name:'Iced Peach Tea', desc:'Black tea brewed daily with peach purée.', price:130, img:IMG.drink2, opt:'cold'},
-  {id:'f4', cat:'refreshments', name:'Mango Smoothie', desc:'Mango, banana, yogurt, a squeeze of lime.', price:180, img:IMG.drink3, opt:'cold'},
-  {id:'f5', cat:'refreshments', name:'Classic Hot Chocolate', desc:'Melted dark chocolate and whole milk.', price:150, img:IMG.coffee3, opt:'none'},
-  {id:'f6', cat:'refreshments', name:'Sparkling Water', desc:'Chilled, with a slice of citrus.', price:90, img:IMG.drink3, opt:'none'},
+  // Coffee — ingredients shown as "What's in it"
+  {id:'d1', cat:'coffee', name:'Vanilla Iced Coffee', desc:'Chilled coffee, milk and vanilla over ice.', price:165, opt:'iced', hue:'#6B3A1E', notes:['Coffee','Milk','Vanilla syrup','Ice']},
+  {id:'d2', cat:'coffee', name:'Dalgona Coffee', desc:'Whipped coffee cloud over cold milk.', price:175, opt:'iced', hue:'#B8681D', notes:['Whipped coffee','Sugar','Cold milk']},
+  {id:'d3', cat:'coffee', name:'Honey Cinnamon Latte', desc:'Espresso, steamed milk, honey and cinnamon.', price:185, tag:'New', opt:'hot', hue:'#C4641B', notes:['Espresso','Milk','Honey','Cinnamon']},
+  {id:'d4', cat:'coffee', name:'Mocha Iced Coffee', desc:'Chocolate coffee, whipped cream, chocolate drizzle.', price:190, opt:'iced', hue:'#3B2016', notes:['Coffee','Milk','Cocoa','Whipped cream']},
+  {id:'d5', cat:'coffee', name:'Caramel Iced Coffee', desc:'Caramel coffee, whipped cream, caramel drizzle.', price:185, tag:'Bestseller', opt:'iced', hue:'#B8681D', notes:['Coffee','Milk','Caramel sauce','Ice'], signature:true},
+  {id:'d6', cat:'coffee', name:'Affogato', desc:'Vanilla ice cream drowned in hot espresso.', price:195, opt:'none', hue:'#6B3A1E', notes:['Vanilla ice cream','Hot espresso']},
+  {id:'d7', cat:'coffee', name:'Coconut Iced Coffee', desc:'Coffee over coconut milk and toasted coconut.', price:180, opt:'cold', hue:'#7A4A26', notes:['Coffee','Coconut milk','Syrup','Ice']},
+  {id:'d8', cat:'coffee', name:'Brown Sugar Shaken Coffee', desc:'Espresso shaken with brown sugar, splash of milk.', price:190, tag:'Hot', opt:'iced', hue:'#8A5A2B', notes:['Espresso','Brown sugar','Milk','Ice'], signature:true},
+  {id:'d9', cat:'coffee', name:'Coffee Smoothie', desc:'Coffee blended with banana, milk and honey.', price:195, opt:'cold', hue:'#B8681D', notes:['Coffee','Frozen banana','Milk','Honey']},
+  {id:'d10', cat:'coffee', name:'Strawberry Iced Latte', desc:'Strawberry milk layered with espresso.', price:195, opt:'iced', hue:'#D63A5A', notes:['Strawberry milk','Milk','Espresso','Ice'], signature:true},
+  // Iced teas (category id stays 'refreshments')
+  {id:'f1', cat:'refreshments', name:'Lemon Detox Tea', desc:'Black tea, lemon, ginger and honey.', price:140, opt:'tea', hue:'#C49A00', notes:['Black tea','Lemon','Ginger','Honey']},
+  {id:'f2', cat:'refreshments', name:'Peach Refresh', desc:'Black tea with fresh peaches and lemon.', price:150, tag:'Bestseller', opt:'tea', hue:'#E0662A', notes:['Black tea','Peach','Lemon','Honey']},
+  {id:'f3', cat:'refreshments', name:'Cucumber Mint Tea', desc:'Green tea, cucumber, mint and lemon.', price:140, opt:'tea', hue:'#3F8A3A', notes:['Green tea','Cucumber','Mint','Lemon']},
+  {id:'f4', cat:'refreshments', name:'Berry Antioxidant', desc:'Hibiscus tea with mixed berries.', price:160, opt:'tea', hue:'#B0243F', notes:['Hibiscus tea','Mixed berries','Lemon','Honey']},
+  {id:'f5', cat:'refreshments', name:'Ginger Lemon Tea', desc:'Black tea, fresh ginger, lemon and honey.', price:140, opt:'tea', hue:'#B8681D', notes:['Black tea','Ginger','Lemon','Honey']},
+  {id:'f6', cat:'refreshments', name:'Pineapple Green Tea', desc:'Green tea, pineapple and mint.', price:150, tag:'New', opt:'tea', hue:'#8A9A00', notes:['Green tea','Pineapple','Mint','Honey']},
+  {id:'f7', cat:'refreshments', name:'Turmeric Ginger Tea', desc:'Green tea, turmeric, ginger and lemon.', price:150, opt:'tea', hue:'#D98A00', notes:['Green tea','Turmeric','Ginger','Lemon']},
+  {id:'f8', cat:'refreshments', name:'Orange Cinnamon Tea', desc:'Black tea, orange and cinnamon.', price:145, opt:'tea', hue:'#E0662A', notes:['Black tea','Orange','Cinnamon','Honey']},
+  {id:'f9', cat:'refreshments', name:'Mint Lemon Tea', desc:'Green tea, fresh mint and lemon.', price:140, opt:'tea', hue:'#3F8A3A', notes:['Green tea','Mint','Lemon','Honey']},
+  {id:'f10', cat:'refreshments', name:'Apple Cinnamon Tea', desc:'Black tea, apple and cinnamon.', price:145, opt:'tea', hue:'#C8283E', notes:['Black tea','Apple','Cinnamon','Honey']},
+  {id:'f11', cat:'refreshments', name:'Hibiscus Ginger Tea', desc:'Hibiscus tea, ginger and lemon.', price:150, opt:'tea', hue:'#B0243F', notes:['Hibiscus tea','Ginger','Lemon','Honey']},
+  {id:'f12', cat:'refreshments', name:'Citrus Green Tea', desc:'Green tea, lemon and lime.', price:140, opt:'tea', hue:'#8A9A00', notes:['Green tea','Lemon','Lime','Honey']},
 ];
 
 // Placeholder reviews — replace with real ones before launch
@@ -1087,8 +1134,10 @@ const HOURS = [ // 0 = Sunday
   {d:'Thursday', o:7, c:20}, {d:'Friday', o:7, c:20}, {d:'Saturday', o:7, c:20},
 ];
 
-// Rolls and cookies use photos already in /images
-PRODUCTS.filter(p => p.cat === 'rolls' || p.cat === 'cookies').forEach(p => { p.img = photoFor(p); p.local = true; if (p.cat === 'rolls') p.plate = true; });
+// Every product uses its own photo in /images (see images/PHOTO-GUIDE.md)
+PRODUCTS.forEach(p => { p.img = photoFor(p); p.local = true; if (p.cat === 'rolls') p.plate = true; if (p.cat === 'cookies' || p.cat === 'cakes') p.inside = true; });
+const notesLabel = p => (p.cat === 'coffee' || p.cat === 'refreshments') ? "What's in it" : 'Tasting notes';
+const insideLabel = p => p.cat === 'cakes' ? 'Slice' : 'Inside';
 
 // Prices are in Philippine pesos and VAT-inclusive (12%), as is standard in PH
 const FREE_DELIVERY = 1000, DELIVERY_FEE = 79, VAT = 0.12;
@@ -1116,7 +1165,7 @@ const emojiFor = p => p.emoji || (CATS.find(c => c.id === p.cat)||{}).emoji || '
 const imgTag = (src, alt, emoji, fb) => `<img src="${src}" ${fb ? `data-fb="${fb}"` : ''} alt="${alt}" loading="lazy" onerror="imgFallback(this,'${emoji}')" />`;
 // Cookie "inside" (broken-open) photo: images/cookie-<name>-inside.jpg
 const insideFor = p => photoFor(p).replace(/\.jpg$/, '-inside.jpg');
-const insideImg = p => p.cat === 'cookies' ? `<img class="inside" src="${insideFor(p)}" alt="Inside of ${p.name}" loading="lazy" onerror="this.remove()" />` : '';
+const insideImg = p => p.inside ? `<img class="inside" src="${insideFor(p)}" alt="Inside of ${p.name}" loading="lazy" onerror="this.remove()" />` : '';
 // Product image: your photo in /images first, then stock, then emoji
 const pImg = p => p.local ? imgTag(p.img, p.name, emojiFor(p)) : imgTag(photoFor(p), p.name, emojiFor(p), p.img);
 const heart = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg>`;
@@ -1167,7 +1216,7 @@ function renderGrid(){
       <div class="card-img ${p.plate?'plate slate-bg':''}" data-open="${p.id}">
         ${pImg(p)}
         ${isSold(p) ? '' : insideImg(p)}
-        ${p.cat === 'cookies' && !isSold(p) ? `<span class="inside-hint">👀 See inside</span>` : ''}
+        ${p.inside && !isSold(p) ? `<span class="inside-hint">${p.cat === 'cakes' ? '🍰 See a slice' : '👀 See inside'}</span>` : ''}
         ${isSold(p) ? `<span class="sold-flag"><span><b>Sold out today</b><small>Back ${TODAY.restock}</small></span></span>`
           : TODAY.low[p.id] ? `<span class="tag low">Only ${TODAY.low[p.id]} left</span>`
           : p.tag ? `<span class="tag ${p.tag==='Hot'?'hot':p.tag==='New'?'new':''}">${p.tag}</span>` : ''}
@@ -1226,13 +1275,14 @@ function openQuickView(id){
     $('#modalContent').innerHTML = `
       <div class="qv">
         <div class="qv-img ${p.plate?'plate slate-bg':''} ${qv.view==='inside'?'show-inside':''}">${pImg(p)}${insideImg(p)}
-          ${p.cat === 'cookies' ? `<div class="view-toggle"><button data-view="whole" class="${qv.view!=='inside'?'active':''}">Whole</button><button data-view="inside" class="${qv.view==='inside'?'active':''}">Inside</button></div>` : ''}
+          ${p.inside ? `<div class="view-toggle"><button data-view="whole" class="${qv.view!=='inside'?'active':''}">${p.cat==='cakes'?'Whole cake':'Whole'}</button><button data-view="inside" class="${qv.view==='inside'?'active':''}">${insideLabel(p)}</button></div>` : ''}
         </div>
         <div class="qv-body">
           <span class="eyebrow">${CATS.find(c=>c.id===p.cat).name}</span>
           <h3>${p.name}</h3>
           <p class="desc">${p.desc}</p>
           ${p.filling ? `<p style="margin-top:8px;font-size:.88rem"><b style="color:var(--pink)">Inside:</b> ${p.filling}</p>` : ''}
+          ${p.notes ? `<div class="chips" style="margin-top:10px"><b>${notesLabel(p)}</b>${p.notes.map(n => `<span>${n}</span>`).join('')}</div>` : ''}
           ${TODAY.low[p.id] && !isSold(p) ? `<p style="margin-top:10px;font-size:.85rem;color:var(--grape);font-weight:600">⏳ Only ${TODAY.low[p.id]} left from this morning's batch</p>` : ''}
           ${groups.map((g,gi) => `
             <div class="opt-group"><h6>${g.name}</h6><div class="opts">
@@ -1446,22 +1496,39 @@ $('#toastAction').addEventListener('click', () => { $('#toast').classList.remove
 /* =========================================================
    MEET THE COOKIES — whole · name · inside
    ========================================================= */
-$('#lineup').innerHTML = PRODUCTS.filter(p => p.cat === 'cookies').map((c,i) => `
-  <article class="lrow reveal ${isSold(c)?'sold':''}" style="--hue:${c.hue}" data-open="${c.id}">
+const LINE = {
+  cookies: {title:'Eight cookies.<br/>Eight gooey centers.', sub:"Every cookie is stuffed. Here's what each one looks like on the outside, and what's waiting inside."},
+  cakes: {title:'Twelve cakes.<br/>Every layer counts.', sub:'See each cake whole, then sliced, so you know exactly what you\'re getting.'},
+  pastries: {title:'Fourteen pastries.<br/>Baked every morning.', sub:'Laminated, glazed, filled and fresh out of the oven at 7am.'},
+  coffee: {title:'Ten coffees.<br/>One for every craving.', sub:"Iced, shaken, whipped or hot. Here's exactly what goes in each cup."},
+  refreshments: {title:'Twelve iced teas.<br/>Brewed fresh daily.', sub:'Real fruit, fresh herbs and a touch of honey. No powders.'},
+};
+let lineCat = 'cookies';
+$('#lineTabs').innerHTML = Object.keys(LINE).map(k => { const c = CATS.find(x => x.id === k); return `<button class="tab ${k===lineCat?'active':''}" data-line="${k}">${c.emoji} ${c.name}</button>`; }).join('');
+function renderLineup(){
+  $('#lineupTitle').innerHTML = LINE[lineCat].title; $('#lineupSub').textContent = LINE[lineCat].sub;
+  $$('#lineTabs .tab').forEach(t => t.classList.toggle('active', t.dataset.line === lineCat));
+  $('#lineup').innerHTML = PRODUCTS.filter(p => p.cat === lineCat).map((c,i) => `
+  <article class="lrow in ${isSold(c)?'sold':''}" style="--hue:${c.hue||'var(--pink-pop)'}" data-open="${c.id}">
     <div class="whole">${pImg(c)}</div>
     <div>
       <span class="num">No. ${String(i+1).padStart(2,'0')}</span>
       <h3>${c.name}</h3>
       <p>${c.desc}</p>
-      <p style="margin-top:6px"><b style="color:var(--plum)">Inside:</b> ${c.filling}</p>
+      ${c.filling ? `<p style="margin-top:6px"><b style="color:var(--plum)">Inside:</b> ${c.filling}</p>` : ''}
       <div class="lfoot">
-        <span class="price">${money(c.price)}</span>
+        <span class="price">${money(c.price)}${c.cat==='cakes'?' <small style="font-size:.7rem;color:var(--muted)">/ slice</small>':''}</span>
         ${isSold(c) ? `<span class="soldpill">Sold out today</span>` : `<span class="btn btn-dark">Add to order</span>`}
         ${TODAY.low[c.id] && !isSold(c) ? `<span style="font-size:.82rem;font-weight:700;color:var(--pink)">⏳ Only ${TODAY.low[c.id]} left</span>` : ''}
       </div>
     </div>
-    <div class="in"><img src="${insideFor(c)}" alt="Inside of ${c.name}" loading="lazy" onerror="imgFallback(this,'🍪')" /><span>Inside</span></div>
+    ${c.inside
+      ? `<div class="in"><img src="${insideFor(c)}" alt="${insideLabel(c)} of ${c.name}" loading="lazy" onerror="imgFallback(this,'🍪')" /><span>${insideLabel(c)}</span></div>`
+      : `<div class="in notes"><b>${notesLabel(c)}</b><div class="chips">${(c.notes||[]).map(n => `<span>${n}</span>`).join('')}</div></div>`}
   </article>`).join('');
+}
+$('#lineTabs').addEventListener('click', e => { const t = e.target.closest('[data-line]'); if (t){ lineCat = t.dataset.line; renderLineup(); } });
+renderLineup();
 
 /* =========================================================
    SWIRL COLLECTION
@@ -1571,7 +1638,7 @@ setInterval(() => { const per = innerWidth < 860 ? 1 : 3; revI = revI >= REVIEWS
 const SLIDES = [
   {e:'Fresh from the oven', t:'Baked slow.<br/>Brewed <i>bold.</i>', p:'Golden-edged cookies, soft-centered cinnamon rolls, and coffee pulled by people who care. Order ahead and skip the line.', img:'images/hero-cookie.jpg', fb:'https://images.unsplash.com/photo-1499636136210-6f4ee915583e?w=900&q=75', video:true},
   {e:'The Swirl Collection', t:'Nine rolls.<br/>Zero <i>regrets.</i>', p:'From Classic Cinnamon to Rose Pistachio. Rolled by hand every morning, glazed while warm.', img:'images/roll-cookie-butter.jpg'},
-  {e:'Espresso bar', t:'Good coffee,<br/>better <i>days.</i>', p:'Single-origin espresso, 18-hour cold brew, and house-made syrups. Pair with a pastry and save ₱30.', img:'https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=900&q=75'},
+  {e:'Espresso bar', t:'Good coffee,<br/>better <i>days.</i>', p:'Single-origin espresso, 18-hour cold brew, and house-made syrups. Pair with a pastry and save ₱30.', img:'images/coffee-caramel-iced-coffee.jpg'},
 ];
 let slide = 0, videoReady = false, videoPaused = false;
 /* Hero video: plays slowly once it can; respects reduced-motion and data-saver */

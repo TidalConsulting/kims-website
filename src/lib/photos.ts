@@ -17,7 +17,7 @@ export const localOr = (file: string, fallback: string) =>
   EMBEDDED[file] ?? (FILES.has(file) ? `/images/${file}` : fallback);
 
 const slug = (s: string) =>
-  s.toLowerCase().replace(/['’]/g, "").replace(/&/g, "and").replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+  s.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/['’]/g, "").replace(/&/g, "and").replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
 
 const CAT_PREFIX: Record<CategoryId, string> = {
   cookies: "cookie",
@@ -31,9 +31,12 @@ const CAT_PREFIX: Record<CategoryId, string> = {
 export const photoFileFor = (p: Product) => `${CAT_PREFIX[p.cat]}-${slug(p.name)}.jpg`;
 export const productPhoto = (p: Product) => localOr(photoFileFor(p), p.img);
 
-/** Cookie "inside" (broken-open) photo, cookie-<name>-inside.jpg, or undefined if there isn't one. */
+/** Cookies and cakes have a second photo: the cookie broken open, or a cake slice. */
+const HAS_INSIDE: CategoryId[] = ["cookies", "cakes"];
+
+/** <name>-inside.jpg (cookie broken open / cake slice), or undefined if there isn't one. */
 export const insidePhoto = (p: Product) => {
-  if (p.cat !== "cookies") return undefined;
+  if (!HAS_INSIDE.includes(p.cat)) return undefined;
   const file = photoFileFor(p).replace(/\.jpg$/, "-inside.jpg");
   return localOr(file, "") || undefined;
 };
@@ -42,8 +45,12 @@ export const insidePhoto = (p: Product) => {
 export const isPlate = (p?: Product) => p?.cat === "rolls";
 
 const CATEGORY_DEFAULT: Partial<Record<CategoryId, string>> = {
-  rolls: "roll-classic-cinnamon.jpg",
   cookies: "cookie-classic-chocolate-chip.jpg",
+  cakes: "cake-chocolate-salted-caramel-inside.jpg",
+  pastries: "pastry-classic-croissant.jpg",
+  rolls: "roll-classic-cinnamon.jpg",
+  coffee: "coffee-caramel-iced-coffee.jpg",
+  refreshments: "drink-peach-refresh.jpg",
 };
 
 /** category-<id>.jpg if you add one, otherwise a product photo for that category, otherwise stock. */
@@ -70,3 +77,9 @@ export const heroVideo = Object.keys(EMBEDDED).length
       { src: "/images/hero-cookie.mp4", type: "video/mp4" },
     ].filter((v) => FILES.has(v.src.slice("/images/".length)));
 
+
+/** Label for the second photo: "Slice" for cakes, "Inside" for cookies. */
+export const insideLabel = (p: Product) => (p.cat === "cakes" ? "Slice" : "Inside");
+
+/** Heading for a product's notes: ingredients for drinks, tasting notes for food. */
+export const notesLabel = (p: Product) => (p.cat === "coffee" || p.cat === "refreshments" ? "What's in it" : "Tasting notes");

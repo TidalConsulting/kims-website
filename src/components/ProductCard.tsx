@@ -36,7 +36,7 @@ export default function ProductCard({ p, index, sold, low }: { p: Product; index
         {inside && !sold && (
           <>
             <SmartImage src={inside} alt={`Inside of ${p.name}`} fill sizes="(max-width: 860px) 50vw, (max-width: 1080px) 33vw, 300px" emoji="" className="inside" />
-            <span className="inside-hint" aria-hidden="true">👀 See inside</span>
+            <span className="inside-hint" aria-hidden="true">{p.cat === "cakes" ? "🍰 See a slice" : "👀 See inside"}</span>
           </>
         )}
         {sold ? (

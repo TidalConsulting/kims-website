@@ -64,12 +64,12 @@ export interface Category {
 }
 
 export const CATS: Category[] = [
-  { id: "cookies", name: "Cookies", emoji: "🍪", img: IMG.cookie1, blurb: "Chewy, gooey, brown butter" },
-  { id: "cakes", name: "Cakes", emoji: "🎂", img: IMG.cake1, blurb: "Slices & whole cakes" },
-  { id: "pastries", name: "Pastries", emoji: "🥐", img: IMG.pastry1, blurb: "Laminated daily" },
+  { id: "cookies", name: "Cookies", emoji: "🍪", img: IMG.cookie1, blurb: "8 stuffed cookies" },
+  { id: "cakes", name: "Cakes", emoji: "🎂", img: IMG.cake1, blurb: "12 flavors · slice or whole" },
+  { id: "pastries", name: "Pastries", emoji: "🥐", img: IMG.pastry1, blurb: "14 baked every morning" },
   { id: "rolls", name: "Cinnamon Rolls", emoji: "🌀", img: IMG.roll, blurb: "9 signature swirls" },
-  { id: "coffee", name: "Coffee", emoji: "☕", img: IMG.coffee1, blurb: "Espresso bar & cold brew" },
-  { id: "refreshments", name: "Refreshments", emoji: "🍋", img: IMG.drink2, blurb: "Teas, lemonades, smoothies" },
+  { id: "coffee", name: "Coffee", emoji: "☕", img: IMG.coffee1, blurb: "10 iced, shaken & hot" },
+  { id: "refreshments", name: "Iced Teas", emoji: "🍹", img: IMG.drink2, blurb: "12 fresh-brewed blends" },
 ];
 
 /** A choice either adds `p`, multiplies the base price by `mult`, or sets a `fixed` price. */
@@ -83,7 +83,7 @@ export interface OptionGroup {
   name: string;
   choices: OptionChoice[];
 }
-export type OptionPreset = "cookie" | "cake" | "drink" | "cold" | "roll" | "none";
+export type OptionPreset = "cookie" | "cake" | "drink" | "cold" | "iced" | "hot" | "tea" | "roll" | "none";
 
 export const OPT: Record<OptionPreset, OptionGroup[]> = {
   cookie: [{ name: "Quantity", choices: [{ l: "Single", mult: 1 }, { l: "Half dozen", mult: 5.5 }, { l: "Dozen", mult: 10 }] }], // keep in line with BULK_RATE
@@ -94,6 +94,18 @@ export const OPT: Record<OptionPreset, OptionGroup[]> = {
     { name: "Temp", choices: [{ l: "Hot", p: 0 }, { l: "Iced", p: 0 }] },
   ],
   cold: [{ name: "Size", choices: [{ l: "16 oz", p: 0 }, { l: "24 oz", p: 40 }] }],
+  iced: [
+    { name: "Size", choices: [{ l: "16 oz", p: 0 }, { l: "24 oz", p: 40 }] },
+    { name: "Milk", choices: [{ l: "Whole", p: 0 }, { l: "Oat", p: 40 }, { l: "Almond", p: 40 }] },
+  ],
+  hot: [
+    { name: "Size", choices: [{ l: "12 oz", p: 0 }, { l: "16 oz", p: 20 }] },
+    { name: "Milk", choices: [{ l: "Whole", p: 0 }, { l: "Oat", p: 40 }, { l: "Almond", p: 40 }] },
+  ],
+  tea: [
+    { name: "Size", choices: [{ l: "16 oz", p: 0 }, { l: "24 oz", p: 30 }] },
+    { name: "Sweetness", choices: [{ l: "Regular", p: 0 }, { l: "Less sweet", p: 0 }, { l: "No honey", p: 0 }] },
+  ],
   roll: [{ name: "Quantity", choices: [{ l: "Single", mult: 1 }, { l: "4-pack", mult: 3.6 }, { l: "Party of 9 (one of each)", fixed: 1450 }] }],
   none: [],
 };
@@ -115,9 +127,12 @@ export interface Product {
   signature?: boolean;
   /** Swirl Collection emoji, also the image fallback. */
   emoji?: string;
-  /** Cookies: accent colour for the "Meet the cookies" lineup, and what's inside. */
+  /** Accent colour for the product's name in the "Meet the menu" lineup. */
   hue?: string;
+  /** Cookies: what's inside. */
   filling?: string;
+  /** Ingredients (drinks, "What's in it") or tasting notes (cakes, pastries). */
+  notes?: string[];
   /** CMS-driven: permanently unavailable (for day-to-day sell-outs use TODAY). */
   soldOut?: boolean;
   /** CMS-driven: days of week the item is baked (0 = Sunday). Omit for every day. */
@@ -135,17 +150,34 @@ export const PRODUCTS: Product[] = [
   { id: "c6", cat: "cookies", name: "Caramel Pecan", desc: "Salted caramel pools, toasted pecans, dark chocolate chunks.", price: 140, img: IMG.cookie1, opt: "cookie", box: true, hue: "#B8681D", filling: "Salted caramel" },
   { id: "c7", cat: "cookies", name: "Pistachio Raspberry", desc: "Pistachio dough, pistachio cream, fresh raspberries.", price: 150, img: IMG.cookie3, tag: "New", opt: "cookie", box: true, hue: "#5E7F22", filling: "Silky pistachio cream" },
   { id: "c8", cat: "cookies", name: "Red Velvet White Chocolate", desc: "Crimson cocoa dough with big white chocolate chunks.", price: 125, img: IMG.cookie3, opt: "cookie", box: true, hue: "#C8283E", filling: "Cream cheese filling" },
-  // Cakes
-  { id: "k1", cat: "cakes", name: "Belgian Chocolate Cake", desc: "Three layers, ganache drip, chocolate curls.", price: 220, img: IMG.cake1, tag: "Bestseller", opt: "cake" },
-  { id: "k2", cat: "cakes", name: "Salted Caramel Cake", desc: "Brown sugar sponge, house caramel, toasted pecans.", price: 220, img: IMG.cake3, opt: "cake" },
-  { id: "k3", cat: "cakes", name: "Classic Red Velvet", desc: "Buttermilk red velvet with cream cheese frosting.", price: 210, img: IMG.cake2, opt: "cake" },
-  { id: "k4", cat: "cakes", name: "Vanilla Berry Bliss", desc: "Vanilla bean sponge, fresh berries, whipped cream.", price: 200, img: IMG.cake2, opt: "cake" },
+  // Cakes: whole cake photo + slice photo (cake-<name>.jpg and cake-<name>-inside.jpg)
+  { id: "k1", cat: "cakes", name: "Chocolate Salted Caramel", desc: "Dark chocolate layers, salted caramel filling, caramel drip.", price: 240, img: IMG.cake1, tag: "Bestseller", opt: "cake", hue: "#6B3A1E", notes: ["Rich", "Sweet", "Indulgent"] },
+  { id: "k2", cat: "cakes", name: "Vanilla Strawberry", desc: "Vanilla sponge, whipped cream and fresh strawberries.", price: 220, img: IMG.cake1, opt: "cake", hue: "#D63A5A", notes: ["Soft", "Fruity", "Classic"] },
+  { id: "k3", cat: "cakes", name: "Lemon Blueberry", desc: "Lemon sponge, blueberry jam, lemon cream cheese frosting.", price: 220, img: IMG.cake1, opt: "cake", hue: "#4B4FB8", notes: ["Fresh", "Bright", "Fruity"] },
+  { id: "k4", cat: "cakes", name: "Chocolate Raspberry", desc: "Dark chocolate sponge, raspberry jam, glossy ganache.", price: 240, img: IMG.cake1, opt: "cake", hue: "#B0243F", notes: ["Decadent", "Tart", "Elegant"] },
+  { id: "k5", cat: "cakes", name: "Pistachio Rose", desc: "Pistachio sponge, pistachio cream, rose petals.", price: 250, img: IMG.cake1, tag: "New", opt: "cake", hue: "#5E7F22", notes: ["Floral", "Nutty", "Delicate"] },
+  { id: "k6", cat: "cakes", name: "Coconut Mango", desc: "Coconut sponge, mango curd, toasted coconut.", price: 230, img: IMG.cake1, opt: "cake", hue: "#E08A00", notes: ["Tropical", "Light", "Juicy"] },
+  { id: "k7", cat: "cakes", name: "Coffee Hazelnut", desc: "Coffee-soaked layers, hazelnut praline, mocha buttercream.", price: 240, img: IMG.cake1, opt: "cake", hue: "#7A4A26", notes: ["Bold", "Nutty", "Creamy"] },
+  { id: "k8", cat: "cakes", name: "Apple Cinnamon", desc: "Spiced sponge with baked cinnamon apples.", price: 210, img: IMG.cake1, opt: "cake", hue: "#B8681D", notes: ["Warm", "Cozy", "Spiced"] },
+  { id: "k9", cat: "cakes", name: "Pumpkin Cream Cheese", desc: "Pumpkin spice layers with cream cheese frosting.", price: 220, img: IMG.cake1, opt: "cake", hue: "#C4641B", notes: ["Fall", "Creamy", "Spiced"] },
+  { id: "k10", cat: "cakes", name: "Red Velvet White Chocolate", desc: "Red velvet layers, cream cheese, white chocolate.", price: 230, img: IMG.cake1, opt: "cake", hue: "#C8283E", notes: ["Velvety", "Sweet", "Luxe"] },
+  { id: "k11", cat: "cakes", name: "Orange Dark Chocolate", desc: "Dark chocolate sponge, orange marmalade, candied orange.", price: 240, img: IMG.cake1, opt: "cake", hue: "#D9541E", notes: ["Citrusy", "Rich", "Bold"] },
+  { id: "k12", cat: "cakes", name: "Pear Almond", desc: "Almond sponge, vanilla cream and poached pears.", price: 230, img: IMG.cake1, opt: "cake", hue: "#8A7A2B", notes: ["Subtle", "Nutty", "Refined"] },
   // Pastries
-  { id: "p1", cat: "pastries", name: "Butter Croissant", desc: "72-hour laminated dough. 27 flaky layers.", price: 135, img: IMG.pastry1, opt: "none" },
-  { id: "p2", cat: "pastries", name: "Pain au Chocolat", desc: "Two batons of dark chocolate in buttery pastry.", price: 155, img: IMG.pastry1, tag: "Bestseller", opt: "none" },
-  { id: "p3", cat: "pastries", name: "Almond Croissant", desc: "Twice-baked with frangipane and sliced almonds.", price: 175, img: IMG.pastry2, opt: "none" },
-  { id: "p4", cat: "pastries", name: "Strawberry Cream Danish", desc: "Vanilla custard, fresh strawberries, glaze.", price: 185, img: IMG.pastry1, tag: "New", opt: "none" },
-  { id: "p5", cat: "pastries", name: "Fudgy Walnut Brownie", desc: "Dense, crackly top, toasted walnuts.", price: 125, img: IMG.brownie, opt: "none" },
+  { id: "p1", cat: "pastries", name: "Almond Croissant", desc: "Twice-baked with frangipane and toasted sliced almonds.", price: 175, img: IMG.pastry1, opt: "none", hue: "#B8681D", notes: ["Flaky", "Nutty", "Buttery"] },
+  { id: "p2", cat: "pastries", name: "Mixed Berry Danish", desc: "Vanilla custard topped with fresh mixed berries.", price: 165, img: IMG.pastry1, opt: "none", hue: "#C8283E", notes: ["Fruity", "Creamy", "Flaky"] },
+  { id: "p3", cat: "pastries", name: "Pain au Chocolat", desc: "Two batons of dark chocolate in buttery pastry.", price: 155, img: IMG.pastry1, tag: "Bestseller", opt: "none", hue: "#6B3A1E", notes: ["Buttery", "Chocolatey", "Classic"] },
+  { id: "p4", cat: "pastries", name: "Lemon Tart", desc: "Zesty lemon curd under toasted meringue.", price: 160, img: IMG.pastry1, opt: "none", hue: "#C49A00", notes: ["Zesty", "Tangy", "Light"] },
+  { id: "p5", cat: "pastries", name: "Chocolate Éclair", desc: "Choux pastry, vanilla cream, chocolate glaze and hazelnuts.", price: 150, img: IMG.pastry1, opt: "none", hue: "#3B2016", notes: ["Creamy", "Chocolatey", "Crisp"] },
+  { id: "p6", cat: "pastries", name: "Classic Croissant", desc: "72-hour laminated dough. Shatteringly flaky.", price: 135, img: IMG.pastry1, opt: "none", hue: "#B8681D", notes: ["Buttery", "Flaky", "Golden"] },
+  { id: "p7", cat: "pastries", name: "Strawberry Tart", desc: "Vanilla pastry cream and glazed fresh strawberries.", price: 175, img: IMG.pastry1, tag: "New", opt: "none", hue: "#D63A5A", notes: ["Fresh", "Sweet", "Creamy"] },
+  { id: "p8", cat: "pastries", name: "Blueberry Muffin", desc: "Bursting with blueberries under a crunchy crumb top.", price: 120, img: IMG.pastry1, opt: "none", hue: "#4B4FB8", notes: ["Soft", "Fruity", "Crumbly"] },
+  { id: "p9", cat: "pastries", name: "Palmier", desc: "Caramelized puff pastry hearts.", price: 95, img: IMG.pastry1, opt: "none", hue: "#C4641B", notes: ["Crispy", "Caramelized", "Light"] },
+  { id: "p10", cat: "pastries", name: "Raspberry Danish", desc: "Cream cheese center with fresh raspberries.", price: 165, img: IMG.pastry1, opt: "none", hue: "#B0243F", notes: ["Tart", "Creamy", "Flaky"] },
+  { id: "p11", cat: "pastries", name: "Chocolate Brownie", desc: "Fudgy, crackly top, chocolate drizzle.", price: 125, img: IMG.pastry1, opt: "none", hue: "#3B2016", notes: ["Fudgy", "Rich", "Chewy"] },
+  { id: "p12", cat: "pastries", name: "Custard Danish", desc: "Vanilla custard swirl with crushed pistachios.", price: 150, img: IMG.pastry1, opt: "none", hue: "#C49A00", notes: ["Creamy", "Buttery", "Nutty"] },
+  { id: "p13", cat: "pastries", name: "Mille-Feuille", desc: "Crisp puff pastry layers and vanilla cream.", price: 185, img: IMG.pastry1, opt: "none", hue: "#8A7A2B", notes: ["Layered", "Creamy", "Crisp"] },
+  { id: "p14", cat: "pastries", name: "Chocolate Tart", desc: "Silky dark chocolate ganache with pistachios.", price: 170, img: IMG.pastry1, opt: "none", hue: "#6B3A1E", notes: ["Silky", "Rich", "Nutty"] },
   // Cinnamon rolls (Swirl Collection)
   { id: "r1", cat: "rolls", name: "Classic Cinnamon", desc: "The original. Brown sugar swirl and vanilla glaze.", price: 165, img: IMG.roll, tag: "Bestseller", opt: "roll", emoji: "🌀" },
   { id: "r2", cat: "rolls", name: "Chocolate Hazelnut", desc: "Hazelnut spread, chocolate drizzle, toasted hazelnuts.", price: 185, img: IMG.roll, opt: "roll", emoji: "🌰" },
@@ -156,20 +188,30 @@ export const PRODUCTS: Product[] = [
   { id: "r7", cat: "rolls", name: "Matcha White Chocolate", desc: "Ceremonial matcha glaze, white chocolate pearls.", price: 195, img: IMG.roll, tag: "New", opt: "roll", emoji: "🍵" },
   { id: "r8", cat: "rolls", name: "Red Velvet", desc: "Cocoa-red dough, cream cheese icing, velvet crumbs.", price: 185, img: IMG.roll, opt: "roll", emoji: "❤️" },
   { id: "r9", cat: "rolls", name: "Rose Pistachio", desc: "Rose water glaze, pistachios, dried petals.", price: 195, img: IMG.roll, opt: "roll", emoji: "🌹" },
-  // Coffee
-  { id: "d1", cat: "coffee", name: "Caramel Latte", desc: "Rich espresso, steamed milk, house caramel.", price: 185, img: IMG.coffee3, tag: "Bestseller", opt: "drink", signature: true },
-  { id: "d2", cat: "coffee", name: "Cappuccino", desc: "Bold espresso with velvety milk foam.", price: 160, img: IMG.coffee1, opt: "drink", signature: true },
-  { id: "d3", cat: "coffee", name: "Cold Brew", desc: "Steeped 18 hours. Smooth, chocolatey, strong.", price: 170, img: IMG.coffee4, opt: "cold", signature: true },
-  { id: "d4", cat: "coffee", name: "Honey Oat Latte", desc: "Local honey, oat milk, a dash of cinnamon.", price: 195, img: IMG.coffee1, tag: "New", opt: "drink" },
-  { id: "d5", cat: "coffee", name: "Mocha", desc: "Espresso, dark chocolate, whipped cream.", price: 190, img: IMG.coffee3, opt: "drink" },
-  { id: "d6", cat: "coffee", name: "Espresso", desc: "Double shot of our seasonal single origin.", price: 110, img: IMG.coffee2, opt: "none" },
-  // Refreshments
-  { id: "f1", cat: "refreshments", name: "Iced Matcha Latte", desc: "Ceremonial-grade matcha over milk and ice.", price: 190, img: IMG.drink1, opt: "drink" },
-  { id: "f2", cat: "refreshments", name: "Strawberry Lemonade", desc: "Fresh-squeezed lemons, muddled strawberries.", price: 150, img: IMG.drink2, tag: "Hot", opt: "cold" },
-  { id: "f3", cat: "refreshments", name: "Iced Peach Tea", desc: "Black tea brewed daily with peach purée.", price: 130, img: IMG.drink2, opt: "cold" },
-  { id: "f4", cat: "refreshments", name: "Mango Smoothie", desc: "Mango, banana, yogurt, a squeeze of lime.", price: 180, img: IMG.drink3, opt: "cold" },
-  { id: "f5", cat: "refreshments", name: "Classic Hot Chocolate", desc: "Melted dark chocolate and whole milk.", price: 150, img: IMG.coffee3, opt: "none" },
-  { id: "f6", cat: "refreshments", name: "Sparkling Water", desc: "Chilled, with a slice of citrus.", price: 90, img: IMG.drink3, opt: "none" },
+  // Coffee: notes are the ingredients, shown as "What's in it"
+  { id: "d1", cat: "coffee", name: "Vanilla Iced Coffee", desc: "Chilled coffee, milk and vanilla over ice.", price: 165, img: IMG.coffee1, opt: "iced", hue: "#6B3A1E", notes: ["Coffee", "Milk", "Vanilla syrup", "Ice"] },
+  { id: "d2", cat: "coffee", name: "Dalgona Coffee", desc: "Whipped coffee cloud over cold milk.", price: 175, img: IMG.coffee1, opt: "iced", hue: "#B8681D", notes: ["Whipped coffee", "Sugar", "Cold milk"] },
+  { id: "d3", cat: "coffee", name: "Honey Cinnamon Latte", desc: "Espresso, steamed milk, honey and cinnamon.", price: 185, img: IMG.coffee1, tag: "New", opt: "hot", hue: "#C4641B", notes: ["Espresso", "Milk", "Honey", "Cinnamon"] },
+  { id: "d4", cat: "coffee", name: "Mocha Iced Coffee", desc: "Chocolate coffee, whipped cream, chocolate drizzle.", price: 190, img: IMG.coffee1, opt: "iced", hue: "#3B2016", notes: ["Coffee", "Milk", "Cocoa", "Whipped cream"] },
+  { id: "d5", cat: "coffee", name: "Caramel Iced Coffee", desc: "Caramel coffee, whipped cream, caramel drizzle.", price: 185, img: IMG.coffee1, tag: "Bestseller", opt: "iced", signature: true, hue: "#B8681D", notes: ["Coffee", "Milk", "Caramel sauce", "Ice"] },
+  { id: "d6", cat: "coffee", name: "Affogato", desc: "Vanilla ice cream drowned in hot espresso.", price: 195, img: IMG.coffee1, opt: "none", hue: "#6B3A1E", notes: ["Vanilla ice cream", "Hot espresso"] },
+  { id: "d7", cat: "coffee", name: "Coconut Iced Coffee", desc: "Coffee over coconut milk and toasted coconut.", price: 180, img: IMG.coffee1, opt: "cold", hue: "#7A4A26", notes: ["Coffee", "Coconut milk", "Syrup", "Ice"] },
+  { id: "d8", cat: "coffee", name: "Brown Sugar Shaken Coffee", desc: "Espresso shaken with brown sugar, splash of milk.", price: 190, img: IMG.coffee1, tag: "Hot", opt: "iced", signature: true, hue: "#8A5A2B", notes: ["Espresso", "Brown sugar", "Milk", "Ice"] },
+  { id: "d9", cat: "coffee", name: "Coffee Smoothie", desc: "Coffee blended with banana, milk and honey.", price: 195, img: IMG.coffee1, opt: "cold", hue: "#B8681D", notes: ["Coffee", "Frozen banana", "Milk", "Honey"] },
+  { id: "d10", cat: "coffee", name: "Strawberry Iced Latte", desc: "Strawberry milk layered with espresso.", price: 195, img: IMG.coffee1, opt: "iced", signature: true, hue: "#D63A5A", notes: ["Strawberry milk", "Milk", "Espresso", "Ice"] },
+  // Iced teas (the category id stays "refreshments")
+  { id: "f1", cat: "refreshments", name: "Lemon Detox Tea", desc: "Black tea, lemon, ginger and honey.", price: 140, img: IMG.drink2, opt: "tea", hue: "#C49A00", notes: ["Black tea", "Lemon", "Ginger", "Honey"] },
+  { id: "f2", cat: "refreshments", name: "Peach Refresh", desc: "Black tea with fresh peaches and lemon.", price: 150, img: IMG.drink2, tag: "Bestseller", opt: "tea", hue: "#E0662A", notes: ["Black tea", "Peach", "Lemon", "Honey"] },
+  { id: "f3", cat: "refreshments", name: "Cucumber Mint Tea", desc: "Green tea, cucumber, mint and lemon.", price: 140, img: IMG.drink2, opt: "tea", hue: "#3F8A3A", notes: ["Green tea", "Cucumber", "Mint", "Lemon"] },
+  { id: "f4", cat: "refreshments", name: "Berry Antioxidant", desc: "Hibiscus tea with mixed berries.", price: 160, img: IMG.drink2, opt: "tea", hue: "#B0243F", notes: ["Hibiscus tea", "Mixed berries", "Lemon", "Honey"] },
+  { id: "f5", cat: "refreshments", name: "Ginger Lemon Tea", desc: "Black tea, fresh ginger, lemon and honey.", price: 140, img: IMG.drink2, opt: "tea", hue: "#B8681D", notes: ["Black tea", "Ginger", "Lemon", "Honey"] },
+  { id: "f6", cat: "refreshments", name: "Pineapple Green Tea", desc: "Green tea, pineapple and mint.", price: 150, img: IMG.drink2, tag: "New", opt: "tea", hue: "#8A9A00", notes: ["Green tea", "Pineapple", "Mint", "Honey"] },
+  { id: "f7", cat: "refreshments", name: "Turmeric Ginger Tea", desc: "Green tea, turmeric, ginger and lemon.", price: 150, img: IMG.drink2, opt: "tea", hue: "#D98A00", notes: ["Green tea", "Turmeric", "Ginger", "Lemon"] },
+  { id: "f8", cat: "refreshments", name: "Orange Cinnamon Tea", desc: "Black tea, orange and cinnamon.", price: 145, img: IMG.drink2, opt: "tea", hue: "#E0662A", notes: ["Black tea", "Orange", "Cinnamon", "Honey"] },
+  { id: "f9", cat: "refreshments", name: "Mint Lemon Tea", desc: "Green tea, fresh mint and lemon.", price: 140, img: IMG.drink2, opt: "tea", hue: "#3F8A3A", notes: ["Green tea", "Mint", "Lemon", "Honey"] },
+  { id: "f10", cat: "refreshments", name: "Apple Cinnamon Tea", desc: "Black tea, apple and cinnamon.", price: 145, img: IMG.drink2, opt: "tea", hue: "#C8283E", notes: ["Black tea", "Apple", "Cinnamon", "Honey"] },
+  { id: "f11", cat: "refreshments", name: "Hibiscus Ginger Tea", desc: "Hibiscus tea, ginger and lemon.", price: 150, img: IMG.drink2, opt: "tea", hue: "#B0243F", notes: ["Hibiscus tea", "Ginger", "Lemon", "Honey"] },
+  { id: "f12", cat: "refreshments", name: "Citrus Green Tea", desc: "Green tea, lemon and lime.", price: 140, img: IMG.drink2, opt: "tea", hue: "#8A9A00", notes: ["Green tea", "Lemon", "Lime", "Honey"] },
 ];
 
 /* ---------------------------------------------------------
@@ -216,7 +258,7 @@ export const BATCH_TIMES = [7, 11, 15];
 export const SLIDES = [
   { e: "Fresh from the oven", t: ["Baked slow.", "Brewed", "bold."], p: "Golden-edged cookies, soft-centered cinnamon rolls, and coffee pulled by people who care. Order ahead and skip the line.", file: "hero-cookie.jpg", img: IMG.cookie1, emoji: "🍪", video: true },
   { e: "The Swirl Collection", t: ["Nine rolls.", "Zero", "regrets."], p: "From Classic Cinnamon to Rose Pistachio. Rolled by hand every morning, glazed while warm.", file: "roll-cookie-butter.jpg", img: IMG.roll, emoji: "🌀" },
-  { e: "Espresso bar", t: ["Good coffee,", "better", "days."], p: "Single-origin espresso, 18-hour cold brew, and house-made syrups. Pair with a pastry and save ₱30.", img: IMG.coffee1, emoji: "☕" },
+  { e: "Espresso bar", t: ["Good coffee,", "better", "days."], p: "Single-origin espresso, 18-hour cold brew, and house-made syrups. Pair with a pastry and save ₱30.", file: "coffee-caramel-iced-coffee.jpg", img: IMG.coffee1, emoji: "☕" },
 ] as { e: string; t: string[]; p: string; file?: string; img: string; emoji: string; video?: boolean }[];
 
 /** All prices are in this currency. */

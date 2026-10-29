@@ -107,11 +107,12 @@ export const useShop = create<ShopState>()(
       name: "ck_shop",
       storage: createJSONStorage(() => localStorage),
       partialize: (s) => ({ cart: s.cart, favs: s.favs }),
-      // Bump when prices change: older carts (v1 USD, v2 old peso prices) are dropped; favorites are kept.
-      version: 3,
+      // Bump when prices or products change: older carts (v1 USD, v2/v3 earlier menus) are dropped.
+      // Favorites are kept.
+      version: 4,
       migrate: (persisted, version) => {
         const old = persisted as { cart?: CartLine[]; favs?: string[] };
-        return version < 3 ? { cart: [], favs: old.favs ?? [] } : old;
+        return version < 4 ? { cart: [], favs: old.favs ?? [] } : old;
       },
       // Rehydrated on mount (see StoreHydrator) so the server and first client render match.
       skipHydration: true,

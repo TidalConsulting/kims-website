@@ -37,34 +37,7 @@ Cookie **inside** shots (broken in half to show the filling, side view, same pas
 - cookie-red-velvet-white-chocolate-inside.jpg
 Shooting tip: break the cookie while it's still warm, stack the halves, and shoot from the side at cookie height.
 
-Cakes (a slice on a plate, overhead or 45°)
-- cake-belgian-chocolate-cake.jpg
-- cake-salted-caramel-cake.jpg
-- cake-classic-red-velvet.jpg
-- cake-vanilla-berry-bliss.jpg
-
-Pastries
-- pastry-butter-croissant.jpg
-- pastry-pain-au-chocolat.jpg
-- pastry-almond-croissant.jpg
-- pastry-strawberry-cream-danish.jpg
-- pastry-fudgy-walnut-brownie.jpg
-
-Coffee (top-down latte art works great; iced drinks at 45°)
-- coffee-caramel-latte.jpg
-- coffee-cappuccino.jpg
-- coffee-cold-brew.jpg
-- coffee-honey-oat-latte.jpg
-- coffee-mocha.jpg
-- coffee-espresso.jpg
-
-Refreshments
-- drink-iced-matcha-latte.jpg
-- drink-strawberry-lemonade.jpg
-- drink-iced-peach-tea.jpg
-- drink-mango-smoothie.jpg
-- drink-classic-hot-chocolate.jpg
-- drink-sparkling-water.jpg
+**Cakes, pastries, coffee and iced teas: done (AI-generated, pastel pink, 76 photos in total).** File names follow `<category>-<item-name>.jpg`; cakes also have `-inside.jpg` (the slice). See `CANVA-LINKS.md` for the full-size downloads. Swap in real photos of your own products before launch.
 
 ## Section photos
 - `hero-cookie.jpg`: square, 1400×1400. One hero cookie broken in half on slate. Also the poster frame for the video.

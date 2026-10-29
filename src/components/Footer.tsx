@@ -33,7 +33,7 @@ export default function Footer() {
           <h2 className="foot-h">Café</h2>
           <ul>
             <li><FilterLink filter="coffee">Coffee</FilterLink></li>
-            <li><FilterLink filter="refreshments">Refreshments</FilterLink></li>
+            <li><FilterLink filter="refreshments">Iced Teas</FilterLink></li>
             <li><a href="#visit">Reservations</a></li>
             <li><a href="#visit">Catering</a></li>
           </ul>

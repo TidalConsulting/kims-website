@@ -91,7 +91,7 @@ export default function Nav() {
               </a>
             </div>
           </li>
-          <li><a href="#cookies">Cookies</a></li>
+          <li><a href="#cookies">Meet the Menu</a></li>
           <li><a href="#box">Build a Box</a></li>
           <li><a href="#coffee">Coffee</a></li>
           <li><a href="#story">Our Story</a></li>
