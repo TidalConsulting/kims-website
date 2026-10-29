@@ -18,16 +18,6 @@ export const Next = (p: P) => <svg {...stroke} {...p}><path d="m9 6 6 6-6 6" /><
 export const Check = (p: P) => <svg {...stroke} strokeWidth={3} {...p}><path d="m5 12 5 5 9-10" /></svg>;
 export const Play = (p: P) => <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden {...p}><path d="M8 5v14l11-7z" /></svg>;
 
-export const LogoMark = (p: P) => (
-  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden {...p}>
-    <circle cx="12" cy="12" r="9" />
-    <circle cx="9" cy="10" r="1.2" fill="currentColor" />
-    <circle cx="14.5" cy="9" r="1" fill="currentColor" />
-    <circle cx="13" cy="14.5" r="1.3" fill="currentColor" />
-    <circle cx="8.5" cy="15" r=".8" fill="currentColor" />
-  </svg>
-);
-
 export const Instagram = (p: P) => (
   <svg {...stroke} {...p}><rect x="3" y="3" width="18" height="18" rx="5" /><circle cx="12" cy="12" r="4" /><circle cx="17.5" cy="6.5" r="1" fill="currentColor" /></svg>
 );

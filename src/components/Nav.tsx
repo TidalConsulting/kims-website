@@ -1,12 +1,13 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { BUSINESS, CATS } from "@/lib/data";
+import { CATS } from "@/lib/data";
 import { SECTION_PHOTOS } from "@/lib/photos";
 import { cartCount, useShop } from "@/store/shop";
 import FilterLink from "./FilterLink";
 import SmartImage from "./SmartImage";
-import { Bag, Burger, Chevron, Heart, LogoMark, Search } from "./icons";
+import Logo from "./Logo";
+import { Bag, Burger, Chevron, Heart, Search } from "./icons";
 
 const BAKERY = CATS.slice(0, 4);
 const CAFE = CATS.slice(4);
@@ -48,10 +49,7 @@ export default function Nav() {
   return (
     <header className={`nav ${scrolled ? "scrolled" : ""}`}>
       <div className="shell nav-inner">
-        <a href="#top" className="logo" aria-label={`${BUSINESS.name} home`}>
-          <span className="logo-mark"><LogoMark /></span>
-          <span>{BUSINESS.name}<small>{BUSINESS.tagline}</small></span>
-        </a>
+        <Logo />
 
         <ul className="nav-links">
           <li><a href="#top">Home</a></li>

@@ -72,7 +72,7 @@ export async function POST(req: Request) {
   }
 
   const t = cartTotals(items, mode);
-  const orderNo = "CK-" + crypto.randomUUID().slice(0, 5).toUpperCase();
+  const orderNo = "CC-" + crypto.randomUUID().slice(0, 5).toUpperCase();
   const time = str(body.time, 40);
   const notes = str(body.notes);
   const online = paymongoEnabled();

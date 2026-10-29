@@ -5,7 +5,7 @@ import { useShop } from "@/store/shop";
 
 /**
  * Loads the persisted cart + favorites after the first render (avoids hydration mismatches),
- * then handles the return from PayMongo: ?order=CK-XXXXX after paying, ?order_cancelled=1 after backing out.
+ * then handles the return from PayMongo: ?order=CC-XXXXX after paying, ?order_cancelled=1 after backing out.
  */
 export default function StoreHydrator() {
   useEffect(() => {

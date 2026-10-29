@@ -1,4 +1,4 @@
-# Crumb & Kettle: Bakery + Coffee site
+# Coffee Crumble: bakery & café site
 
 Next.js (App Router), TypeScript, Tailwind CSS v4 and Zustand. Built from the single-file prototype in `prototype/index.html`, which is kept for reference. `CLAUDE.md` has the spec.
 
@@ -17,6 +17,7 @@ Copy `.env.example` to `.env.local` and set `NEXT_PUBLIC_SITE_URL`. The sitemap,
 
 | What | Where |
 | --- | --- |
+| Logo files (`public/brand/`, original PDF in `docs/brand/`), lockup in `Logo.tsx` | `public/brand/`, `src/components/Logo.tsx` |
 | Brand name, address, phone, hours, time zone, socials | `src/lib/data.ts` → `BUSINESS`, `HOURS` |
 | Currency (PHP), VAT rate, delivery fee, free-delivery minimum, box prices | `src/lib/data.ts` → `CURRENCY`, `VAT_RATE`, `DELIVERY_FEE`, `FREE_DELIVERY`, `BOX_PRICE` |
 | Products, categories, option presets, reviews, hero slides | `src/lib/data.ts` |

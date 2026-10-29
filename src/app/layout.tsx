@@ -10,13 +10,13 @@ const caveat = Caveat({ subsets: ["latin"], weight: ["500", "700"], variable: "-
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  title: `${BUSINESS.name} — Bakery & Coffee`,
+  title: `${BUSINESS.name} — Bakery & Café`,
   description: BUSINESS.description,
   alternates: { canonical: "/" },
   openGraph: {
     type: "website",
     siteName: BUSINESS.name,
-    title: `${BUSINESS.name} — Bakery & Coffee`,
+    title: `${BUSINESS.name} — Bakery & Café`,
     description: BUSINESS.description,
   },
   twitter: { card: "summary_large_image" },

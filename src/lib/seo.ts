@@ -16,6 +16,8 @@ export function jsonLd() {
     servesCuisine: ["Bakery", "Coffee"],
     foundingDate: String(BUSINESS.foundedYear),
     image: `${SITE_URL}/opengraph-image`,
+    logo: `${SITE_URL}/brand/logo-badge.png`,
+    slogan: BUSINESS.slogan,
     address: {
       "@type": "PostalAddress",
       streetAddress: BUSINESS.street,

@@ -11,7 +11,7 @@ export const ONLINE_PAYMENT = !STATIC_PREVIEW && process.env.NEXT_PUBLIC_ONLINE_
 export async function postJson<T = { ok: true }>(url: string, body: unknown): Promise<T> {
   if (STATIC_PREVIEW) {
     await new Promise((r) => setTimeout(r, 400));
-    if (url === "/api/order") return { orderNo: "CK-" + crypto.randomUUID().slice(0, 5).toUpperCase() } as T;
+    if (url === "/api/order") return { orderNo: "CC-" + crypto.randomUUID().slice(0, 5).toUpperCase() } as T;
     return { ok: true } as T;
   }
   const res = await fetch(url, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });

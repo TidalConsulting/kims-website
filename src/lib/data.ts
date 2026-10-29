@@ -4,13 +4,16 @@
    or a Supabase table so the owner can edit without code.
    ========================================================= */
 
-// "Crumb & Kettle" is a placeholder brand. Swap in the real details.
+// Brand: Coffee Crumble (logo: docs/brand/Coffee_Crumble_Logo.pdf).
+// The address, phone, email and socials below are still placeholders. Swap in the real details.
 export const BUSINESS = {
-  name: "Crumb & Kettle",
-  tagline: "Bakery · Coffee",
+  name: "Coffee Crumble",
+  slogan: "baked slow · brewed bold",
+  taglineShort: "bakery & café",
+  tagline: "Bakery · Café",
   description:
     "Small-batch cookies, cakes, pastries, cinnamon rolls, and specialty coffee. Order for pickup or delivery.",
-  email: "hello@crumbandkettle.com",
+  email: "hello@coffeecrumble.com",
   phone: "(555) 123-4567",
   street: "123 Main Street",
   city: "Your City",
@@ -20,7 +23,7 @@ export const BUSINESS = {
   // Used to compute "Open now" in the shop's local time, not the visitor's.
   timeZone: "Asia/Manila",
   priceRange: "₱₱",
-  foundedYear: 2019,
+  foundedYear: 2026,
   socials: {
     instagram: "#",
     facebook: "#",

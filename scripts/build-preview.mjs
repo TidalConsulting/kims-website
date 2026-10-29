@@ -25,7 +25,7 @@ try {
 
   const out = join(work, "out");
   const file = (url) => readFileSync(join(out, url.split("?")[0]));
-  const mime = { woff2: "font/woff2", woff: "font/woff", ttf: "font/ttf", svg: "image/svg+xml", png: "image/png" };
+  const mime = { woff2: "font/woff2", woff: "font/woff", ttf: "font/ttf", svg: "image/svg+xml", png: "image/png", jpg: "image/jpeg", jpeg: "image/jpeg", webp: "image/webp", avif: "image/avif" };
   const dataUri = (url) => `data:${mime[url.split(".").pop().split("?")[0]] ?? "application/octet-stream"};base64,${file(url).toString("base64")}`;
 
   let html = readFileSync(join(out, "index.html"), "utf8");
@@ -52,9 +52,15 @@ try {
   // Both are already inlined above, so drop those references from the (JS-string-escaped) payload.
   html = html.replace(/:HL\[\\"\/_next\/[^\]]*\]\\n/g, "");
   html = html.replace(/\[\\"\$\\",\\"link\\",\\"\d+\\",\{\\"rel\\":\\"stylesheet\\",\\"href\\":\\"\/_next\/[^}]*\}\]/g, "null");
+  // Imported images (e.g. the logo) are referenced by path from the HTML and the inlined scripts.
+  html = html.replace(/\/_next\/static\/media\/[^"'\\)\s]+?\.(?:png|jpe?g|webp|avif|svg)/g, (u) => dataUri(u));
   // Preloads and the favicon pointed at files that no longer exist.
   html = html.replace(/<link rel="(?:preload|modulepreload)"[^>]*\/?>/g, "");
-  html = html.replace(/<link rel="icon" href="\/icon\.svg[^"]*"([^>]*)\/?>/, `<link rel="icon" href="${dataUri("/icon.svg")}"$1/>`);
+  // App icons are referenced from the HTML and from the start-up payload: embed them everywhere.
+  for (const icon of ["/icon.png", "/apple-icon.png"]) {
+    const uri = dataUri(icon);
+    html = html.replaceAll(new RegExp(`${icon.replace(".", "\\.")}(\\?[\\w-]+)?(?=["\\\\])`, "g"), uri);
+  }
 
   const dest = join(root, "preview");
   mkdirSync(dest, { recursive: true });

@@ -1,17 +1,15 @@
 import { BUSINESS } from "@/lib/data";
 import FilterLink from "./FilterLink";
 import InfoLink from "./InfoLink";
-import { Facebook, Instagram, LogoMark, TikTok } from "./icons";
+import Logo from "./Logo";
+import { Facebook, Instagram, TikTok } from "./icons";
 
 export default function Footer() {
   return (
     <footer>
       <div className="shell foot-grid">
         <div>
-          <a href="#top" className="logo">
-            <span className="logo-mark"><LogoMark /></span>
-            <span>{BUSINESS.name}</span>
-          </a>
+          <Logo variant="dark" />
           <p className="mt-3.5 max-w-[30ch]">Baked slow. Brewed bold. Made for the little moments.</p>
           <div className="socials">
             <a href={BUSINESS.socials.instagram} aria-label="Instagram"><Instagram /></a>
