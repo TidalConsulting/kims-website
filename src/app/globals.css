@@ -526,8 +526,8 @@ footer .foot-h{color:var(--lemon)!important}
 .done p{color:var(--muted);margin:10px auto 24px;max-width:40ch}
 .order-no{display:inline-block;font-family:monospace;background:var(--cotton-2);padding:6px 12px;border-radius:8px;margin-bottom:22px}
 
-.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(140%);background:var(--plum);color:var(--cotton);padding:14px 20px;border-radius:14px;z-index:120;display:flex;align-items:center;gap:12px;font-size:.9rem;box-shadow:var(--shadow-lg);transition:transform .4s var(--ease)}
-.toast.show{transform:translateX(-50%) translateY(0)}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(calc(100% + 40px));visibility:hidden;background:var(--plum);color:var(--cotton);padding:14px 20px;border-radius:14px;z-index:120;display:flex;align-items:center;gap:12px;font-size:.9rem;box-shadow:var(--shadow-lg);transition:transform .4s var(--ease),visibility 0s .4s}
+.toast.show{transform:translateX(-50%) translateY(0);visibility:visible;transition:transform .4s var(--ease)}
 .toast button{color:var(--lemon);font-weight:700;text-decoration:underline}
 
 .fab{position:fixed;right:20px;bottom:20px;z-index:60;display:none!important;box-shadow:var(--shadow-lg)}

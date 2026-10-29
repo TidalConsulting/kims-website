@@ -109,7 +109,9 @@ export function liveStatus(date = new Date()) {
     ? `until ${fmtHour(today.c)}`
     : `opens ${hour < today.o ? "at " + fmtHour(today.o) : "tomorrow " + fmtHour(HOURS[(day + 1) % 7].o)}`;
   const next = BATCH_TIMES.find((b) => b > hour);
-  const nextBatch = next ? `in ${Math.round((next - hour) * 60)} min` : `tomorrow ${fmtHour(BATCH_TIMES[0])}`;
+  // "in 25 min" when it's close; otherwise the clock time, so it never reads "in 338 min".
+  const mins = next ? Math.round((next - hour) * 60) : 0;
+  const nextBatch = !next ? `tomorrow ${fmtHour(BATCH_TIMES[0])}` : mins <= 90 ? `in ${mins} min` : `at ${fmtHour(next)}`;
   return { day, open, sub, nextBatch };
 }
 
