@@ -45,7 +45,7 @@ export default function QuickView({ p }: { p: Product }) {
       </div>
       <div className="qv-body">
         <span className="eyebrow">{CATS.find((c) => c.id === p.cat)?.name}</span>
-        <h3 id="modal-title">{p.name}</h3>
+        <h3 id="modal-title" style={p.hue ? { color: p.hue } : undefined}>{p.name}</h3>
         <p className="desc">{p.desc}</p>
         {p.filling && <p className="mt-2 text-[.88rem]"><b className="text-pink">Inside:</b> {p.filling}</p>}
         {p.notes && (

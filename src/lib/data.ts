@@ -144,7 +144,7 @@ export interface Product {
   signature?: boolean;
   /** Swirl Collection emoji, also the image fallback. */
   emoji?: string;
-  /** Accent colour for the product's name in the "Meet the menu" lineup. */
+  /** Accent colour for the product's name in the quick view. */
   hue?: string;
   /** Cookies: what's inside. */
   filling?: string;
