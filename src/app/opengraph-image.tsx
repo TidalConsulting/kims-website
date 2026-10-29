@@ -18,13 +18,13 @@ export default function OgImage() {
           flexDirection: "column",
           justifyContent: "center",
           padding: 80,
-          background: "radial-gradient(1200px 600px at 75% 40%, #4a2d1d 0%, #24160F 60%)",
-          color: "#F7F0E6",
+          background: "radial-gradient(700px 500px at 78% 40%, rgba(255,95,174,.55) 0%, transparent 60%), radial-gradient(600px 500px at 10% 90%, rgba(123,63,228,.55) 0%, transparent 60%), #2B1340",
+          color: "#FFF0F7",
         }}
       >
-        <div style={{ fontSize: 28, letterSpacing: 8, textTransform: "uppercase", color: "#C8925A" }}>{BUSINESS.tagline}</div>
+        <div style={{ fontSize: 28, letterSpacing: 8, textTransform: "uppercase", color: "#FF8AC4" }}>{BUSINESS.tagline}</div>
         <div style={{ fontSize: 110, marginTop: 20, lineHeight: 1.05 }}>{BUSINESS.name}</div>
-        <div style={{ fontSize: 56, marginTop: 24, color: "#E0B07A", fontStyle: "italic" }}>Baked slow. Brewed bold.</div>
+        <div style={{ fontSize: 56, marginTop: 24, color: "#FFD93D" }}>Baked slow. Brewed bold.</div>
       </div>
     ),
     size,

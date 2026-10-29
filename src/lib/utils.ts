@@ -1,4 +1,4 @@
-import { BATCH_TIMES, BUSINESS, CATS, CURRENCY, HOURS, OPT, PRODUCTS, VAT_RATE, type OptionChoice, type Product } from "./data";
+import { BATCH_TIMES, BUSINESS, CATS, CURRENCY, HOURS, OPT, PRODUCTS, TODAY, VAT_RATE, type OptionChoice, type Product } from "./data";
 
 const fmtWhole = new Intl.NumberFormat(CURRENCY.locale, { style: "currency", currency: CURRENCY.code, maximumFractionDigits: 0 });
 const fmtCents = new Intl.NumberFormat(CURRENCY.locale, { style: "currency", currency: CURRENCY.code, minimumFractionDigits: 2 });
@@ -31,10 +31,13 @@ export function optLabel(p: Product, c: OptionChoice) {
   return "";
 }
 
-/** Is the product on sale today? Respects CMS-driven soldOut and availableDays. */
-export function isAvailable(p: Product, day: number) {
-  return !p.soldOut && (!p.availableDays || p.availableDays.includes(day));
+/** Sold out today: listed in TODAY, flagged soldOut, or not baked on this day of the week. */
+export function isSold(p: Product, day: number | null = null) {
+  return TODAY.soldOut.includes(p.id) || !!p.soldOut || (day !== null && !!p.availableDays && !p.availableDays.includes(day));
 }
+
+/** How many are left when stock is low ("Only N left"), otherwise undefined. */
+export const lowStock = (p: Product) => (isSold(p) ? undefined : TODAY.low[p.id]);
 
 export function fmtHour(h: number) {
   return new Date(2000, 0, 1, h).toLocaleTimeString([], { hour: "numeric" });

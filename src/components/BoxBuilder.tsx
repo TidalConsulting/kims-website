@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 import { BOX_PRICE, IMG, PRODUCTS } from "@/lib/data";
-import { byId, money } from "@/lib/utils";
+import { localOr, productPhoto } from "@/lib/photos";
+import { byId, isSold, money } from "@/lib/utils";
 import { useShop } from "@/store/shop";
 import Reveal from "./Reveal";
 import SmartImage from "./SmartImage";
@@ -15,12 +16,16 @@ export default function BoxBuilder() {
   const { addToCart, showToast } = useShop.getState();
   const full = items.length === size;
 
-  const pick = (id: string) =>
-    items.length < size ? setItems([...items, id]) : showToast("Your box is full! Tap a cookie in the box to swap it.");
+  const pick = (id: string) => {
+    if (isSold(byId(id)!)) return showToast("That one sold out today. Pick another!");
+    if (items.length < size) setItems([...items, id]);
+    else showToast("Your box is full! Tap a cookie in the box to swap it.");
+  };
 
   const surprise = () => {
+    const avail = COOKIES.filter((c) => !isSold(c));
     const next = [...items];
-    while (next.length < size) next.push(COOKIES[Math.floor(Math.random() * COOKIES.length)].id);
+    while (next.length < size) next.push(avail[Math.floor(Math.random() * avail.length)].id);
     setItems(next);
   };
 
@@ -30,7 +35,7 @@ export default function BoxBuilder() {
     addToCart({
       pid: "box" + size,
       name: `Mix & Match Box (${size})`,
-      img: IMG.cookie2,
+      img: localOr("gift-box.jpg", IMG.cookie2),
       price: BOX_PRICE[size],
       opts: Object.entries(counts).map(([n, q]) => `${q}× ${n}`).join(", "),
       qty: 1,
@@ -53,11 +58,18 @@ export default function BoxBuilder() {
           <div className="box-picks">
             {COOKIES.map((c) => {
               const n = items.filter((x) => x === c.id).length;
+              const sold = isSold(c);
               return (
-                <button className="pick" key={c.id} onClick={() => pick(c.id)} aria-label={`Add ${c.name} to box${n ? ` (${n} in box)` : ""}`}>
+                <button
+                  className={`pick ${sold ? "sold" : ""}`}
+                  key={c.id}
+                  onClick={() => pick(c.id)}
+                  aria-disabled={sold || undefined}
+                  aria-label={sold ? `${c.name} (sold out today)` : `Add ${c.name} to box${n ? ` (${n} in box)` : ""}`}
+                >
                   <span className={`qty ${n ? "show" : ""}`} aria-hidden="true">{n}</span>
                   <div className="pimg">
-                    <SmartImage src={c.img} alt="" fill sizes="(max-width: 520px) 45vw, 220px" emoji="🍪" className="object-cover" />
+                    <SmartImage src={productPhoto(c)} alt="" fill sizes="(max-width: 520px) 45vw, 220px" emoji="🍪" className="object-cover" />
                   </div>
                   <b>{c.name}</b>
                 </button>
@@ -91,7 +103,7 @@ export default function BoxBuilder() {
                     aria-label={`Remove ${byId(id)!.name} from box`}
                     onClick={() => setItems(items.filter((_, j) => j !== i))}
                   >
-                    <SmartImage src={byId(id)!.img} alt="" fill sizes="60px" emoji="🍪" className="object-cover" />
+                    <SmartImage src={productPhoto(byId(id)!)} alt="" fill sizes="60px" emoji="🍪" className="object-cover" />
                   </button>
                 ) : (
                   <div key={i} className="slot" aria-hidden="true">{i + 1}</div>

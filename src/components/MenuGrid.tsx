@@ -1,7 +1,7 @@
 "use client";
 
-import { CATS, PRODUCTS } from "@/lib/data";
-import { isAvailable, shopNow } from "@/lib/utils";
+import { CATS, PRODUCTS, TODAY } from "@/lib/data";
+import { isSold, shopNow } from "@/lib/utils";
 import { useShop, type Sort } from "@/store/shop";
 import ProductCard from "./ProductCard";
 import Reveal from "./Reveal";
@@ -22,6 +22,9 @@ export default function MenuGrid() {
   if (sort === "high") list = [...list].sort((a, b) => b.price - a.price);
   if (sort === "az") list = [...list].sort((a, b) => a.name.localeCompare(b.name));
   if (sort === "fav") list = list.filter((p) => favs.includes(p.id));
+  // Sold-out items sink to the bottom (a stable sort keeps the chosen order otherwise).
+  list = [...list].sort((a, b) => Number(isSold(a, day)) - Number(isSold(b, day)));
+  const soldHere = PRODUCTS.filter((p) => isSold(p, day) && (filter === "all" || p.cat === filter));
 
   return (
     <section className="section" id="menu">
@@ -67,10 +70,17 @@ export default function MenuGrid() {
             </select>
           </div>
         </div>
+        {soldHere.length > 0 && (
+          <div className="sold-strip">
+            <span>🔥 <b>Sold out today:</b></span>
+            {soldHere.map((p) => <span className="pill" key={p.id}>{p.name}</span>)}
+            <span className="ml-auto text-muted">Fresh batch {TODAY.restock}</span>
+          </div>
+        )}
         <div className="grid" aria-live="polite">
           {list.length ? (
             list.map((p, i) => (
-              <ProductCard key={p.id} p={p} index={i} available={day === null || isAvailable(p, day)} />
+              <ProductCard key={p.id} p={p} index={i} sold={isSold(p, day)} />
             ))
           ) : (
             <div className="empty">

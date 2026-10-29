@@ -1,4 +1,4 @@
-import { IMG } from "@/lib/data";
+import { SECTION_PHOTOS } from "@/lib/photos";
 import Reveal from "./Reveal";
 import SmartImage from "./SmartImage";
 
@@ -8,7 +8,7 @@ export default function Gift() {
       <div className="shell">
         <Reveal className="gift">
           <div className="gift-img">
-            <SmartImage src={IMG.cookie2} alt="Cookies arranged for gifting" fill sizes="(max-width: 860px) 100vw, 620px" emoji="🎁" className="object-cover" />
+            <SmartImage src={SECTION_PHOTOS.gift} alt="Cookies arranged for gifting" fill sizes="(max-width: 860px) 100vw, 620px" emoji="🎁" className="object-cover" />
           </div>
           <div className="gift-text">
             <span className="eyebrow">Gift boxes &amp; catering</span>

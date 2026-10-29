@@ -37,3 +37,4 @@ export const Facebook = (p: P) => (
 export const TikTok = (p: P) => (
   <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden {...p}><path d="M16 3c.3 2.2 1.8 3.8 4 4v3.2c-1.5 0-2.9-.4-4-1.2V15a6 6 0 1 1-6-6v3.3a2.7 2.7 0 1 0 2.7 2.7V3H16z" /></svg>
 );
+export const Pause = (p: P) => <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden {...p}><path d="M7 5h4v14H7zM13 5h4v14h-4z" /></svg>;

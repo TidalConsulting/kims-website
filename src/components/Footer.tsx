@@ -8,7 +8,7 @@ export default function Footer() {
       <div className="shell foot-grid">
         <div>
           <a href="#top" className="logo">
-            <span className="logo-mark bg-caramel text-espresso"><LogoMark /></span>
+            <span className="logo-mark"><LogoMark /></span>
             <span>{BUSINESS.name}</span>
           </a>
           <p className="mt-3.5 max-w-[30ch]">Baked slow. Brewed bold. Made for the little moments.</p>

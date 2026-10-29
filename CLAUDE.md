@@ -17,21 +17,43 @@
 - Coffee section (sage-green palette) with 3 signature drinks
 - Story section with animated counters and a video-modal placeholder
 - Gifting banner, reviews carousel, visit/hours (today highlighted), a reservation/catering form, newsletter, and footer
-- **Cart drawer**: quantity steppers, free-delivery progress bar ($35 threshold), tax
+- **Cart drawer**: quantity steppers, free-delivery progress bar (₱1,000 threshold, ₱79 delivery fee), VAT-inclusive totals
 - **Checkout modal**: pickup or delivery, generated time slots, validation, and an order-confirmation screen
 - Cart and favorites persist in localStorage. Scroll-reveal animations respect `prefers-reduced-motion`.
 
-## Design tokens
-All colors and fonts live in `:root` at the top of the `<style>` block.
-- Espresso `#24160F`, Caramel `#C8925A`, Cream `#F7F0E6`, Paper `#FBF8F3`, Sage `#33503A`, Berry `#B8485A`
-- Fonts: Fraunces (headlines), DM Sans (body), Caveat (handwritten accents)
+- **Photo system**: each product loads `images/<category>-<slug>.jpg` first, then stock, then an emoji (`photoFor()`, `pImg()`, `imgFallback()`). Cinnamon rolls use the "plate" style, a round overhead crop centered on dark slate. All photos get the same CSS grade so mixed sources match. See `images/PHOTO-GUIDE.md` for file names and the shot list.
+- **Hero video**: `images/hero-cookie.mp4/.webm` plays muted, looped, at 0.6× speed in the hero plate on slide 1, with a pause button. `hero-cookie.jpg` is the poster/fallback. It's skipped under `prefers-reduced-motion` or data-saver.
+- **Sold out today / low stock**: the `TODAY` object (`soldOut` ids, `low` counts, `restock` text). Sold-out cards are greyed with a "Sold out today · Back tomorrow at 7am" overlay, can't be added to the cart, and sink to the bottom of the grid. A strip above the grid lists them. They also can't be picked in Build-a-Box, and the "surprise me" fill skips them. Low-stock items show an "Only N left" tag.
+
+## Currency & pricing
+- All prices are **Philippine pesos (₱), whole numbers, VAT-inclusive (12%)**. `money()` formats with `en-PH`, and `vatOf()` shows the VAT portion at checkout. Nothing is added on top.
+- Keep prices as integers. If you move to a database, store them as integer pesos (or centavos) and never as floats.
+
+## Design rules: Candy Pop theme (keep to these)
+All colors are tokens in `:root`. Never hard-code a hex in components.
+- **Plum** `#2B1340` (`--plum`, `--plum-2`): text, dark sections (hero, visit, footer, box panel)
+- **Bubblegum** `#DB1F80` (`--pink`): primary buttons, prices, active tabs, key accents. White text on it passes contrast.
+- `--pink-pop` `#FF5FAE` and `--pink-2` `#FF8AC4` are **decoration only** (rings, hover shadows, text on dark). Don't put white text on them.
+- **Lemon** `#FFD93D`: badges, add buttons, stars, highlights on dark, newsletter band. Always plum text on lemon.
+- **Grape** `#7B3FE4`: secondary accent, gradients (Swirl section, gift banner)
+- **Mint** `#2EC4A0` / `--mint-dark` `#0E5B4C` / `--mint-soft`: **coffee section only**
+- **Sky** `#6EC8FF` and peach `#FF9F6E`: tiny accents only (category rings, sprinkles)
+- Backgrounds: `--paper` `#FFF8FB`, `--cotton` `#FFF0F7`, `--cotton-2` `#FFE1EF`. Photo surface: `--slate` pastel pink.
+- Candy details: candy-stripe announcement bar, rainbow sprinkles falling in the hero, "sticker" hover on cards (offset pink shadow plus a slight tilt), chunky pressed buttons (`box-shadow: 0 5px 0 <darker>`), rainbow category rings, bouncy easing (`--bounce`)
+- Fonts: **Fredoka** (headlines, rounded and playful), DM Sans (body), Caveat (handwritten accents only)
+
+## Production notes for these features
+- Move `TODAY` into the CMS or POS so staff can tap "sold out" from a phone. With Square, read inventory counts and mark items sold out at 0.
+- Reset `soldOut` automatically at opening time each day.
+- Serve photos through `next/image` (AVIF/WebP, responsive sizes). Keep the slate "plate" style as a component prop.
+- The hero video should keep `muted playsinline`, a `poster`, and the reduced-motion check.
 
 ## Recommended build plan
 1. **Scaffold**: Next.js (App Router) + TypeScript + Tailwind. Map the CSS tokens into `tailwind.config` theme colors and fonts (`next/font`).
 2. **Componentize**: Nav/MegaMenu, MobileNav, Hero, CategoryStrip, MenuGrid, ProductCard, QuickViewModal, SwirlCollection, BoxBuilder, CoffeeSection, Story, Reviews, Visit, Footer, CartDrawer, Checkout.
 3. **State**: move the cart and favorites into a Zustand store with `persist`.
 4. **Data**: move `PRODUCTS`, `CATS`, `OPT`, `HOURS` into a CMS (Sanity is good for a bakery owner) or a Supabase table, so prices and sold-out items can be edited without code. Add `soldOut` and `availableDays` fields.
-5. **Payments**: Stripe Checkout, or Square if the shop already uses Square POS (then orders land on the POS automatically). Use webhooks to email or text the kitchen.
+5. **Payments (Philippines)**: PayMongo Checkout (GCash, Maya, GrabPay, cards, QR Ph). Xendit is an alternative. Stripe does not onboard PH businesses. Use webhooks to text or Viber the kitchen. For delivery, integrate Lalamove or Grab Express, or keep a flat in-house fee.
 6. **Images**: the prototype uses Unsplash stock with an emoji fallback. Replace them with real product photos (WebP, around 1200px) and use `next/image`.
 7. **Reviews**: the reviews in the prototype are **placeholders**. Replace them with real ones, ideally pulled from Google Business Profile.
 8. **Forms**: wire up the contact/catering form and newsletter (Resend or Formspree; Mailchimp or Klaviyo for the newsletter).

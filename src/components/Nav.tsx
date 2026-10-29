@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { BUSINESS, CATS, IMG } from "@/lib/data";
+import { BUSINESS, CATS } from "@/lib/data";
+import { SECTION_PHOTOS } from "@/lib/photos";
 import { cartCount, useShop } from "@/store/shop";
 import FilterLink from "./FilterLink";
 import SmartImage from "./SmartImage";
@@ -84,7 +85,7 @@ export default function Nav() {
                 <FilterLink filter="all" onClick={() => setMega(false)}><span className="ico">📋</span><span>Full Menu<em>See everything</em></span></FilterLink>
               </div>
               <a href="#swirl" className="mega-feature" onClick={() => setMega(false)}>
-                <SmartImage src={IMG.roll} alt="" fill sizes="200px" emoji="" style={{ objectFit: "cover", opacity: 0.55 }} />
+                <SmartImage src={SECTION_PHOTOS.swirlFeature} alt="" fill sizes="200px" emoji="" style={{ objectFit: "cover", opacity: 0.55 }} />
                 <small>NEW THIS SEASON</small>
                 <b>The Swirl Collection →</b>
               </a>

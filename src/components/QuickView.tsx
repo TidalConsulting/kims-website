@@ -1,8 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { CATS, OPT, type Product } from "@/lib/data";
-import { calcPrice, emojiFor, isAvailable, money, optLabel, shopNow } from "@/lib/utils";
+import { CATS, OPT, TODAY, type Product } from "@/lib/data";
+import { isPlate, productPhoto } from "@/lib/photos";
+import { calcPrice, emojiFor, isSold, lowStock, money, optLabel, shopNow } from "@/lib/utils";
 import { useShop } from "@/store/shop";
 import SmartImage from "./SmartImage";
 
@@ -13,7 +14,8 @@ export default function QuickView({ p }: { p: Product }) {
   const [note, setNote] = useState("");
   const { addToCart, closeAll } = useShop.getState();
   const price = calcPrice(p, sel);
-  const available = isAvailable(p, shopNow().day);
+  const sold = isSold(p, shopNow().day);
+  const low = sold ? undefined : lowStock(p);
   const emoji = emojiFor(p);
 
   const add = () => {
@@ -22,7 +24,7 @@ export default function QuickView({ p }: { p: Product }) {
     addToCart({
       pid: p.id,
       name: p.name,
-      img: p.img,
+      img: productPhoto(p),
       price,
       opts: optsText + (n ? (optsText ? " · " : "") + `“${n}”` : ""),
       qty,
@@ -33,13 +35,14 @@ export default function QuickView({ p }: { p: Product }) {
 
   return (
     <div className="qv">
-      <div className="qv-img">
-        <SmartImage src={p.img} alt={p.name} fill sizes="(max-width: 860px) 100vw, 460px" emoji={emoji} className="object-cover" />
+      <div className={`qv-img ${isPlate(p) ? "plate slate-bg" : ""}`}>
+        <SmartImage src={productPhoto(p)} alt={p.name} fill sizes="(max-width: 860px) 100vw, 460px" emoji={emoji} className="object-cover" />
       </div>
       <div className="qv-body">
         <span className="eyebrow">{CATS.find((c) => c.id === p.cat)?.name}</span>
         <h3 id="modal-title">{p.name}</h3>
         <p className="desc">{p.desc}</p>
+        {low && <p className="mt-2.5 text-sm font-semibold text-grape">⏳ Only {low} left from this morning&apos;s batch</p>}
         {groups.map((g, gi) => (
           <div className="opt-group" key={g.name} role="radiogroup" aria-label={g.name}>
             <h6>{g.name}</h6>
@@ -71,14 +74,18 @@ export default function QuickView({ p }: { p: Product }) {
           />
         </div>
         <div className="qv-foot">
-          <div className="stepper">
-            <button aria-label="Decrease quantity" onClick={() => setQty((q) => Math.max(1, q - 1))}>−</button>
-            <span aria-live="polite">{qty}</span>
-            <button aria-label="Increase quantity" onClick={() => setQty((q) => q + 1)}>+</button>
-          </div>
-          <button className="btn btn-dark" onClick={add} disabled={!available}>
-            {available ? `Add to order · ${money(price * qty)}` : "Sold out today"}
-          </button>
+          {sold ? (
+            <button className="btn btn-dark opacity-50" disabled>Sold out today · back {TODAY.restock}</button>
+          ) : (
+            <>
+              <div className="stepper">
+                <button aria-label="Decrease quantity" onClick={() => setQty((q) => Math.max(1, q - 1))}>−</button>
+                <span aria-live="polite">{qty}</span>
+                <button aria-label="Increase quantity" onClick={() => setQty((q) => q + 1)}>+</button>
+              </div>
+              <button className="btn btn-dark" onClick={add}>Add to order · {money(price * qty)}</button>
+            </>
+          )}
         </div>
       </div>
     </div>

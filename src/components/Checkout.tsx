@@ -112,8 +112,8 @@ export default function Checkout() {
           <button className="btn btn-dark w-full justify-center" disabled={busy || !cart.length}>
             {busy ? "Placing order…" : `Place order · ${money(total)}`}
           </button>
-          {failed && <p role="alert" className="mt-2.5 text-center text-sm text-berry">Something went wrong. Please try again or call us.</p>}
-          <p className="mt-2.5 text-center text-xs text-muted">Demo checkout: no payment is taken. Connect Stripe or Square to go live.</p>
+          {failed && <p role="alert" className="mt-2.5 text-center text-sm text-grape">Something went wrong. Please try again or call us.</p>}
+          <p className="mt-2.5 text-center text-xs text-muted">Demo checkout: no payment is taken. Connect PayMongo (GCash, Maya, cards) to go live.</p>
         </form>
         <div className="co-summary">
           <h6 className="eyebrow mb-2.5">Order summary</h6>
@@ -123,7 +123,7 @@ export default function Checkout() {
           <div className="sum mt-3"><span>Subtotal</span><span>{money(sub)}</span></div>
           <div className="sum"><span>Delivery</span><span>{fee ? money(fee) : "Free"}</span></div>
           <div className="sum total"><span>Total</span><span>{money(total)}</span></div>
-          <div className="sum"><span>Includes VAT ({VAT_RATE * 100}%)</span><span>{money(vatIncluded(total))}</span></div>
+          <div className="sum -mt-2 text-[.78rem]"><span>Includes {VAT_RATE * 100}% VAT</span><span>{money(vatIncluded(total))}</span></div>
         </div>
       </div>
     </div>

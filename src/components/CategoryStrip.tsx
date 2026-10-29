@@ -1,4 +1,5 @@
 import { CATS } from "@/lib/data";
+import { categoryPhoto } from "@/lib/photos";
 import FilterLink from "./FilterLink";
 import Reveal from "./Reveal";
 import SmartImage from "./SmartImage";
@@ -11,7 +12,7 @@ export default function CategoryStrip() {
           <Reveal key={c.id}>
             <FilterLink filter={c.id} className="cat block">
               <div className="thumb">
-                <SmartImage src={c.img} alt="" fill sizes="108px" emoji={c.emoji} className="object-cover" />
+                <SmartImage src={categoryPhoto(c)} alt="" fill sizes="108px" emoji={c.emoji} className="object-cover" />
               </div>
               <b>{c.name}</b>
               <small>Explore</small>

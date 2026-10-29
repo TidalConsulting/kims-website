@@ -1,28 +1,39 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { SLIDES } from "@/lib/data";
+import { heroVideo, localOr } from "@/lib/photos";
 import { liveStatus } from "@/lib/utils";
 import CountUp from "./CountUp";
 import Reveal from "./Reveal";
 import SmartImage from "./SmartImage";
 import { useClientValue } from "./hooks";
-import { Arrow } from "./icons";
+import { Arrow, Pause, Play } from "./icons";
 
-type Crumb = { left: number; size: number; dur: number; delay: number };
+type Sprinkle = { left: number; size: number; color: string; dur: number; delay: number };
+const SPRINKLE_COLORS = ["var(--pink-pop)", "var(--lemon)", "var(--mint)", "var(--sky)", "#B48CFF", "#FF9F6E", "#fff"];
 
 export default function Hero() {
   const [slide, setSlide] = useState(0);
+  const [videoReady, setVideoReady] = useState(false);
+  const [videoPaused, setVideoPaused] = useState(false);
+  const video = useRef<HTMLVideoElement>(null);
   const status = useClientValue(() => liveStatus(), 60_000);
   // Random positions are generated client-side only to avoid a hydration mismatch.
-  const crumbs = useClientValue<Crumb[]>(() =>
-    Array.from({ length: 14 }, () => ({
+  const sprinkles = useClientValue<Sprinkle[]>(() =>
+    Array.from({ length: 26 }, () => ({
       left: Math.random() * 100,
       size: 4 + Math.random() * 9,
+      color: SPRINKLE_COLORS[Math.floor(Math.random() * SPRINKLE_COLORS.length)],
       dur: 8 + Math.random() * 10,
       delay: Math.random() * 15,
     })),
   );
+  // Skip the video for reduced motion or data saver.
+  const allowVideo = useClientValue(() => {
+    const saveData = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData;
+    return heroVideo.length > 0 && !matchMedia("(prefers-reduced-motion: reduce)").matches && !saveData;
+  });
 
   useEffect(() => {
     const t = setInterval(() => setSlide((s) => (s + 1) % SLIDES.length), 7000);
@@ -30,14 +41,29 @@ export default function Hero() {
   }, [slide]);
 
   const s = SLIDES[slide];
+  const showVideo = !!s.video && videoReady;
+
+  useEffect(() => {
+    const v = video.current;
+    if (!v) return;
+    if (showVideo && !videoPaused) v.play().catch(() => {});
+    else v.pause();
+  }, [showVideo, videoPaused]);
 
   return (
     <section className="hero" aria-roledescription="carousel" aria-label="Featured">
       <div className="crumbs" aria-hidden="true">
-        {crumbs?.map((c, i) => (
+        {sprinkles?.map((c, i) => (
           <span
             key={i}
-            style={{ left: `${c.left}%`, width: c.size, height: c.size * 0.8, animationDuration: `${c.dur}s`, animationDelay: `-${c.delay}s` }}
+            style={{
+              left: `${c.left}%`,
+              width: c.size * 0.45,
+              height: c.size * 1.5,
+              background: c.color,
+              animationDuration: `${c.dur}s`,
+              animationDelay: `-${c.delay}s`,
+            }}
           />
         ))}
       </div>
@@ -61,10 +87,25 @@ export default function Hero() {
         <div className="hero-visual">
           <div className="hero-ring" />
           <div className="hero-plate">
+            {allowVideo && (
+              <video
+                ref={video}
+                className={showVideo ? "on" : ""}
+                muted
+                loop
+                playsInline
+                preload="metadata"
+                poster={localOr("hero-cookie.jpg", SLIDES[0].img)}
+                aria-hidden="true"
+                onCanPlay={(e) => { e.currentTarget.playbackRate = 0.6; setVideoReady(true); }}
+              >
+                {heroVideo.map((v) => <source key={v.src} src={v.src} type={v.type} />)}
+              </video>
+            )}
             {SLIDES.map((sl, i) => (
               <SmartImage
-                key={sl.img}
-                src={sl.img}
+                key={i}
+                src={sl.file ? localOr(sl.file, sl.img) : sl.img}
                 alt={i === slide ? sl.e : ""}
                 fill
                 priority={i === 0}
@@ -74,6 +115,13 @@ export default function Hero() {
               />
             ))}
           </div>
+          <button
+            className={`vid-toggle ${showVideo ? "show" : ""}`}
+            aria-label={videoPaused ? "Play video" : "Pause video"}
+            onClick={() => setVideoPaused((p) => !p)}
+          >
+            {videoPaused ? <Play /> : <Pause />}
+          </button>
           <div className={`chip-float chip-1 ${status && !status.open ? "closed" : ""}`}>
             <span className="dot" />
             <div>

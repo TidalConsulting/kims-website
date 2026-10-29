@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { bad, readJson, str } from "@/lib/api";
 import { BOX_PRICE, OPT, PRODUCTS } from "@/lib/data";
-import { calcPrice } from "@/lib/utils";
+import { calcPrice, isSold } from "@/lib/utils";
 
 type Item = { pid: string; name: string; opts: string; qty: number; price: number };
 
@@ -9,7 +9,7 @@ type Item = { pid: string; name: string; opts: string; qty: number; price: numbe
 function serverPrice(item: Item): number | null {
   if (item.pid === "box6" || item.pid === "box12") return BOX_PRICE[item.pid === "box6" ? 6 : 12];
   const p = PRODUCTS.find((x) => x.id === item.pid);
-  if (!p || p.soldOut) return null;
+  if (!p || isSold(p)) return null;
   const chosen = item.opts.split(" · ");
   const sel = OPT[p.opt].map((g) => g.choices.findIndex((ch) => chosen.includes(ch.l)));
   return sel.includes(-1) ? null : calcPrice(p, sel);
@@ -17,8 +17,8 @@ function serverPrice(item: Item): number | null {
 
 /**
  * Demo order endpoint: validates the order and returns an order number. No payment is taken.
- * To go live, create a Stripe Checkout Session (or Square order) here from the validated items,
- * and use a webhook to email or text the kitchen once payment succeeds.
+ * To go live, create a PayMongo Checkout Session (GCash, Maya, GrabPay, cards, QR Ph) here from the
+ * validated items, and use a webhook to text or Viber the kitchen once payment succeeds.
  */
 export async function POST(req: Request) {
   const body = await readJson(req);

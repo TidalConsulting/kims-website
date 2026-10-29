@@ -6,6 +6,7 @@ import { byId, money, vatIncluded } from "@/lib/utils";
 import { cartCount, cartSubtotal, useShop, type Modal as ModalState } from "@/store/shop";
 import Checkout from "./Checkout";
 import QuickView from "./QuickView";
+import { isPlate } from "@/lib/photos";
 import SmartImage from "./SmartImage";
 import { useFocusTrap, useScrollLock } from "./hooks";
 import { Close } from "./icons";
@@ -62,7 +63,7 @@ function CartDrawer({ open }: { open: boolean }) {
             </div>
             {cart.map((c) => (
               <div className="line" key={c.key}>
-                <div className="limg">
+                <div className={`limg ${isPlate(byId(c.pid)) ? "slate-bg" : ""}`}>
                   <SmartImage src={c.img} alt="" fill sizes="70px" emoji={c.emoji} className="object-cover" />
                 </div>
                 <div>
@@ -86,8 +87,8 @@ function CartDrawer({ open }: { open: boolean }) {
       {cart.length > 0 && (
         <div className="drawer-foot">
           <div className="sum"><span>Subtotal</span><span>{money(sub)}</span></div>
-          <div className="sum"><span>Includes VAT ({VAT_RATE * 100}%)</span><span>{money(vatIncluded(sub))}</span></div>
           <div className="sum total"><span>Total</span><span>{money(sub)}</span></div>
+          <div className="sum -mt-2.5 mb-3.5 text-[.78rem]"><span>Includes {VAT_RATE * 100}% VAT</span><span>{money(vatIncluded(sub))}</span></div>
           <button className="btn btn-primary" onClick={() => openModal({ kind: "checkout" })}>Checkout →</button>
         </div>
       )}
@@ -117,7 +118,7 @@ function ModalBody({ modal, product }: { modal: ModalState | null; product?: Pro
   if (modal?.kind === "checkout") return <Checkout />;
   if (modal?.kind === "video")
     return (
-      <div className="grid aspect-video place-items-center bg-espresso p-[30px] text-center text-cream">
+      <div className="grid aspect-video place-items-center bg-plum p-[30px] text-center text-cotton">
         <div>
           <div className="text-5xl" aria-hidden="true">🎬</div>
           <h3 id="modal-title" className="my-2.5 text-[1.8rem]">Your brand video goes here</h3>

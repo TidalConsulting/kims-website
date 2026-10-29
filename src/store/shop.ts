@@ -99,11 +99,11 @@ export const useShop = create<ShopState>()(
       name: "ck_shop",
       storage: createJSONStorage(() => localStorage),
       partialize: (s) => ({ cart: s.cart, favs: s.favs }),
-      // v1 carts were priced in USD; drop them rather than show dollar amounts as pesos.
-      version: 2,
+      // Bump when prices change: older carts (v1 USD, v2 old peso prices) are dropped; favorites are kept.
+      version: 3,
       migrate: (persisted, version) => {
         const old = persisted as { cart?: CartLine[]; favs?: string[] };
-        return version < 2 ? { cart: [], favs: old.favs ?? [] } : old;
+        return version < 3 ? { cart: [], favs: old.favs ?? [] } : old;
       },
       // Rehydrated on mount (see StoreHydrator) so the server and first client render match.
       skipHydration: true,
