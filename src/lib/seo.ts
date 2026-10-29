@@ -1,4 +1,4 @@
-import { BUSINESS, CATS, HOURS, PRODUCTS, SITE_URL } from "./data";
+import { BUSINESS, CATS, CURRENCY, HOURS, PRODUCTS, SITE_URL } from "./data";
 
 const pad = (h: number) => `${String(h).padStart(2, "0")}:00`;
 
@@ -40,7 +40,7 @@ export function jsonLd() {
           "@type": "MenuItem",
           name: p.name,
           description: p.desc,
-          offers: { "@type": "Offer", price: p.price.toFixed(2), priceCurrency: "USD" },
+          offers: { "@type": "Offer", price: p.price.toFixed(2), priceCurrency: CURRENCY.code },
         })),
       })),
     },

@@ -19,7 +19,7 @@ export default function CoffeeSection() {
           <Reveal>
             <span className="eyebrow text-sage-2">Premium coffee &amp; more</span>
             <h2>Good coffee brings<span className="hand">better days</span></h2>
-            <p>Single-origin espresso, slow-steeped cold brew, and house syrups made in our kitchen. Pair any drink with a pastry and save $1.</p>
+            <p>Single-origin espresso, slow-steeped cold brew, and house syrups made in our kitchen. Pair any drink with a pastry and save ₱50.</p>
             <FilterLink filter="coffee" className="btn btn-sage">View Coffee Menu →</FilterLink>
             <div className="coffee-feats">
               {FEATS.map(([e, t]) => <div key={t}><span aria-hidden="true">{e}</span>{t}</div>)}

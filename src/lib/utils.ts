@@ -1,6 +1,13 @@
-import { BATCH_TIMES, BUSINESS, CATS, HOURS, OPT, PRODUCTS, type OptionChoice, type Product } from "./data";
+import { BATCH_TIMES, BUSINESS, CATS, CURRENCY, HOURS, OPT, PRODUCTS, VAT_RATE, type OptionChoice, type Product } from "./data";
 
-export const money = (n: number) => "$" + n.toFixed(2);
+const fmtWhole = new Intl.NumberFormat(CURRENCY.locale, { style: "currency", currency: CURRENCY.code, maximumFractionDigits: 0 });
+const fmtCents = new Intl.NumberFormat(CURRENCY.locale, { style: "currency", currency: CURRENCY.code, minimumFractionDigits: 2 });
+
+/** ₱95, ₱1,250, or ₱36.43 when there are centavos. */
+export const money = (n: number) => (Number.isInteger(Math.round(n * 100) / 100) ? fmtWhole : fmtCents).format(n);
+
+/** VAT portion of a VAT-inclusive amount. */
+export const vatIncluded = (amount: number) => amount - amount / (1 + VAT_RATE);
 
 export const byId = (id: string) => PRODUCTS.find((p) => p.id === id);
 
@@ -14,12 +21,12 @@ export function calcPrice(p: Product, sel: number[]) {
     else if (c.mult) price = price * c.mult;
     else price += c.p || 0;
   });
-  return Math.round(price * 100) / 100;
+  return Math.round(price); // whole pesos
 }
 
 export function optLabel(p: Product, c: OptionChoice) {
   if (c.fixed) return money(c.fixed);
-  if (c.mult && c.mult !== 1) return money(p.price * c.mult);
+  if (c.mult && c.mult !== 1) return money(Math.round(p.price * c.mult));
   if (c.p) return "+" + money(c.p);
   return "";
 }

@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { bad, readJson, str } from "@/lib/api";
 import { BOX_PRICE, OPT, PRODUCTS } from "@/lib/data";
+import { calcPrice } from "@/lib/utils";
 
 type Item = { pid: string; name: string; opts: string; qty: number; price: number };
 
@@ -10,15 +11,8 @@ function serverPrice(item: Item): number | null {
   const p = PRODUCTS.find((x) => x.id === item.pid);
   if (!p || p.soldOut) return null;
   const chosen = item.opts.split(" · ");
-  let price = p.price;
-  for (const g of OPT[p.opt]) {
-    const c = g.choices.find((ch) => chosen.includes(ch.l));
-    if (!c) return null;
-    if (c.fixed) price = c.fixed;
-    else if (c.mult) price *= c.mult;
-    else price += c.p || 0;
-  }
-  return Math.round(price * 100) / 100;
+  const sel = OPT[p.opt].map((g) => g.choices.findIndex((ch) => chosen.includes(ch.l)));
+  return sel.includes(-1) ? null : calcPrice(p, sel);
 }
 
 /**

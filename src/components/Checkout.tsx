@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
-import { DELIVERY_FEE, FREE_DELIVERY, TAX } from "@/lib/data";
-import { money, pickupTimes } from "@/lib/utils";
+import { DELIVERY_FEE, FREE_DELIVERY, VAT_RATE } from "@/lib/data";
+import { money, pickupTimes, vatIncluded } from "@/lib/utils";
 import { cartSubtotal, useShop } from "@/store/shop";
 import { Check } from "./icons";
 
@@ -20,7 +20,7 @@ export default function Checkout() {
 
   const sub = cartSubtotal(cart);
   const fee = mode === "delivery" && sub < FREE_DELIVERY ? DELIVERY_FEE : 0;
-  const total = sub + sub * TAX + fee;
+  const total = sub + fee; // prices are VAT-inclusive
 
   async function submit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -126,9 +126,9 @@ export default function Checkout() {
             <div className="mini" key={c.key}><span>{c.qty} × {c.name}</span><span>{money(c.price * c.qty)}</span></div>
           ))}
           <div className="sum mt-3"><span>Subtotal</span><span>{money(sub)}</span></div>
-          <div className="sum"><span>Tax</span><span>{money(sub * TAX)}</span></div>
           <div className="sum"><span>Delivery</span><span>{fee ? money(fee) : "Free"}</span></div>
           <div className="sum total"><span>Total</span><span>{money(total)}</span></div>
+          <div className="sum"><span>Includes VAT ({VAT_RATE * 100}%)</span><span>{money(vatIncluded(total))}</span></div>
         </div>
       </div>
     </div>

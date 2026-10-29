@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { FREE_DELIVERY, TAX, type Product } from "@/lib/data";
-import { byId, money } from "@/lib/utils";
+import { FREE_DELIVERY, VAT_RATE, type Product } from "@/lib/data";
+import { byId, money, vatIncluded } from "@/lib/utils";
 import { cartCount, cartSubtotal, useShop, type Modal as ModalState } from "@/store/shop";
 import Checkout from "./Checkout";
 import QuickView from "./QuickView";
@@ -86,8 +86,8 @@ function CartDrawer({ open }: { open: boolean }) {
       {cart.length > 0 && (
         <div className="drawer-foot">
           <div className="sum"><span>Subtotal</span><span>{money(sub)}</span></div>
-          <div className="sum"><span>Est. tax</span><span>{money(sub * TAX)}</span></div>
-          <div className="sum total"><span>Total</span><span>{money(sub * (1 + TAX))}</span></div>
+          <div className="sum"><span>Includes VAT ({VAT_RATE * 100}%)</span><span>{money(vatIncluded(sub))}</span></div>
+          <div className="sum total"><span>Total</span><span>{money(sub)}</span></div>
           <button className="btn btn-primary" onClick={() => openModal({ kind: "checkout" })}>Checkout →</button>
         </div>
       )}

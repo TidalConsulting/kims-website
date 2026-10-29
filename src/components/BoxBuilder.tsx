@@ -76,7 +76,7 @@ export default function BoxBuilder() {
                   className={size === s ? "active" : ""}
                   onClick={() => { setSize(s); setItems((it) => it.slice(0, s)); }}
                 >
-                  {s === 6 ? "Half dozen" : "Dozen"} · ${BOX_PRICE[s]}
+                  {s === 6 ? "Half dozen" : "Dozen"} · {money(BOX_PRICE[s])}
                 </button>
               ))}
             </div>
