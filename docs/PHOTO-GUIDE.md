@@ -12,7 +12,7 @@ Drop files into the `public/images/` folder with the **exact names below**. The 
 - Phone tip: Portrait mode off, 1× lens, stand on a chair, lock exposure on the food
 
 ## Already done
-5 of the 9 cinnamon rolls are in: `roll-classic-cinnamon.jpg`, `roll-chocolate-hazelnut.jpg`, `roll-cookie-butter.jpg`, `roll-caramel-pecan.jpg` and `roll-blueberry-cheesecake.jpg`. Still needed: `roll-smores.jpg`, `roll-matcha-white-chocolate.jpg`, `roll-red-velvet.jpg` and `roll-rose-pistachio.jpg`. **If that photo came from Pinterest or another site, reshoot the rolls before launch.** You need the rights to use it. The Cookie Butter crop also shows a brand logo on the biscuit, so reshoot that one with an unbranded cookie.
+All 9 cinnamon rolls (`roll-*.jpg`) are in `public/images/`. **If that photo came from Pinterest or another site, reshoot the rolls before launch.** You need the rights to use it. The Cookie Butter crop also shows a brand logo on the biscuit, so reshoot that one with an unbranded cookie.
 
 ## Shot list: products (overhead, dark surface, square)
 Cookies
