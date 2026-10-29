@@ -50,6 +50,10 @@ Copy `.env.example` to `.env.local` locally, or add the same variables in your h
 - **CMS:** move `PRODUCTS`, `CATS`, `OPT` and `HOURS` into Sanity or Supabase.
 - **Video:** replace the "Watch our story" placeholder in `Layers.tsx` with a real embed.
 
+## Performance
+
+Lighthouse (production build): desktop 99 performance, mobile about 83 (simulated slow 4G and a 4× slower CPU); 100 accessibility, best practices and SEO on both. In a real browser the hero appears in about 0.3 s even with the CPU slowed 4×. The menu grid shows 8 items at a time ("Show more" / "Show all") to keep the page light, and only the first hero photo loads with the page.
+
 ## Pricing rules
 
 - Prices are whole pesos and include 12% VAT.
