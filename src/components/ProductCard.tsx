@@ -2,7 +2,7 @@
 
 import { OPT, TODAY, type Product } from "@/lib/data";
 import { insidePhoto, isPlate, productPhoto } from "@/lib/photos";
-import { emojiFor, money } from "@/lib/utils";
+import { emojiFor, lineText, money } from "@/lib/utils";
 import { useShop } from "@/store/shop";
 import SmartImage from "./SmartImage";
 import { Heart, Plus } from "./icons";
@@ -19,7 +19,7 @@ export default function ProductCard({ p, index, sold, low }: { p: Product; index
   const quickAdd = () => {
     if (sold) return showToast(`${p.name} is sold out today. Back ${TODAY.restock}.`);
     if (OPT[p.opt].length) return openModal({ kind: "quick", id: p.id });
-    addToCart({ pid: p.id, name: p.name, img: productPhoto(p), price: p.price, opts: "", qty: 1, emoji });
+    addToCart({ pid: p.id, ...lineText({ pid: p.id, qty: 1 }), img: productPhoto(p), price: p.price, qty: 1, emoji });
   };
 
   return (

@@ -1,28 +1,31 @@
 import { NextResponse } from "next/server";
 import { bad, readJson, str } from "@/lib/api";
-import { BUSINESS, DELIVERY_AREAS, OPT, PRODUCTS, SITE_URL } from "@/lib/data";
+import { BUSINESS, DELIVERY_AREAS, SITE_URL } from "@/lib/data";
 import { mustRefuse, notify } from "@/lib/notify";
-import { createCheckout, paymongoEnabled } from "@/lib/paymongo";
-import { boxPrice, calcPrice, cartTotals, isSold, money, shopNow, type ShopNow } from "@/lib/utils";
+import { cancelSig, createCheckout, paymongoEnabled } from "@/lib/paymongo";
+import {
+  ASAP, byId, cartTotals, linePrice, lineText, MAX_QTY, money, orderSlots, shopNow, stockProblem, type LineRef,
+} from "@/lib/utils";
 
-type Item = { pid: string; name: string; opts: string; qty: number; price: number; box?: string[] };
+type Item = LineRef & { name: string; opts: string; price: number };
 
-/** Re-derives a line's unit price on the server so a tampered client can't set its own price. */
-function serverPrice(item: Item, now: ShopNow): number | null {
-  if (item.pid === "box6" || item.pid === "box12") {
-    const size = item.pid === "box6" ? 6 : 12;
-    const ids = item.box ?? [];
-    const ok = ids.length === size && ids.every((id) => {
-      const p = PRODUCTS.find((x) => x.id === id);
-      return p?.box && !isSold(p, now);
-    });
-    return ok ? boxPrice(ids, size) : null;
-  }
-  const p = PRODUCTS.find((x) => x.id === item.pid);
-  if (!p || isSold(p, now)) return null;
-  const chosen = item.opts.split(" · ");
-  const sel = OPT[p.opt].map((g) => g.choices.findIndex((ch) => chosen.includes(ch.l)));
-  return sel.includes(-1) ? null : calcPrice(p, sel);
+/** Reads one cart line. Only ids, option indices, a note and a quantity are taken from the browser. */
+function readLine(raw: unknown): LineRef {
+  const r = (raw ?? {}) as Record<string, unknown>;
+  const ints = (v: unknown, max: number) => (Array.isArray(v) ? v.slice(0, max).map((x) => Number(x)) : undefined);
+  return {
+    pid: str(r.pid, 20),
+    qty: Math.floor(Number(r.qty)),
+    sel: ints(r.sel, 5),
+    note: str(r.note, 200) || undefined,
+    box: Array.isArray(r.box) ? r.box.slice(0, 12).map((id) => str(id, 20)) : undefined,
+  };
+}
+
+/** The chosen time must be one we offer now, or offered up to 20 minutes ago (the checkout was left open). */
+function validSlot(time: string) {
+  if (time === ASAP) return orderSlots(shopNow()).includes(ASAP);
+  return [0, 20].some((ago) => orderSlots(shopNow(new Date(Date.now() - ago * 60_000))).includes(time));
 }
 
 /**
@@ -48,37 +51,29 @@ export async function POST(req: Request) {
   if (mode === "delivery" && (!addr || !DELIVERY_AREAS.includes(area))) return bad("We don't deliver to that area");
   if (!Array.isArray(body.items) || !body.items.length || body.items.length > 100) return bad("Cart is empty");
 
+  const time = str(body.time, 40);
+  if (!validSlot(time)) return bad("That time isn't available any more. Please pick another time.");
+
   const now = shopNow();
   const items: Item[] = [];
-  for (const raw of body.items as Item[]) {
-    const item: Item = {
-      pid: str(raw?.pid, 20),
-      name: str(raw?.name, 120),
-      opts: str(raw?.opts, 500),
-      qty: Math.floor(Number(raw?.qty)),
-      price: 0,
-      box: Array.isArray(raw?.box) ? raw.box.map((id) => str(id, 20)).slice(0, 12) : undefined,
-    };
-    const price = serverPrice(item, now);
-    if (price === null || !(item.qty >= 1 && item.qty <= 99)) return bad(`Sorry, ${item.name || "an item"} is no longer available`);
-    if (item.box) {
-      // Describe boxes from their real contents for the kitchen ticket.
-      const counts = new Map<string, number>();
-      item.box.forEach((id) => { const n = PRODUCTS.find((p) => p.id === id)!.name; counts.set(n, (counts.get(n) ?? 0) + 1); });
-      item.name = `Mix & Match Box (${item.box.length})`;
-      item.opts = [...counts].map(([n, q]) => `${q}× ${n}`).join(", ");
-    }
-    items.push({ ...item, price });
+  for (const raw of body.items) {
+    const line = readLine(raw);
+    const label = byId(line.pid)?.name ?? "an item";
+    if (!(line.qty >= 1 && line.qty <= MAX_QTY)) return bad(`You can order 1 to ${MAX_QTY} of ${label} online.`);
+    const price = linePrice(line, now);
+    if (price === null) return bad(`Sorry, ${label} is no longer available. Please remove it from your cart.`);
+    items.push({ ...line, ...lineText(line), price });
   }
+  const short = stockProblem(items, now);
+  if (short) return bad(`${short} Please change your cart.`);
 
   const t = cartTotals(items, mode);
   const orderNo = "CC-" + crypto.randomUUID().slice(0, 5).toUpperCase();
-  const time = str(body.time, 40);
   const notes = str(body.notes);
   const online = paymongoEnabled();
 
   const ticket = [
-    `Order ${orderNo}: ${mode.toUpperCase()} at ${time || "ASAP"}`,
+    `Order ${orderNo}: ${mode.toUpperCase()}, ${time}`,
     `Customer: ${name} · ${phone}`,
     mode === "delivery" ? `Deliver to: ${addr}, ${area}` : "",
     "",
@@ -95,13 +90,13 @@ export async function POST(req: Request) {
     kind: "order",
     subject: `${online ? "[Awaiting payment] " : ""}New ${mode} order ${orderNo}: ${money(t.total)}`,
     text: ticket,
-    data: { orderNo, mode, name, phone, area, addr, time, notes, items, totals: t, online },
+    data: { orderNo, mode, name, phone, area, addr, time, notes, items: items.map(({ pid, name, opts, qty, price }) => ({ pid, name, opts, qty, price })), totals: t, online },
   });
   if (!delivered && process.env.NODE_ENV === "production") {
     return NextResponse.json({ error: "We couldn't send your order to the kitchen" }, { status: 502 });
   }
 
-  if (!online) return NextResponse.json({ orderNo });
+  if (!online) return NextResponse.json({ orderNo, total: t.total });
   try {
     const checkoutUrl = await createCheckout({
       orderNo,
@@ -110,6 +105,7 @@ export async function POST(req: Request) {
       name,
       phone,
       siteUrl: SITE_URL,
+      cancelSig: cancelSig(orderNo),
     });
     return NextResponse.json({ orderNo, checkoutUrl });
   } catch (e) {

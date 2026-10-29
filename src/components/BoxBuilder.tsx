@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { PRODUCTS } from "@/lib/data";
 import { productPhoto, SECTION_PHOTOS } from "@/lib/photos";
-import { boxPrice, byId, isSold, money } from "@/lib/utils";
+import { boxPrice, byId, isSold, lineText, money } from "@/lib/utils";
 import { useShop } from "@/store/shop";
 import Reveal from "./Reveal";
 import SmartImage from "./SmartImage";
@@ -38,19 +38,8 @@ export default function BoxBuilder() {
   };
 
   const addBox = () => {
-    const counts: Record<string, number> = {};
-    items.forEach((id) => { const n = byId(id)!.name; counts[n] = (counts[n] || 0) + 1; });
-    addToCart({
-      pid: "box" + size,
-      name: `Mix & Match Box (${size})`,
-      img: SECTION_PHOTOS.box,
-      price: boxPrice(items, size),
-      opts: Object.entries(counts).map(([n, q]) => `${q}× ${n}`).join(", "),
-      box: items,
-      qty: 1,
-      emoji: "🎁",
-    });
-    setItems([]);
+    const line = { pid: "box" + size, qty: 1, box: items };
+    if (addToCart({ ...line, ...lineText(line), img: SECTION_PHOTOS.box, price: boxPrice(items, size), emoji: "🎁" })) setItems([]);
   };
 
   return (

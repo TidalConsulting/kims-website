@@ -60,3 +60,11 @@ Lighthouse (production build): desktop 99 performance, mobile about 83 (simulate
 - Bulk prices (half dozen = 5.5 singles, dozen = 10, roll 4-pack = 3.6) round to the nearest ₱5. A mixed Build-a-Box is priced from the cookies picked at the same rate, so it always matches a single-flavour box.
 - Each drink paired with a pastry or cinnamon roll takes ₱30 off (`PAIRING`). Free delivery applies once the discounted subtotal reaches ₱1,000.
 - `/api/order` recalculates all of this on the server; prices sent by the browser are ignored.
+
+## Ordering rules
+
+- The browser sends only product ids, option choices, notes and quantities. The server builds the kitchen ticket from the menu, so names and prices can't be faked.
+- Pickup and delivery times are 15-minute slots in shop time (Asia/Manila) inside `HOURS`. "ASAP" is offered only while open, until 20 minutes before closing. When closed, the first slot is 30 minutes after opening. The server accepts only these slots.
+- "Only N left" counts in `TODAY.low` are enforced in the cart and on the server: a dozen uses 12, a 4-pack 4, and a cookie box one of each cookie in it. A line can have at most 99.
+- A saved cart is re-priced when the page loads, and anything sold out is removed with a notice.
+- With PayMongo on, a customer who backs out of the payment page triggers a "CANCELLED" message to the kitchen (a signed link, so only that customer can cancel).

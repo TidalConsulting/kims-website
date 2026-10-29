@@ -4,7 +4,7 @@
  * - A webhook: set NOTIFY_WEBHOOK_URL (e.g. a Zapier or Make hook that texts or Vibers the kitchen,
  *   or adds newsletter sign-ups to Mailchimp/Klaviyo).
  */
-type Message = { kind: "order" | "payment" | "contact" | "newsletter"; subject: string; text: string; replyTo?: string; data?: unknown };
+type Message = { kind: "order" | "payment" | "cancelled" | "contact" | "newsletter"; subject: string; text: string; replyTo?: string; data?: unknown };
 
 const emailOn = () => !!(process.env.RESEND_API_KEY && process.env.SHOP_EMAIL);
 const webhookOn = () => !!process.env.NOTIFY_WEBHOOK_URL;

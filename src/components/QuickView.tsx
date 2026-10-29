@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { CATS, OPT, TODAY, type Product } from "@/lib/data";
 import { insideLabel, insidePhoto, isPlate, notesLabel, productPhoto } from "@/lib/photos";
-import { calcPrice, emojiFor, isSold, lowStock, money, optLabel, shopNow } from "@/lib/utils";
+import { calcPrice, emojiFor, isSold, lineText, lowStock, MAX_QTY, money, optLabel, shopNow } from "@/lib/utils";
 import { useShop } from "@/store/shop";
 import SmartImage from "./SmartImage";
 
@@ -22,18 +22,8 @@ export default function QuickView({ p }: { p: Product }) {
   const emoji = emojiFor(p);
 
   const add = () => {
-    const optsText = groups.map((g, i) => g.choices[sel[i]].l).join(" · ");
-    const n = note.trim();
-    addToCart({
-      pid: p.id,
-      name: p.name,
-      img: productPhoto(p),
-      price,
-      opts: optsText + (n ? (optsText ? " · " : "") + `“${n}”` : ""),
-      qty,
-      emoji,
-    });
-    closeAll();
+    const line = { pid: p.id, qty, sel, note: note.trim() || undefined };
+    if (addToCart({ ...line, ...lineText(line), img: productPhoto(p), price, emoji })) closeAll();
   };
 
   return (
@@ -90,6 +80,7 @@ export default function QuickView({ p }: { p: Product }) {
             id="qvNote"
             className="note-input"
             rows={2}
+            maxLength={200}
             placeholder="e.g. 'Happy Birthday Sam' on the cake, extra hot…"
             value={note}
             onChange={(e) => setNote(e.target.value)}
@@ -103,7 +94,7 @@ export default function QuickView({ p }: { p: Product }) {
               <div className="stepper">
                 <button aria-label="Decrease quantity" onClick={() => setQty((q) => Math.max(1, q - 1))}>−</button>
                 <span aria-live="polite">{qty}</span>
-                <button aria-label="Increase quantity" onClick={() => setQty((q) => q + 1)}>+</button>
+                <button aria-label="Increase quantity" onClick={() => setQty((q) => Math.min(MAX_QTY, q + 1))}>+</button>
               </div>
               <button className="btn btn-dark" onClick={add}>Add to order · {money(price * qty)}</button>
             </>

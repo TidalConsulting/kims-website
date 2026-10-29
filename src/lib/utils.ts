@@ -115,13 +115,92 @@ export function liveStatus(date = new Date()) {
   return { day, open, sub, nextBatch };
 }
 
-export function pickupTimes() {
-  const out = ["ASAP (~15 min)"];
-  const d = new Date();
-  d.setMinutes(Math.ceil(d.getMinutes() / 15) * 15 + 30, 0, 0);
-  for (let i = 0; i < 10; i++) {
-    out.push(d.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" }));
-    d.setMinutes(d.getMinutes() + 15);
-  }
+/** "2:30 PM" for a fractional hour. Fixed locale, so the server and browser produce the same slot labels. */
+function fmtClock(h: number) {
+  const m = Math.round(h * 60);
+  return new Date(Date.UTC(2000, 0, 1, Math.floor(m / 60), m % 60)).toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", timeZone: "UTC" });
+}
+
+export const ASAP = "ASAP (~15 min)";
+
+/**
+ * Pickup / delivery times in shop time, inside opening hours: "ASAP" while open (until 20 min
+ * before closing), then 15-minute slots from 30 min ahead, rolling into tomorrow.
+ * The order API accepts only these labels.
+ */
+export function orderSlots(now: ShopNow = shopNow(), max = 24) {
+  const out: string[] = [];
+  const today = HOURS[now.day];
+  if (now.hour >= today.o && now.hour < today.c - 1 / 3) out.push(ASAP);
+  const add = (prefix: string, from: number, to: number) => {
+    for (let q = Math.ceil(from * 4); q <= to * 4 && out.length < max; q++) out.push(`${prefix} ${fmtClock(q / 4)}`);
+  };
+  add("Today", Math.max(now.hour, today.o) + 0.5, today.c - 0.25);
+  const next = HOURS[(now.day + 1) % 7];
+  add("Tomorrow", next.o + 0.5, next.c - 0.25);
   return out;
+}
+
+/** "in about 15 minutes" / "today at 2:30 PM", for the confirmation message. */
+export const slotPhrase = (slot: string) =>
+  slot === ASAP ? "in about 15 minutes" : slot.replace(/^(\w+) /, (_, d: string) => `${d.toLowerCase()} at `);
+
+/** A cart line as the order API sees it: option indices, an optional note, or a box's cookie ids. */
+export type LineRef = { pid: string; qty: number; sel?: number[]; note?: string; box?: string[] };
+
+export const MAX_QTY = 99;
+const BOX_SIZES: Record<string, 6 | 12> = { box6: 6, box12: 12 };
+
+/** Unit price of a line, or null if it can't be ordered (unknown item, bad options, sold out). */
+export function linePrice(l: LineRef, now: ShopNow | null): number | null {
+  const size = BOX_SIZES[l.pid];
+  if (size) {
+    const ids = l.box ?? [];
+    const ok = ids.length === size && ids.every((id) => { const p = byId(id); return !!p?.box && !isSold(p, now); });
+    return ok ? boxPrice(ids, size) : null;
+  }
+  const p = byId(l.pid);
+  if (!p || l.box || isSold(p, now)) return null;
+  const groups = OPT[p.opt];
+  const sel = l.sel ?? groups.map(() => 0);
+  const ok = sel.length === groups.length && sel.every((v, i) => Number.isInteger(v) && v >= 0 && v < groups[i].choices.length);
+  return ok ? calcPrice(p, sel) : null;
+}
+
+/** Name and option text for a line, always built from the menu (never from what the browser sent). */
+export function lineText(l: LineRef) {
+  if (BOX_SIZES[l.pid]) {
+    const counts = new Map<string, number>();
+    (l.box ?? []).forEach((id) => { const n = byId(id)?.name ?? id; counts.set(n, (counts.get(n) ?? 0) + 1); });
+    return { name: `Mix & Match Box (${BOX_SIZES[l.pid]})`, opts: [...counts].map(([n, q]) => `${q}× ${n}`).join(", ") };
+  }
+  const p = byId(l.pid);
+  const groups = p ? OPT[p.opt] : [];
+  const parts = groups.map((g, i) => g.choices[l.sel?.[i] ?? 0]?.l ?? "");
+  const note = l.note?.trim();
+  if (note) parts.push(`“${note}”`);
+  return { name: p?.name ?? l.pid, opts: parts.filter(Boolean).join(" · ") };
+}
+
+/**
+ * Checks the whole cart against today's "Only N left" counts (a dozen uses 12, a box one of each
+ * cookie in it). Returns a message for the first item that runs over, or null.
+ */
+export function stockProblem(lines: LineRef[], now: ShopNow | null): string | null {
+  const used = new Map<string, number>();
+  const add = (id: string, n: number) => used.set(id, (used.get(id) ?? 0) + n);
+  for (const l of lines) {
+    if (l.box) l.box.forEach((id) => add(id, l.qty));
+    else {
+      const p = byId(l.pid);
+      const units = p ? OPT[p.opt].reduce((n, g, i) => n * (g.choices[l.sel?.[i] ?? 0]?.n ?? 1), 1) : 1;
+      add(l.pid, units * l.qty);
+    }
+  }
+  for (const [id, n] of used) {
+    const p = byId(id);
+    const left = p && lowStock(p, now);
+    if (left !== undefined && n > left) return `Sorry, we only have ${left} ${p!.name} left today.`;
+  }
+  return null;
 }

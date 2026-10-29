@@ -85,12 +85,16 @@ export const CATS: Category[] = [
   { id: "refreshments", name: "Iced Teas", emoji: "🍹", img: IMG.drink2, blurb: "12 fresh-brewed blends" },
 ];
 
-/** A choice either adds `p`, multiplies the base price by `mult`, or sets a `fixed` price. */
+/**
+ * A choice either adds `p`, multiplies the base price by `mult`, or sets a `fixed` price.
+ * `n` is how many of the item it uses (a dozen is 12), for the "Only N left" stock limit.
+ */
 export interface OptionChoice {
   l: string;
   p?: number;
   mult?: number;
   fixed?: number;
+  n?: number;
 }
 export interface OptionGroup {
   name: string;
@@ -99,7 +103,7 @@ export interface OptionGroup {
 export type OptionPreset = "cookie" | "cake" | "drink" | "cold" | "iced" | "hot" | "tea" | "roll" | "none";
 
 export const OPT: Record<OptionPreset, OptionGroup[]> = {
-  cookie: [{ name: "Quantity", choices: [{ l: "Single", mult: 1 }, { l: "Half dozen", mult: 5.5 }, { l: "Dozen", mult: 10 }] }], // keep in line with BULK_RATE
+  cookie: [{ name: "Quantity", choices: [{ l: "Single", mult: 1 }, { l: "Half dozen", mult: 5.5, n: 6 }, { l: "Dozen", mult: 10, n: 12 }] }], // keep in line with BULK_RATE
   cake: [{ name: "Size", choices: [{ l: "Slice", p: 0 }, { l: '6" Whole cake', p: 1100 }, { l: '9" Whole cake', p: 1800 }] }],
   drink: [
     { name: "Size", choices: [{ l: "12 oz", p: 0 }, { l: "16 oz", p: 20 }, { l: "20 oz", p: 40 }] },
@@ -119,7 +123,7 @@ export const OPT: Record<OptionPreset, OptionGroup[]> = {
     { name: "Size", choices: [{ l: "16 oz", p: 0 }, { l: "24 oz", p: 30 }] },
     { name: "Sweetness", choices: [{ l: "Regular", p: 0 }, { l: "Less sweet", p: 0 }, { l: "No honey", p: 0 }] },
   ],
-  roll: [{ name: "Quantity", choices: [{ l: "Single", mult: 1 }, { l: "4-pack", mult: 3.6 }, { l: "Party of 9 (one of each)", fixed: 1450 }] }],
+  roll: [{ name: "Quantity", choices: [{ l: "Single", mult: 1 }, { l: "4-pack", mult: 3.6, n: 4 }, { l: "Party of 9 (one of each)", fixed: 1450 }] }],
   none: [],
 };
 

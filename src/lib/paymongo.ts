@@ -18,6 +18,7 @@ export async function createCheckout(o: {
   name: string;
   phone: string;
   siteUrl: string;
+  cancelSig: string;
 }): Promise<string> {
   const res = await fetch("https://api.paymongo.com/v1/checkout_sessions", {
     method: "POST",
@@ -32,7 +33,8 @@ export async function createCheckout(o: {
           description: `Order ${o.orderNo}`,
           billing: { name: o.name, phone: o.phone },
           success_url: `${o.siteUrl}/?order=${encodeURIComponent(o.orderNo)}`,
-          cancel_url: `${o.siteUrl}/?order_cancelled=1`,
+          // Signed, so only this customer's browser can tell the kitchen to drop the order (/api/order/cancel).
+          cancel_url: `${o.siteUrl}/?order_cancelled=${encodeURIComponent(o.orderNo)}&sig=${o.cancelSig}`,
         },
       },
     }),
@@ -40,6 +42,15 @@ export async function createCheckout(o: {
   if (!res.ok) throw new Error(`PayMongo ${res.status}: ${await res.text()}`);
   const json = await res.json();
   return json.data.attributes.checkout_url as string;
+}
+
+/** Signature for an order's cancel link, so nobody else can cancel it. */
+export const cancelSig = (orderNo: string) =>
+  createHmac("sha256", process.env.PAYMONGO_SECRET_KEY ?? "").update(`cancel:${orderNo}`).digest("hex").slice(0, 32);
+
+export function cancelSigValid(orderNo: string, sig: string) {
+  const expected = cancelSig(orderNo);
+  return paymongoEnabled() && sig.length === expected.length && timingSafeEqual(Buffer.from(sig), Buffer.from(expected));
 }
 
 /** Verifies the Paymongo-Signature header: "t=<timestamp>,te=<test sig>,li=<live sig>". */
