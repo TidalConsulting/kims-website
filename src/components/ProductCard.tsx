@@ -1,7 +1,7 @@
 "use client";
 
 import { OPT, TODAY, type Product } from "@/lib/data";
-import { isPlate, productPhoto } from "@/lib/photos";
+import { insidePhoto, isPlate, productPhoto } from "@/lib/photos";
 import { emojiFor, money } from "@/lib/utils";
 import { useShop } from "@/store/shop";
 import SmartImage from "./SmartImage";
@@ -14,6 +14,7 @@ export default function ProductCard({ p, index, sold, low }: { p: Product; index
   const { toggleFav, openModal, addToCart, showToast } = useShop.getState();
   const emoji = emojiFor(p);
   const plate = isPlate(p);
+  const inside = insidePhoto(p);
 
   const quickAdd = () => {
     if (sold) return showToast(`${p.name} is sold out today. Back ${TODAY.restock}.`);
@@ -32,6 +33,12 @@ export default function ProductCard({ p, index, sold, low }: { p: Product; index
           emoji={emoji}
           className="object-cover"
         />
+        {inside && !sold && (
+          <>
+            <SmartImage src={inside} alt={`Inside of ${p.name}`} fill sizes="(max-width: 860px) 50vw, (max-width: 1080px) 33vw, 300px" emoji="" className="inside" />
+            <span className="inside-hint" aria-hidden="true">👀 See inside</span>
+          </>
+        )}
         {sold ? (
           <span className="sold-flag">
             <span><b>Sold out today</b><small>Back {TODAY.restock}</small></span>

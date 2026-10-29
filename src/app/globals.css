@@ -258,6 +258,44 @@
 .empty{grid-column:1/-1;text-align:center;padding:60px;color:var(--muted)}
 .ph{width:100%;height:100%;display:grid;place-items:center;font-size:3.4rem;background:radial-gradient(120% 90% at 30% 20%,var(--slate-2),var(--slate) 70%)}
 
+/* Cookie "inside" shot: crossfades in on hover */
+.card-img img.inside{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0!important;transition:opacity .45s var(--ease),transform .7s var(--ease)}
+.card:hover .card-img img.inside,.card:focus-within .card-img img.inside{opacity:1!important}
+.inside-hint{position:absolute;left:12px;bottom:12px;background:rgba(255,255,255,.92);color:var(--plum);font-size:.7rem;font-weight:700;padding:5px 10px;border-radius:999px;transition:opacity .3s;pointer-events:none}
+.card:hover .inside-hint{opacity:0}
+@media (hover:none){.inside-hint::after{content:" · tap"}}
+.qv-img img.inside{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .4s}
+.qv-img.show-inside img.inside{opacity:1}
+.lrow .whole,.lrow .in{position:relative}
+.lrow .in .ph{border-radius:20px}
+.view-toggle{position:absolute;left:50%;bottom:16px;transform:translateX(-50%);display:flex;background:rgba(255,255,255,.95);border-radius:999px;padding:4px;box-shadow:var(--shadow);z-index:2}
+.view-toggle button{padding:8px 16px;border-radius:999px;font-size:.82rem;font-weight:700;color:var(--plum)}
+.view-toggle button.active{background:var(--pink);color:#fff}
+
+/* Meet the cookies lineup */
+.lineup{background:var(--cotton)}
+.lineup-list{display:grid;gap:18px}
+.lrow{display:grid;grid-template-columns:200px 1fr 260px;align-items:center;gap:28px;background:#fff;border:2px solid var(--line);border-radius:28px;padding:16px 16px 16px 16px;transition:transform .35s var(--bounce),box-shadow .35s,border-color .35s;cursor:pointer}
+.lrow:hover{transform:translate(-3px,-4px);box-shadow:8px 10px 0 var(--hue,var(--pink-pop));border-color:var(--plum)}
+.lrow .whole{width:200px;height:200px;border-radius:50%;overflow:hidden;background:var(--slate);box-shadow:0 0 0 6px #fff,0 0 0 9px var(--hue,var(--pink-pop))}
+.lrow .whole img,.lrow .in img{width:100%;height:100%;object-fit:cover}
+.lrow .in{height:200px;border-radius:20px;overflow:hidden;background:var(--slate);position:relative}
+.lrow .in span{position:absolute;top:10px;left:10px;background:rgba(255,255,255,.92);font-size:.68rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--plum);padding:4px 10px;border-radius:999px}
+.lrow .num{font-family:var(--display);font-weight:700;font-size:.85rem;color:var(--muted);letter-spacing:.1em}
+.lrow h3{font-size:clamp(1.6rem,3vw,2.4rem);color:var(--hue,var(--plum));margin:2px 0 6px;font-weight:700}
+.lrow p{color:var(--muted);max-width:44ch;font-size:.95rem}
+.lrow .lfoot{display:flex;align-items:center;gap:14px;margin-top:14px;flex-wrap:wrap}
+.lrow .lfoot .btn{padding:10px 18px;font-size:.85rem}
+.lrow.sold .whole img,.lrow.sold .in img{filter:grayscale(.85) brightness(.8)}
+.lrow .soldpill{background:var(--plum);color:#fff;font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:6px 12px;border-radius:999px}
+@media (max-width:860px){
+  .lrow{grid-template-columns:110px 1fr;gap:14px;padding:12px}
+  .lrow .whole{width:110px;height:110px}
+  .lrow .in{grid-column:1/-1;height:180px;order:3}
+}
+.empty{grid-column:1/-1;text-align:center;padding:60px;color:var(--muted)}
+.ph{width:100%;height:100%;display:grid;place-items:center;font-size:3.4rem;background:radial-gradient(120% 90% at 30% 20%,var(--slate-2),var(--slate) 70%)}
+
 /* =================== SWIRL COLLECTION =================== */
 .swirl{background:linear-gradient(135deg,var(--grape) 0%,#B5308F 55%,var(--pink-pop) 100%);color:var(--cotton);position:relative;overflow:hidden}
 .swirl::before{content:"";position:absolute;inset:0;background:radial-gradient(800px 400px at 10% 0%,rgba(255,95,174,.28),transparent 60%),radial-gradient(600px 400px at 100% 100%,rgba(123,63,228,.30),transparent 60%)}
@@ -524,6 +562,7 @@ footer .foot-h{color:var(--lemon)!important}
   .foot-grid{grid-template-columns:1fr 1fr}
   .form .two,.seg{grid-template-columns:1fr}
   .gift-text{padding:32px 22px}
+  .sold-flag b{font-size:1rem}.sold-flag small{font-size:.6rem;letter-spacing:.08em}
 }
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation:none!important;transition:none!important}

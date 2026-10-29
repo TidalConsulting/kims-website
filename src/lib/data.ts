@@ -115,6 +115,9 @@ export interface Product {
   signature?: boolean;
   /** Swirl Collection emoji, also the image fallback. */
   emoji?: string;
+  /** Cookies: accent colour for the "Meet the cookies" lineup, and what's inside. */
+  hue?: string;
+  filling?: string;
   /** CMS-driven: permanently unavailable (for day-to-day sell-outs use TODAY). */
   soldOut?: boolean;
   /** CMS-driven: days of week the item is baked (0 = Sunday). Omit for every day. */
@@ -122,13 +125,16 @@ export interface Product {
 }
 
 export const PRODUCTS: Product[] = [
-  // Cookies
-  { id: "c1", cat: "cookies", name: "Brown Butter Chocolate Chunk", desc: "Our signature: crisp edges, molten middle, flaky salt.", price: 120, img: IMG.cookie1, tag: "Bestseller", opt: "cookie", box: true },
-  { id: "c2", cat: "cookies", name: "Double Dark Sea Salt", desc: "70% cacao dough with dark chocolate puddles.", price: 130, img: IMG.cookie3, opt: "cookie", box: true },
-  { id: "c3", cat: "cookies", name: "Almond Butter Shortbread", desc: "Melt-in-your-mouth, lightly toasted almond.", price: 95, img: IMG.cookie2, opt: "cookie", box: true },
-  { id: "c4", cat: "cookies", name: "Oatmeal Cranberry", desc: "Chewy oats, tart cranberries, white chocolate.", price: 95, img: IMG.cookie2, opt: "cookie", box: true },
-  { id: "c5", cat: "cookies", name: "Red Velvet Crinkle", desc: "Powdered-sugar crackle with a cream cheese heart.", price: 120, img: IMG.cookie3, tag: "New", opt: "cookie", box: true },
-  { id: "c6", cat: "cookies", name: "Pistachio Rose", desc: "Roasted pistachio, rose sugar, a little fancy.", price: 135, img: IMG.cookie1, opt: "cookie", box: true },
+  // Cookies: every one is stuffed. Photos are public/images/cookie-<name>.jpg plus cookie-<name>-inside.jpg
+  // (AI flat-lays for now; swap in real photos of the actual cookies before launch).
+  { id: "c1", cat: "cookies", name: "Classic Chocolate Chip", desc: "Golden edges, gooey center, dark chocolate puddles and flaky salt.", price: 110, img: IMG.cookie1, tag: "Bestseller", opt: "cookie", box: true, hue: "#8A5A2B", filling: "Molten dark chocolate & white chocolate cream" },
+  { id: "c2", cat: "cookies", name: "Double Chocolate", desc: "Cocoa dough loaded with dark chocolate chunks and sea salt.", price: 125, img: IMG.cookie3, opt: "cookie", box: true, hue: "#3B2016", filling: "Fudgy molten dark chocolate" },
+  { id: "c3", cat: "cookies", name: "Spiced Cookie Butter", desc: "Cookie butter center, crushed spice biscuits, white chocolate drizzle.", price: 135, img: IMG.cookie2, tag: "Hot", opt: "cookie", box: true, hue: "#D9541E", filling: "Gooey spiced cookie butter" },
+  { id: "c4", cat: "cookies", name: "Cookies & Cream", desc: "Vanilla dough with chocolate wafer crumbs and melty white chocolate.", price: 130, img: IMG.cookie2, opt: "cookie", box: true, hue: "#2B1340", filling: "White chocolate sweet cream" },
+  { id: "c5", cat: "cookies", name: "Chocolate Hazelnut", desc: "Toasted hazelnuts and a gooey chocolate-hazelnut swirl.", price: 140, img: IMG.cookie1, opt: "cookie", box: true, hue: "#7A4A26", filling: "Chocolate-hazelnut praline" },
+  { id: "c6", cat: "cookies", name: "Caramel Pecan", desc: "Salted caramel pools, toasted pecans, dark chocolate chunks.", price: 140, img: IMG.cookie1, opt: "cookie", box: true, hue: "#B8681D", filling: "Salted caramel" },
+  { id: "c7", cat: "cookies", name: "Pistachio Raspberry", desc: "Pistachio dough, pistachio cream, fresh raspberries.", price: 150, img: IMG.cookie3, tag: "New", opt: "cookie", box: true, hue: "#5E7F22", filling: "Silky pistachio cream" },
+  { id: "c8", cat: "cookies", name: "Red Velvet White Chocolate", desc: "Crimson cocoa dough with big white chocolate chunks.", price: 125, img: IMG.cookie3, opt: "cookie", box: true, hue: "#C8283E", filling: "Cream cheese filling" },
   // Cakes
   { id: "k1", cat: "cakes", name: "Belgian Chocolate Cake", desc: "Three layers, ganache drip, chocolate curls.", price: 220, img: IMG.cake1, tag: "Bestseller", opt: "cake" },
   { id: "k2", cat: "cakes", name: "Salted Caramel Cake", desc: "Brown sugar sponge, house caramel, toasted pecans.", price: 220, img: IMG.cake3, opt: "cake" },

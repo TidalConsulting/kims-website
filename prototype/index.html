@@ -233,6 +233,39 @@ h2{font-size:clamp(2rem,4vw,3rem)}
 .sold-strip{display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:var(--cotton);border:1px solid var(--line);border-radius:14px;padding:12px 16px;margin-bottom:22px;font-size:.86rem;color:var(--grape)}
 .sold-strip b{font-weight:700}
 .sold-strip .pill{background:#fff;border:1px solid var(--line);border-radius:999px;padding:3px 10px;font-size:.78rem;text-decoration:line-through;color:var(--muted)}
+/* Cookie "inside" shot: crossfades in on hover */
+.card-img img.inside{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .45s var(--ease),transform .7s var(--ease)}
+.card:hover .card-img img.inside{opacity:1}
+.inside-hint{position:absolute;left:12px;bottom:12px;background:rgba(255,255,255,.92);color:var(--plum);font-size:.7rem;font-weight:700;padding:5px 10px;border-radius:999px;transition:opacity .3s;pointer-events:none}
+.card:hover .inside-hint{opacity:0}
+@media (hover:none){.inside-hint::after{content:" · tap"}}
+.qv-img img.inside{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .4s}
+.qv-img.show-inside img.inside{opacity:1}
+.view-toggle{position:absolute;left:50%;bottom:16px;transform:translateX(-50%);display:flex;background:rgba(255,255,255,.95);border-radius:999px;padding:4px;box-shadow:var(--shadow);z-index:2}
+.view-toggle button{padding:8px 16px;border-radius:999px;font-size:.82rem;font-weight:700;color:var(--plum)}
+.view-toggle button.active{background:var(--pink);color:#fff}
+
+/* Meet the cookies lineup */
+.lineup{background:var(--cotton)}
+.lineup-list{display:grid;gap:18px}
+.lrow{display:grid;grid-template-columns:200px 1fr 260px;align-items:center;gap:28px;background:#fff;border:2px solid var(--line);border-radius:28px;padding:16px 16px 16px 16px;transition:transform .35s var(--bounce),box-shadow .35s,border-color .35s;cursor:pointer}
+.lrow:hover{transform:translate(-3px,-4px);box-shadow:8px 10px 0 var(--hue,var(--pink-pop));border-color:var(--plum)}
+.lrow .whole{width:200px;height:200px;border-radius:50%;overflow:hidden;background:var(--slate);box-shadow:0 0 0 6px #fff,0 0 0 9px var(--hue,var(--pink-pop))}
+.lrow .whole img,.lrow .in img{width:100%;height:100%;object-fit:cover}
+.lrow .in{height:200px;border-radius:20px;overflow:hidden;background:var(--slate);position:relative}
+.lrow .in span{position:absolute;top:10px;left:10px;background:rgba(255,255,255,.92);font-size:.68rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--plum);padding:4px 10px;border-radius:999px}
+.lrow .num{font-family:var(--display);font-weight:700;font-size:.85rem;color:var(--muted);letter-spacing:.1em}
+.lrow h3{font-size:clamp(1.6rem,3vw,2.4rem);color:var(--hue,var(--plum));margin:2px 0 6px;font-weight:700}
+.lrow p{color:var(--muted);max-width:44ch;font-size:.95rem}
+.lrow .lfoot{display:flex;align-items:center;gap:14px;margin-top:14px;flex-wrap:wrap}
+.lrow .lfoot .btn{padding:10px 18px;font-size:.85rem}
+.lrow.sold .whole img,.lrow.sold .in img{filter:grayscale(.85) brightness(.8)}
+.lrow .soldpill{background:var(--plum);color:#fff;font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:6px 12px;border-radius:999px}
+@media (max-width:860px){
+  .lrow{grid-template-columns:110px 1fr;gap:14px;padding:12px}
+  .lrow .whole{width:110px;height:110px}
+  .lrow .in{grid-column:1/-1;height:180px;order:3}
+}
 .empty{grid-column:1/-1;text-align:center;padding:60px;color:var(--muted)}
 .ph{width:100%;height:100%;display:grid;place-items:center;font-size:3.4rem;background:radial-gradient(120% 90% at 30% 20%,var(--slate-2),var(--slate) 70%)}
 
@@ -490,6 +523,7 @@ footer h5{color:var(--lemon)!important}
   .search{flex:1}.search input{width:100%}
 }
 @media (max-width:520px){
+  .sold-flag b{font-size:1rem}.sold-flag small{font-size:.6rem;letter-spacing:.08em}
   .logo{font-size:1.2rem}.logo small{display:none}.nav-actions .icon-btn{width:38px;height:38px}
   .cat .thumb{width:84px;height:84px}
   .box-picks{grid-template-columns:repeat(2,1fr)}
@@ -558,6 +592,7 @@ function imgFallback(el, emoji){
           </a>
         </div>
       </li>
+      <li><a href="#cookies">Cookies</a></li>
       <li><a href="#box">Build a Box</a></li>
       <li><a href="#coffee">Coffee</a></li>
       <li><a href="#story">Our Story</a></li>
@@ -599,6 +634,7 @@ function imgFallback(el, emoji){
     <a href="#menu" data-filter="coffee">☕ Coffee</a>
     <a href="#menu" data-filter="refreshments">🍋 Refreshments</a>
   </div>
+  <a href="#cookies">Meet the Cookies</a>
   <a href="#box">Build a Box</a>
   <a href="#coffee">Coffee</a>
   <a href="#story">Our Story</a>
@@ -679,6 +715,21 @@ function imgFallback(el, emoji){
     </div>
     <div class="sold-strip" id="soldStrip" hidden></div>
     <div class="grid" id="grid"></div>
+  </div>
+</section>
+
+<!-- ============ MEET THE COOKIES (whole · name · inside) ============ -->
+<section class="section lineup" id="cookies">
+  <div class="container">
+    <div class="section-head reveal">
+      <div>
+        <span class="eyebrow">The cookie lineup</span>
+        <h2>Eight cookies.<br/>Eight gooey centers.</h2>
+        <p>Every cookie is stuffed. Here's what each one looks like on the outside, and what's waiting inside.</p>
+      </div>
+      <a href="#box" class="btn btn-primary">Build a box of 6 or 12</a>
+    </div>
+    <div class="lineup-list" id="lineup"></div>
   </div>
 </section>
 
@@ -953,7 +1004,7 @@ const TODAY = {
 const isSold = p => TODAY.soldOut.includes(p.id);
 
 const CATS = [
-  {id:'cookies', name:'Cookies', emoji:'🍪', img:IMG.cookie1},
+  {id:'cookies', name:'Cookies', emoji:'🍪', img:'images/cookie-classic-chocolate-chip.jpg'},
   {id:'cakes', name:'Cakes', emoji:'🎂', img:IMG.cake1},
   {id:'pastries', name:'Pastries', emoji:'🥐', img:IMG.pastry1},
   {id:'rolls', name:'Cinnamon Rolls', emoji:'🌀', img:'images/roll-classic-cinnamon.jpg'},
@@ -976,13 +1027,15 @@ const OPT = {
 };
 
 const PRODUCTS = [
-  // Cookies
-  {id:'c1', cat:'cookies', name:'Brown Butter Chocolate Chunk', desc:'Our signature: crisp edges, molten middle, flaky salt.', price:120, img:IMG.cookie1, tag:'Bestseller', opt:'cookie', box:true},
-  {id:'c2', cat:'cookies', name:'Double Dark Sea Salt', desc:'70% cacao dough with dark chocolate puddles.', price:130, img:IMG.cookie3, opt:'cookie', box:true},
-  {id:'c3', cat:'cookies', name:'Almond Butter Shortbread', desc:'Melt-in-your-mouth, lightly toasted almond.', price:95, img:IMG.cookie2, opt:'cookie', box:true},
-  {id:'c4', cat:'cookies', name:'Oatmeal Cranberry', desc:'Chewy oats, tart cranberries, white chocolate.', price:95, img:IMG.cookie2, opt:'cookie', box:true},
-  {id:'c5', cat:'cookies', name:'Red Velvet Crinkle', desc:'Powdered-sugar crackle with a cream cheese heart.', price:120, img:IMG.cookie3, tag:'New', opt:'cookie', box:true},
-  {id:'c6', cat:'cookies', name:'Pistachio Rose', desc:'Roasted pistachio, rose sugar, a little fancy.', price:135, img:IMG.cookie1, opt:'cookie', box:true},
+  // Cookies — photos: images/cookie-*.jpg (AI flat-lays; replace with full-size versions from Canva)
+  {id:'c1', cat:'cookies', name:'Classic Chocolate Chip', desc:'Golden edges, gooey center, dark chocolate puddles and flaky salt.', price:110, img:IMG.cookie1, tag:'Bestseller', opt:'cookie', box:true, hue:'#8A5A2B', filling:'Molten dark chocolate & white chocolate cream'},
+  {id:'c2', cat:'cookies', name:'Double Chocolate', desc:'Cocoa dough loaded with dark chocolate chunks and sea salt.', price:125, img:IMG.cookie3, opt:'cookie', box:true, hue:'#3B2016', filling:'Fudgy molten dark chocolate'},
+  {id:'c3', cat:'cookies', name:'Spiced Cookie Butter', desc:'Cookie butter center, crushed spice biscuits, white chocolate drizzle.', price:135, img:IMG.cookie2, tag:'Hot', opt:'cookie', box:true, hue:'#D9541E', filling:'Gooey spiced cookie butter'},
+  {id:'c4', cat:'cookies', name:'Cookies & Cream', desc:'Vanilla dough with chocolate wafer crumbs and melty white chocolate.', price:130, img:IMG.cookie2, opt:'cookie', box:true, hue:'#2B1340', filling:'White chocolate sweet cream'},
+  {id:'c5', cat:'cookies', name:'Chocolate Hazelnut', desc:'Toasted hazelnuts and a gooey chocolate-hazelnut swirl.', price:140, img:IMG.cookie1, opt:'cookie', box:true, hue:'#7A4A26', filling:'Chocolate-hazelnut praline'},
+  {id:'c6', cat:'cookies', name:'Caramel Pecan', desc:'Salted caramel pools, toasted pecans, dark chocolate chunks.', price:140, img:IMG.cookie1, opt:'cookie', box:true, hue:'#B8681D', filling:'Salted caramel'},
+  {id:'c7', cat:'cookies', name:'Pistachio Raspberry', desc:'Pistachio dough, pistachio cream, fresh raspberries.', price:150, img:IMG.cookie3, tag:'New', opt:'cookie', box:true, hue:'#5E7F22', filling:'Silky pistachio cream'},
+  {id:'c8', cat:'cookies', name:'Red Velvet White Chocolate', desc:'Crimson cocoa dough with big white chocolate chunks.', price:125, img:IMG.cookie3, opt:'cookie', box:true, hue:'#C8283E', filling:'Cream cheese filling'},
   // Cakes
   {id:'k1', cat:'cakes', name:'Belgian Chocolate Cake', desc:'Three layers, ganache drip, chocolate curls.', price:220, img:IMG.cake1, tag:'Bestseller', opt:'cake'},
   {id:'k2', cat:'cakes', name:'Salted Caramel Cake', desc:'Brown sugar sponge, house caramel, toasted pecans.', price:220, img:IMG.cake3, opt:'cake'},
@@ -1034,8 +1087,8 @@ const HOURS = [ // 0 = Sunday
   {d:'Thursday', o:7, c:20}, {d:'Friday', o:7, c:20}, {d:'Saturday', o:7, c:20},
 ];
 
-// Rolls use the cropped overhead photos already in /images
-PRODUCTS.filter(p => p.cat === 'rolls').forEach(p => { p.img = photoFor(p); p.plate = true; p.local = true; });
+// Rolls and cookies use photos already in /images
+PRODUCTS.filter(p => p.cat === 'rolls' || p.cat === 'cookies').forEach(p => { p.img = photoFor(p); p.local = true; if (p.cat === 'rolls') p.plate = true; });
 
 // Prices are in Philippine pesos and VAT-inclusive (12%), as is standard in PH
 const FREE_DELIVERY = 1000, DELIVERY_FEE = 79, VAT = 0.12;
@@ -1061,6 +1114,9 @@ const money = n => '₱' + n.toLocaleString('en-PH', {minimumFractionDigits: Num
 const byId = id => PRODUCTS.find(p => p.id === id);
 const emojiFor = p => p.emoji || (CATS.find(c => c.id === p.cat)||{}).emoji || '🍪';
 const imgTag = (src, alt, emoji, fb) => `<img src="${src}" ${fb ? `data-fb="${fb}"` : ''} alt="${alt}" loading="lazy" onerror="imgFallback(this,'${emoji}')" />`;
+// Cookie "inside" (broken-open) photo: images/cookie-<name>-inside.jpg
+const insideFor = p => photoFor(p).replace(/\.jpg$/, '-inside.jpg');
+const insideImg = p => p.cat === 'cookies' ? `<img class="inside" src="${insideFor(p)}" alt="Inside of ${p.name}" loading="lazy" onerror="this.remove()" />` : '';
 // Product image: your photo in /images first, then stock, then emoji
 const pImg = p => p.local ? imgTag(p.img, p.name, emojiFor(p)) : imgTag(photoFor(p), p.name, emojiFor(p), p.img);
 const heart = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg>`;
@@ -1110,6 +1166,8 @@ function renderGrid(){
     <article class="card ${isSold(p)?'sold':''}" style="animation-delay:${Math.min(i,12)*40}ms">
       <div class="card-img ${p.plate?'plate slate-bg':''}" data-open="${p.id}">
         ${pImg(p)}
+        ${isSold(p) ? '' : insideImg(p)}
+        ${p.cat === 'cookies' && !isSold(p) ? `<span class="inside-hint">👀 See inside</span>` : ''}
         ${isSold(p) ? `<span class="sold-flag"><span><b>Sold out today</b><small>Back ${TODAY.restock}</small></span></span>`
           : TODAY.low[p.id] ? `<span class="tag low">Only ${TODAY.low[p.id]} left</span>`
           : p.tag ? `<span class="tag ${p.tag==='Hot'?'hot':p.tag==='New'?'new':''}">${p.tag}</span>` : ''}
@@ -1162,16 +1220,19 @@ let qv = null;
 function openQuickView(id){
   const p = byId(id);
   const groups = OPT[p.opt];
-  qv = {p, sel: groups.map(() => 0), qty:1};
+  qv = {p, sel: groups.map(() => 0), qty:1, view:'whole'};
   const render = () => {
     const price = calcPrice(p, qv.sel);
     $('#modalContent').innerHTML = `
       <div class="qv">
-        <div class="qv-img ${p.plate?'plate slate-bg':''}">${pImg(p)}</div>
+        <div class="qv-img ${p.plate?'plate slate-bg':''} ${qv.view==='inside'?'show-inside':''}">${pImg(p)}${insideImg(p)}
+          ${p.cat === 'cookies' ? `<div class="view-toggle"><button data-view="whole" class="${qv.view!=='inside'?'active':''}">Whole</button><button data-view="inside" class="${qv.view==='inside'?'active':''}">Inside</button></div>` : ''}
+        </div>
         <div class="qv-body">
           <span class="eyebrow">${CATS.find(c=>c.id===p.cat).name}</span>
           <h3>${p.name}</h3>
           <p class="desc">${p.desc}</p>
+          ${p.filling ? `<p style="margin-top:8px;font-size:.88rem"><b style="color:var(--pink)">Inside:</b> ${p.filling}</p>` : ''}
           ${TODAY.low[p.id] && !isSold(p) ? `<p style="margin-top:10px;font-size:.85rem;color:var(--grape);font-weight:600">⏳ Only ${TODAY.low[p.id]} left from this morning's batch</p>` : ''}
           ${groups.map((g,gi) => `
             <div class="opt-group"><h6>${g.name}</h6><div class="opts">
@@ -1190,6 +1251,8 @@ function openQuickView(id){
   };
   render();
   $('#modalContent').onclick = e => {
+    const v = e.target.closest('[data-view]');
+    if (v){ qv.view = v.dataset.view; $('.qv-img').classList.toggle('show-inside', qv.view === 'inside'); $$('.view-toggle button').forEach(b => b.classList.toggle('active', b === v)); return; }
     const o = e.target.closest('.opt');
     const s = e.target.closest('[data-step]');
     qv.note = ($('#qvNote')||{}).value;
@@ -1381,6 +1444,26 @@ function toast(msg){
 $('#toastAction').addEventListener('click', () => { $('#toast').classList.remove('show'); openLayer('#drawer'); });
 
 /* =========================================================
+   MEET THE COOKIES — whole · name · inside
+   ========================================================= */
+$('#lineup').innerHTML = PRODUCTS.filter(p => p.cat === 'cookies').map((c,i) => `
+  <article class="lrow reveal ${isSold(c)?'sold':''}" style="--hue:${c.hue}" data-open="${c.id}">
+    <div class="whole">${pImg(c)}</div>
+    <div>
+      <span class="num">No. ${String(i+1).padStart(2,'0')}</span>
+      <h3>${c.name}</h3>
+      <p>${c.desc}</p>
+      <p style="margin-top:6px"><b style="color:var(--plum)">Inside:</b> ${c.filling}</p>
+      <div class="lfoot">
+        <span class="price">${money(c.price)}</span>
+        ${isSold(c) ? `<span class="soldpill">Sold out today</span>` : `<span class="btn btn-dark">Add to order</span>`}
+        ${TODAY.low[c.id] && !isSold(c) ? `<span style="font-size:.82rem;font-weight:700;color:var(--pink)">⏳ Only ${TODAY.low[c.id]} left</span>` : ''}
+      </div>
+    </div>
+    <div class="in"><img src="${insideFor(c)}" alt="Inside of ${c.name}" loading="lazy" onerror="imgFallback(this,'🍪')" /><span>Inside</span></div>
+  </article>`).join('');
+
+/* =========================================================
    SWIRL COLLECTION
    ========================================================= */
 const rolls = PRODUCTS.filter(p => p.cat === 'rolls');
@@ -1448,7 +1531,7 @@ $('#boxRandom').addEventListener('click', () => {
 });
 $('#boxAdd').addEventListener('click', () => {
   const counts = {}; boxItems.forEach(id => counts[byId(id).name] = (counts[byId(id).name]||0)+1);
-  addToCart({pid:'box'+boxSize, name:`Mix & Match Box (${boxSize})`, img:IMG.cookie2, price:BOX_PRICE[boxSize],
+  addToCart({pid:'box'+boxSize, name:`Mix & Match Box (${boxSize})`, img:'images/cookie-classic-chocolate-chip.jpg', price:BOX_PRICE[boxSize],
     opts:Object.entries(counts).map(([n,q]) => `${q}× ${n}`).join(', '), qty:1});
   boxItems = []; renderBox();
 });

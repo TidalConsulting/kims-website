@@ -15,13 +15,27 @@ Drop files into the `public/images/` folder with the **exact names below**. The 
 All 9 cinnamon rolls (`roll-*.jpg`) are in `public/images/`. **If that photo came from Pinterest or another site, reshoot the rolls before launch.** You need the rights to use it. The Cookie Butter crop also shows a brand logo on the biscuit, so reshoot that one with an unbranded cookie.
 
 ## Shot list: products (overhead, dark surface, square)
-Cookies
-- cookie-brown-butter-chocolate-chunk.jpg
-- cookie-double-dark-sea-salt.jpg
-- cookie-almond-butter-shortbread.jpg
-- cookie-oatmeal-cranberry.jpg
-- cookie-red-velvet-crinkle.jpg
-- cookie-pistachio-rose.jpg
+Cookies: **done (AI-generated flat-lays on pastel pink)**. The current files are enlarged previews. Download the full-size 1264×1264 originals from Canva and save over these:
+- cookie-classic-chocolate-chip.jpg (also copied as hero-cookie.jpg)
+- cookie-double-chocolate.jpg
+- cookie-spiced-cookie-butter.jpg
+- cookie-cookies-and-cream.jpg
+- cookie-chocolate-hazelnut.jpg
+- cookie-caramel-pecan.jpg
+- cookie-pistachio-raspberry.jpg
+- cookie-red-velvet-white-chocolate.jpg
+These are AI images. Before launch, swap in real photos of your actual cookies so customers get what they see.
+
+Cookie **inside** shots (broken in half to show the filling, side view, same pastel pink). They show on hover, in the pop-up's Whole/Inside switch, and in the "Meet the cookies" section:
+- cookie-classic-chocolate-chip-inside.jpg
+- cookie-double-chocolate-inside.jpg
+- cookie-spiced-cookie-butter-inside.jpg
+- cookie-cookies-and-cream-inside.jpg
+- cookie-chocolate-hazelnut-inside.jpg
+- cookie-caramel-pecan-inside.jpg
+- cookie-pistachio-raspberry-inside.jpg
+- cookie-red-velvet-white-chocolate-inside.jpg
+Shooting tip: break the cookie while it's still warm, stack the halves, and shoot from the side at cookie height.
 
 Cakes (a slice on a plate, overhead or 45°)
 - cake-belgian-chocolate-cake.jpg

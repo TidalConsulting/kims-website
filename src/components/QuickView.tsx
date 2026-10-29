@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { CATS, OPT, TODAY, type Product } from "@/lib/data";
-import { isPlate, productPhoto } from "@/lib/photos";
+import { insidePhoto, isPlate, productPhoto } from "@/lib/photos";
 import { calcPrice, emojiFor, isSold, lowStock, money, optLabel, shopNow } from "@/lib/utils";
 import { useShop } from "@/store/shop";
 import SmartImage from "./SmartImage";
@@ -12,6 +12,8 @@ export default function QuickView({ p }: { p: Product }) {
   const [sel, setSel] = useState(() => groups.map(() => 0));
   const [qty, setQty] = useState(1);
   const [note, setNote] = useState("");
+  const [view, setView] = useState<"whole" | "inside">("whole");
+  const inside = insidePhoto(p);
   const { addToCart, closeAll } = useShop.getState();
   const price = calcPrice(p, sel);
   const now = shopNow();
@@ -36,13 +38,26 @@ export default function QuickView({ p }: { p: Product }) {
 
   return (
     <div className="qv">
-      <div className={`qv-img ${isPlate(p) ? "plate slate-bg" : ""}`}>
+      <div className={`qv-img ${isPlate(p) ? "plate slate-bg" : ""} ${view === "inside" ? "show-inside" : ""}`}>
         <SmartImage src={productPhoto(p)} alt={p.name} fill sizes="(max-width: 860px) 100vw, 460px" emoji={emoji} className="object-cover" />
+        {inside && (
+          <>
+            <SmartImage src={inside} alt={`Inside of ${p.name}`} fill sizes="(max-width: 860px) 100vw, 460px" emoji="" className="inside" />
+            <div className="view-toggle" role="radiogroup" aria-label="Photo">
+              {(["whole", "inside"] as const).map((v) => (
+                <button key={v} role="radio" aria-checked={view === v} className={view === v ? "active" : ""} onClick={() => setView(v)}>
+                  {v === "whole" ? "Whole" : "Inside"}
+                </button>
+              ))}
+            </div>
+          </>
+        )}
       </div>
       <div className="qv-body">
         <span className="eyebrow">{CATS.find((c) => c.id === p.cat)?.name}</span>
         <h3 id="modal-title">{p.name}</h3>
         <p className="desc">{p.desc}</p>
+        {p.filling && <p className="mt-2 text-[.88rem]"><b className="text-pink">Inside:</b> {p.filling}</p>}
         {low && <p className="mt-2.5 text-sm font-semibold text-grape">⏳ Only {low} left from this morning&apos;s batch</p>}
         {groups.map((g, gi) => (
           <div className="opt-group" key={g.name} role="radiogroup" aria-label={g.name}>

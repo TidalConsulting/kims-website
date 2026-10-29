@@ -23,6 +23,7 @@
 
 - **Photo system**: each product loads `images/<category>-<slug>.jpg` first, then stock, then an emoji (`photoFor()`, `pImg()`, `imgFallback()`). Cinnamon rolls use the "plate" style, a round overhead crop centered on dark slate. All photos get the same CSS grade so mixed sources match. See `images/PHOTO-GUIDE.md` for file names and the shot list.
 - **Hero video**: `images/hero-cookie.mp4/.webm` plays muted, looped, at 0.6× speed in the hero plate on slide 1, with a pause button. `hero-cookie.jpg` is the poster/fallback. It's skipped under `prefers-reduced-motion` or data-saver.
+- **Cookie lineup (8 stuffed cookies)**: each cookie has a whole photo (`images/cookie-<slug>.jpg`) and an inside photo (`images/cookie-<slug>-inside.jpg`, via `insideFor()`). Cards crossfade to the inside shot on hover and show a "See inside" hint. The quick view has a Whole/Inside switch. The "Meet the cookies" section (`#cookies`) lists every cookie as a row (whole · name in its own `hue` color · inside shot), and clicking a row opens the quick view. Each cookie has `hue` and `filling` fields.
 - **Sold out today / low stock**: the `TODAY` object (`soldOut` ids, `low` counts, `restock` text). Sold-out cards are greyed with a "Sold out today · Back tomorrow at 7am" overlay, can't be added to the cart, and sink to the bottom of the grid. A strip above the grid lists them. They also can't be picked in Build-a-Box, and the "surprise me" fill skips them. Low-stock items show an "Only N left" tag.
 
 ## Currency & pricing

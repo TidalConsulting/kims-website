@@ -2,6 +2,7 @@ import Announcement from "@/components/Announcement";
 import BoxBuilder from "@/components/BoxBuilder";
 import CategoryStrip from "@/components/CategoryStrip";
 import CoffeeSection from "@/components/CoffeeSection";
+import CookieLineup from "@/components/CookieLineup";
 import Footer from "@/components/Footer";
 import Gift from "@/components/Gift";
 import Hero from "@/components/Hero";
@@ -29,6 +30,7 @@ export default function Home() {
         <Hero />
         <CategoryStrip />
         <MenuGrid />
+        <CookieLineup />
         <SwirlCollection />
         <BoxBuilder />
         <CoffeeSection />

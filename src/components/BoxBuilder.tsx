@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { IMG, PRODUCTS } from "@/lib/data";
-import { localOr, productPhoto } from "@/lib/photos";
+import { PRODUCTS } from "@/lib/data";
+import { productPhoto, SECTION_PHOTOS } from "@/lib/photos";
 import { boxPrice, byId, isSold, money } from "@/lib/utils";
 import { useShop } from "@/store/shop";
 import Reveal from "./Reveal";
@@ -43,7 +43,7 @@ export default function BoxBuilder() {
     addToCart({
       pid: "box" + size,
       name: `Mix & Match Box (${size})`,
-      img: localOr("gift-box.jpg", IMG.cookie2),
+      img: SECTION_PHOTOS.box,
       price: boxPrice(items, size),
       opts: Object.entries(counts).map(([n, q]) => `${q}× ${n}`).join(", "),
       box: items,

@@ -27,6 +27,8 @@ Copy `.env.example` to `.env.local` and set `NEXT_PUBLIC_SITE_URL`. The sitemap,
 | Order, contact and newsletter endpoints | `src/app/api/*/route.ts` |
 | SEO: JSON-LD, sitemap, robots, OG image | `src/lib/seo.ts`, `src/app/sitemap.ts`, `robots.ts`, `opengraph-image.tsx` |
 
+Cookies have a whole photo and an inside photo (`cookie-<name>-inside.jpg`): cards switch to the inside shot on hover, the quick view has a Whole/Inside switch, and the "Meet the cookies" section (`CookieLineup.tsx`) shows both side by side with each cookie's `hue` and `filling`.
+
 Products support `soldOut` and `availableDays` (0 = Sunday), and `TODAY` lists what sold out today and what is running low. Sold-out items are greyed out, sink to the bottom of the menu, and cannot be added to the cart or a cookie box. The hero plays `public/images/hero-cookie.mp4` (or `.webm`) if you add one.
 
 ## Going live: what to set up
