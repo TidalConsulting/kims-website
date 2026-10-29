@@ -2,13 +2,12 @@
 
 import { useState, type FormEvent } from "react";
 import { postJson, STATIC_PREVIEW } from "@/lib/client";
-import { BUSINESS, HOURS } from "@/lib/data";
+import { ADDRESS, BUSINESS, HOURS, TEL } from "@/lib/data";
 import { fmtHour, shopNow } from "@/lib/utils";
 import { useShop } from "@/store/shop";
 import Reveal from "./Reveal";
 import { useClientValue } from "./hooks";
 
-const ADDRESS = `${BUSINESS.street}, ${BUSINESS.city}, ${BUSINESS.region} ${BUSINESS.postalCode}`;
 
 export default function Visit() {
   const today = useClientValue(() => shopNow().day);
@@ -58,7 +57,7 @@ export default function Visit() {
             </div>
             <p className="mt-[22px] opacity-85">
               📍 <a href={`https://maps.google.com/?q=${encodeURIComponent(ADDRESS)}`} className="underline-offset-2 hover:underline">{BUSINESS.street}, {BUSINESS.city}</a>
-              {" · "}📞 <a href={`tel:${BUSINESS.phone.replace(/[^\d+]/g, "")}`} className="underline-offset-2 hover:underline">{BUSINESS.phone}</a>
+              {" · "}📞 <a href={TEL} className="underline-offset-2 hover:underline">{BUSINESS.phone}</a>
             </p>
             {!STATIC_PREVIEW && (
               <iframe

@@ -42,7 +42,7 @@ Copy `.env.example` to `.env.local` locally, or add the same variables in your h
 
 ## Still to do before launch
 
-- **Real content:** name, logo, address, phone, email, socials and hours (`BUSINESS`, `HOURS`), delivery areas (`DELIVERY_AREAS`), and the hero/story numbers.
+- **Real content:** opening hours (`HOURS`), social links (`BUSINESS.socials`, hidden until filled in), the story text, and a check of the delivery areas (`DELIVERY_AREAS`). Name, logo, email, phone and the Ayala Triangle address are in.
 - **Reviews:** replace the samples in `REVIEWS` with real ones (ideally from Google Business Profile), then set `REVIEWS_ARE_SAMPLES` to `false`.
 - **Help pages:** the Pickup & Delivery, Allergens, FAQ and Privacy text in `src/lib/info.ts` is a draft. Check allergens with the kitchen, and have the privacy notice reviewed against the Data Privacy Act.
 - **Photos:** drop photos into `public/images/` using the names in `docs/PHOTO-GUIDE.md` and restart `npm run dev`. Anything missing falls back to the Unsplash stock photo, then an emoji. Once every photo is in, remove the `remotePatterns` entry in `next.config.ts`. Make sure you have the rights to every photo.

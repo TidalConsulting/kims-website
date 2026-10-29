@@ -1,13 +1,16 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { SLIDES } from "@/lib/data";
+import { PRODUCTS, SLIDES } from "@/lib/data";
 import { heroVideo, localOr } from "@/lib/photos";
 import { liveStatus } from "@/lib/utils";
 import CountUp from "./CountUp";
 import SmartImage from "./SmartImage";
 import { useClientValue } from "./hooks";
 import { Arrow, Pause, Play } from "./icons";
+
+/** Everything from the oven (not drinks), counted from the menu so it stays true. */
+const BAKED_DAILY = PRODUCTS.filter((p) => ["cookies", "cakes", "pastries", "rolls"].includes(p.cat)).length;
 
 type Sprinkle = { left: number; size: number; color: string; dur: number; delay: number };
 const SPRINKLE_COLORS = ["var(--pink-pop)", "var(--lemon)", "var(--mint)", "var(--sky)", "#B48CFF", "#FF9F6E", "#fff"];
@@ -79,9 +82,9 @@ export default function Hero() {
             <a href="#box" className="btn btn-ghost">Build a Cookie Box</a>
           </div>
           <div className="hero-meta">
-            <div><CountUp end={38} />Things baked daily</div>
-            <div><CountUp end={12} />Min avg pickup</div>
-            <div><CountUp end={4.9} dec={1} />Avg rating</div>
+            <div><CountUp end={BAKED_DAILY} />Baked fresh daily</div>
+            <div><CountUp end={15} />Min to pickup</div>
+            <div><CountUp end={PRODUCTS.length} />Items on the menu</div>
           </div>
         </div>
         <div className="hero-visual">

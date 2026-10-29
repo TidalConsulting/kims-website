@@ -5,7 +5,6 @@
    ========================================================= */
 
 // Brand: Coffee Crumble (logo: docs/brand/Coffee_Crumble_Logo.pdf).
-// The address, phone, email and socials below are still placeholders. Swap in the real details.
 export const BUSINESS = {
   name: "Coffee Crumble",
   slogan: "baked slow · brewed bold",
@@ -13,23 +12,34 @@ export const BUSINESS = {
   tagline: "Bakery · Café",
   description:
     "Small-batch cookies, cakes, pastries, cinnamon rolls, and specialty coffee. Order for pickup or delivery.",
-  email: "hello@coffeecrumble.com",
-  phone: "(555) 123-4567",
-  street: "123 Main Street",
-  city: "Your City",
-  region: "ST",
-  postalCode: "00000",
-  country: "US",
+  email: "coffeecrumble@gmail.com",
+  /** Shown on the site. Metro Manila landline, so callers on mobile need the (02). */
+  phone: "(02) 8888-0000",
+  /** For tap-to-call links and search engines. */
+  phoneIntl: "+63 2 8888 0000",
+  street: "Ayala Triangle Gardens, Paseo de Roxas cor. Makati Ave.",
+  city: "Makati City",
+  region: "Metro Manila",
+  postalCode: "1226",
+  country: "PH",
+  /** Ayala Triangle Gardens, for search engines and the map. */
+  geo: { lat: 14.5567, lng: 121.0244 },
   // Used to compute "Open now" in the shop's local time, not the visitor's.
   timeZone: "Asia/Manila",
   priceRange: "₱₱",
   foundedYear: 2026,
+  /** Full profile URLs. The footer only shows the ones filled in. */
   socials: {
-    instagram: "#",
-    facebook: "#",
-    tiktok: "#",
+    instagram: "",
+    facebook: "",
+    tiktok: "",
   },
 };
+
+/** One-line address, e.g. for the map link. */
+export const ADDRESS = `${BUSINESS.street}, ${BUSINESS.city} ${BUSINESS.postalCode}, ${BUSINESS.region}`;
+/** tel: link for the shop phone. */
+export const TEL = `tel:${BUSINESS.phoneIntl.replace(/[^\d+]/g, "")}`;
 
 export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
 
@@ -281,8 +291,14 @@ export const PAIRING = {
   pastries: ["pastries", "rolls"] as CategoryId[],
 };
 
-/** Delivery is limited to these areas (placeholder: replace with your real barangays/cities). */
-export const DELIVERY_AREAS = ["Your City – Area 1", "Your City – Area 2", "Your City – Area 3"];
+/** Delivery is limited to these areas, all within about 4 km of Ayala Triangle. */
+export const DELIVERY_AREAS = [
+  "Makati CBD (Ayala, Salcedo & Legazpi Village)",
+  "Bel-Air & Poblacion",
+  "San Lorenzo, Urdaneta & Dasmariñas Village",
+  "Rockwell, Guadalupe & Pio del Pilar",
+  "BGC, Taguig",
+];
 export const FREE_DELIVERY = 1000;
 export const DELIVERY_FEE = 79;
 /** Philippine VAT. Menu prices already include it, so it is shown but never added on top. */

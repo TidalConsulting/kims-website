@@ -1,4 +1,4 @@
-import { BUSINESS, CATS, CURRENCY, HOURS, PRODUCTS, SITE_URL } from "./data";
+import { ADDRESS, BUSINESS, CATS, CURRENCY, HOURS, PRODUCTS, SITE_URL } from "./data";
 
 const pad = (h: number) => `${String(h).padStart(2, "0")}:00`;
 
@@ -10,7 +10,7 @@ export function jsonLd() {
     name: BUSINESS.name,
     description: BUSINESS.description,
     url: SITE_URL,
-    telephone: BUSINESS.phone,
+    telephone: BUSINESS.phoneIntl,
     email: BUSINESS.email,
     priceRange: BUSINESS.priceRange,
     servesCuisine: ["Bakery", "Coffee"],
@@ -32,6 +32,8 @@ export function jsonLd() {
       opens: pad(h.o),
       closes: pad(h.c),
     })),
+    geo: { "@type": "GeoCoordinates", latitude: BUSINESS.geo.lat, longitude: BUSINESS.geo.lng },
+    hasMap: `https://maps.google.com/?q=${encodeURIComponent(ADDRESS)}`,
     sameAs: Object.values(BUSINESS.socials).filter((u) => u.startsWith("http")),
     hasMenu: {
       "@type": "Menu",

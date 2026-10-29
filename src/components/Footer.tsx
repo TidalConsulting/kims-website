@@ -1,8 +1,16 @@
-import { BUSINESS } from "@/lib/data";
+import { BUSINESS, TEL } from "@/lib/data";
 import FilterLink from "./FilterLink";
 import InfoLink from "./InfoLink";
 import Logo from "./Logo";
 import { Facebook, Instagram, TikTok } from "./icons";
+
+const SOCIALS = (
+  [
+    ["Instagram", BUSINESS.socials.instagram, Instagram],
+    ["Facebook", BUSINESS.socials.facebook, Facebook],
+    ["TikTok", BUSINESS.socials.tiktok, TikTok],
+  ] as const
+).filter(([, url]) => url);
 
 export default function Footer() {
   return (
@@ -11,11 +19,13 @@ export default function Footer() {
         <div>
           <Logo variant="dark" />
           <p className="mt-3.5 max-w-[30ch]">Baked slow. Brewed bold. Made for the little moments.</p>
-          <div className="socials">
-            <a href={BUSINESS.socials.instagram} aria-label="Instagram"><Instagram /></a>
-            <a href={BUSINESS.socials.facebook} aria-label="Facebook"><Facebook /></a>
-            <a href={BUSINESS.socials.tiktok} aria-label="TikTok"><TikTok /></a>
-          </div>
+          {SOCIALS.length > 0 && (
+            <div className="socials">
+              {SOCIALS.map(([label, url, Icon]) => (
+                <a key={label} href={url} aria-label={label}><Icon /></a>
+              ))}
+            </div>
+          )}
         </div>
         <nav aria-label="Shop">
           <h2 className="foot-h">Shop</h2>
@@ -49,8 +59,8 @@ export default function Footer() {
           <h2 className="foot-h">Contact</h2>
           <ul>
             <li><a href={`mailto:${BUSINESS.email}`}>{BUSINESS.email}</a></li>
-            <li><a href={`tel:${BUSINESS.phone.replace(/[^\d+]/g, "")}`}>{BUSINESS.phone}</a></li>
-            <li>{BUSINESS.street}<br />{BUSINESS.city}, {BUSINESS.region} {BUSINESS.postalCode}</li>
+            <li><a href={TEL}>{BUSINESS.phone}</a></li>
+            <li>{BUSINESS.street}<br />{BUSINESS.city} {BUSINESS.postalCode}, {BUSINESS.region}</li>
           </ul>
         </div>
       </div>

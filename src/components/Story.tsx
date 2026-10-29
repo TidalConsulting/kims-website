@@ -1,12 +1,14 @@
 "use client";
 
-import { BUSINESS } from "@/lib/data";
+import { BUSINESS, PRODUCTS } from "@/lib/data";
 import { SECTION_PHOTOS } from "@/lib/photos";
 import { useShop } from "@/store/shop";
 import CountUp from "./CountUp";
 import Reveal from "./Reveal";
 import SmartImage from "./SmartImage";
 import { Play } from "./icons";
+
+const STUFFED_COOKIES = PRODUCTS.filter((p) => p.cat === "cookies").length;
 
 export default function Story() {
   const openModal = useShop((s) => s.openModal);
@@ -20,7 +22,7 @@ export default function Story() {
         </p>
         <div className="stats">
           <div><CountUp end={BUSINESS.foundedYear} /><small>Baking since</small></div>
-          <div><CountUp end={120} suffix="k+" /><small>Cookies sold</small></div>
+          <div><CountUp end={STUFFED_COOKIES} /><small>Stuffed cookies</small></div>
           <div><CountUp end={0} /><small>Shortcuts taken</small></div>
         </div>
         <a href="#visit" className="btn btn-dark self-start">Come say hi</a>

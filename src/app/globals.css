@@ -424,7 +424,7 @@
 .hours{margin-top:24px;display:grid;gap:8px;max-width:360px}
 .hours div{display:flex;justify-content:space-between;border-bottom:1px dashed rgba(255,255,255,.2);padding-bottom:8px;font-size:.92rem}
 .hours div.today{color:var(--lemon);font-weight:700}
-.form{display:grid;gap:12px}
+.form{display:grid;gap:12px;align-content:start}
 .form input,.form textarea,.form select{width:100%;padding:14px 18px;border-radius:14px;border:1.5px solid rgba(255,255,255,.25);background:rgba(255,255,255,.06);color:#fff;outline:none;transition:border-color .2s}
 .form input::placeholder,.form textarea::placeholder{color:rgba(255,255,255,.55)}
 .form input:focus,.form textarea:focus,.form select:focus{border-color:var(--pink-2)}
