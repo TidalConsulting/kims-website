@@ -4,6 +4,9 @@
  */
 export const STATIC_PREVIEW = process.env.NEXT_PUBLIC_STATIC_PREVIEW === "1";
 
+/** True when PayMongo keys are configured (set in next.config.ts; the key itself never reaches the browser). */
+export const ONLINE_PAYMENT = !STATIC_PREVIEW && process.env.NEXT_PUBLIC_ONLINE_PAYMENT === "1";
+
 /** POST JSON to one of our API routes and return the parsed reply. Throws on failure. */
 export async function postJson<T = { ok: true }>(url: string, body: unknown): Promise<T> {
   if (STATIC_PREVIEW) {

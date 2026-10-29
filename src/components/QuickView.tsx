@@ -14,8 +14,9 @@ export default function QuickView({ p }: { p: Product }) {
   const [note, setNote] = useState("");
   const { addToCart, closeAll } = useShop.getState();
   const price = calcPrice(p, sel);
-  const sold = isSold(p, shopNow().day);
-  const low = sold ? undefined : lowStock(p);
+  const now = shopNow();
+  const sold = isSold(p, now);
+  const low = lowStock(p, now);
   const emoji = emojiFor(p);
 
   const add = () => {

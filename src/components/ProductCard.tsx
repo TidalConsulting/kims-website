@@ -2,19 +2,18 @@
 
 import { OPT, TODAY, type Product } from "@/lib/data";
 import { isPlate, productPhoto } from "@/lib/photos";
-import { emojiFor, lowStock, money } from "@/lib/utils";
+import { emojiFor, money } from "@/lib/utils";
 import { useShop } from "@/store/shop";
 import SmartImage from "./SmartImage";
 import { Heart, Plus } from "./icons";
 
 const TAG_CLASS = { Hot: "hot", New: "new", Bestseller: "" } as const;
 
-export default function ProductCard({ p, index, sold }: { p: Product; index: number; sold: boolean }) {
+export default function ProductCard({ p, index, sold, low }: { p: Product; index: number; sold: boolean; low?: number }) {
   const fav = useShop((s) => s.favs.includes(p.id));
   const { toggleFav, openModal, addToCart, showToast } = useShop.getState();
   const emoji = emojiFor(p);
   const plate = isPlate(p);
-  const low = sold ? undefined : lowStock(p);
 
   const quickAdd = () => {
     if (sold) return showToast(`${p.name} is sold out today. Back ${TODAY.restock}.`);

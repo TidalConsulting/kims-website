@@ -107,11 +107,11 @@ export default function Nav() {
             onClick={() => { setSort("fav"); setFilter("all"); goMenu(false); }}
           >
             <Heart />
-            <span className={`badge ${favs.length ? "show" : ""}`}>{favs.length}</span>
+            <span className={`badge ${favs.length ? "show" : ""}`} aria-hidden="true">{favs.length}</span>
           </button>
           <button className="icon-btn" aria-label={`Open cart (${n} items)`} onClick={openDrawer}>
             <Bag />
-            <span key={bump} className={`badge ${n ? "show" : ""} ${bump ? "bump" : ""}`}>{n}</span>
+            <span key={bump} className={`badge ${n ? "show" : ""} ${bump ? "bump" : ""}`} aria-hidden="true">{n}</span>
           </button>
           <a href="#menu" className="btn btn-dark nav-cta">Order Now</a>
           <button className="icon-btn burger" aria-label="Open menu" aria-expanded={false} aria-controls="mobile-nav" onClick={() => setMobileOpen(true)}>

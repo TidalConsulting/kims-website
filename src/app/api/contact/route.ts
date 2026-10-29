@@ -1,18 +1,23 @@
 import { NextResponse } from "next/server";
 import { bad, isEmail, readJson, str } from "@/lib/api";
+import { mustRefuse, notify } from "@/lib/notify";
 
-/** Reservation / catering / custom-cake requests. */
+/** Reservation / catering / custom-cake requests, sent to the shop (reply goes straight to the customer). */
 export async function POST(req: Request) {
+  if (mustRefuse()) return NextResponse.json({ error: "Messages aren't set up yet" }, { status: 503 });
   const body = await readJson(req);
   if (!body) return bad("Invalid JSON");
   const name = str(body.name, 120);
   if (!name || !isEmail(body.email)) return bad("Name and a valid email are required");
 
-  const request = { name, email: body.email, type: str(body.type, 60), date: str(body.date, 20), msg: str(body.msg) };
-
-  // TODO: send with Resend (or Formspree) to the shop inbox, e.g.
-  //   await resend.emails.send({ from, to: process.env.CONTACT_TO_EMAIL, replyTo: request.email, subject: request.type, text: request.msg })
-  console.info("[contact]", request);
-
+  const r = { name, email: body.email, type: str(body.type, 60) || "Message", date: str(body.date, 20), msg: str(body.msg) };
+  const delivered = await notify({
+    kind: "contact",
+    subject: `${r.type} from ${r.name}${r.date ? ` for ${r.date}` : ""}`,
+    text: `${r.type}\nFrom: ${r.name} <${r.email}>\nDate: ${r.date || "not given"}\n\n${r.msg || "(no message)"}`,
+    replyTo: r.email,
+    data: r,
+  });
+  if (!delivered && process.env.NODE_ENV === "production") return NextResponse.json({ error: "Not sent" }, { status: 502 });
   return NextResponse.json({ ok: true });
 }

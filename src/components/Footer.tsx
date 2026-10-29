@@ -1,5 +1,6 @@
 import { BUSINESS } from "@/lib/data";
 import FilterLink from "./FilterLink";
+import InfoLink from "./InfoLink";
 import { Facebook, Instagram, LogoMark, TikTok } from "./icons";
 
 export default function Footer() {
@@ -19,7 +20,7 @@ export default function Footer() {
           </div>
         </div>
         <nav aria-label="Shop">
-          <h5>Shop</h5>
+          <h2 className="foot-h">Shop</h2>
           <ul>
             <li><FilterLink filter="cookies">Cookies</FilterLink></li>
             <li><FilterLink filter="cakes">Cakes</FilterLink></li>
@@ -29,7 +30,7 @@ export default function Footer() {
           </ul>
         </nav>
         <nav aria-label="Café">
-          <h5>Café</h5>
+          <h2 className="foot-h">Café</h2>
           <ul>
             <li><FilterLink filter="coffee">Coffee</FilterLink></li>
             <li><FilterLink filter="refreshments">Refreshments</FilterLink></li>
@@ -38,17 +39,16 @@ export default function Footer() {
           </ul>
         </nav>
         <nav aria-label="Help">
-          {/* TODO: create these pages */}
-          <h5>Help</h5>
+          <h2 className="foot-h">Help</h2>
           <ul>
-            <li><a href="#">Pickup &amp; Delivery</a></li>
-            <li><a href="#">Allergens</a></li>
-            <li><a href="#">FAQ</a></li>
-            <li><a href="#">Privacy</a></li>
+            <li><InfoLink page="delivery">Pickup &amp; Delivery</InfoLink></li>
+            <li><InfoLink page="allergens">Allergens</InfoLink></li>
+            <li><InfoLink page="faq">FAQ</InfoLink></li>
+            <li><InfoLink page="privacy">Privacy</InfoLink></li>
           </ul>
         </nav>
         <div>
-          <h5>Contact</h5>
+          <h2 className="foot-h">Contact</h2>
           <ul>
             <li><a href={`mailto:${BUSINESS.email}`}>{BUSINESS.email}</a></li>
             <li><a href={`tel:${BUSINESS.phone.replace(/[^\d+]/g, "")}`}>{BUSINESS.phone}</a></li>

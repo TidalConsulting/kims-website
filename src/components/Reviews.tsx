@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { REVIEWS } from "@/lib/data";
+import { REVIEWS, REVIEWS_ARE_SAMPLES } from "@/lib/data";
 import Reveal from "./Reveal";
 import { Next, Prev } from "./icons";
 
@@ -38,7 +38,8 @@ export default function Reviews() {
         <Reveal className="section-head">
           <div>
             <span className="eyebrow">Loved by many</span>
-            <h2>Real smiles. Real reviews.</h2>
+            <h2>{REVIEWS_ARE_SAMPLES ? "What guests will say." : "Real smiles. Real reviews."}</h2>
+            {REVIEWS_ARE_SAMPLES && <p>Sample reviews shown for layout. Real Google reviews go here before launch.</p>}
           </div>
           <div className="rev-nav">
             <button className="circle-btn" aria-label="Previous review" onClick={() => move(-1)}><Prev /></button>

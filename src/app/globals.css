@@ -173,7 +173,7 @@
 .chip-float.closed .dot{background:var(--muted);box-shadow:0 0 0 4px rgba(122,92,128,.2)}
 .chip-1{top:8%;left:-4%;animation-delay:-2s}
 .chip-2{bottom:10%;right:-2%;animation-delay:-4s}
-.hero-dots{position:absolute;bottom:28px;left:50%;transform:translateX(-50%);display:flex;gap:8px}
+.hero-dots{position:absolute;bottom:28px;left:50%;transform:translateX(-50%);display:flex;gap:16px}
 .hero-dots button{width:8px;height:8px;border-radius:999px;background:rgba(255,255,255,.35);transition:all .3s}
 .hero-dots button.active{width:28px;background:var(--lemon)}
 .crumbs span{position:absolute;border-radius:999px;opacity:.9;animation:fall linear infinite}
@@ -392,10 +392,10 @@
 footer{background:var(--plum);color:#E9D5F5;padding:70px 0 30px;font-size:.9rem}
 .foot-grid{display:grid;grid-template-columns:1.4fr repeat(3,1fr) 1.2fr;gap:32px}
 footer .logo{color:var(--cotton)}
-footer h5{color:var(--cotton);font-size:.75rem;letter-spacing:.2em;text-transform:uppercase;margin-bottom:16px}
+footer .foot-h{color:var(--cotton);font-size:.75rem;letter-spacing:.2em;text-transform:uppercase;margin-bottom:16px}
 footer ul{list-style:none;display:grid;gap:9px}
 footer a:hover{color:var(--pink-2)}
-footer h5{color:var(--lemon)!important}
+footer .foot-h{color:var(--lemon)!important}
 .socials{display:flex;gap:10px;margin-top:18px}
 .socials a{width:38px;height:38px;border-radius:50%;border:1px solid rgba(255,255,255,.2);display:grid;place-items:center;transition:all .2s}
 .socials a:hover{background:var(--pink);color:var(--plum);border-color:var(--pink)}

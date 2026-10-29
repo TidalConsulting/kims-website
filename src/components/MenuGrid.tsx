@@ -1,18 +1,18 @@
 "use client";
 
 import { CATS, PRODUCTS, TODAY } from "@/lib/data";
-import { isSold, shopNow } from "@/lib/utils";
+import { isSold, lowStock } from "@/lib/utils";
 import { useShop, type Sort } from "@/store/shop";
 import ProductCard from "./ProductCard";
 import Reveal from "./Reveal";
-import { useClientValue } from "./hooks";
+import { useShopNow } from "./hooks";
 import { Search } from "./icons";
 
 const TABS = [{ id: "all" as const, name: "All", emoji: "" }, ...CATS];
 
 export default function MenuGrid() {
   const { filter, query, sort, favs, setFilter, setQuery, setSort } = useShop();
-  const day = useClientValue(() => shopNow().day);
+  const now = useShopNow();
 
   const q = query.trim().toLowerCase();
   let list = PRODUCTS.filter(
@@ -23,8 +23,8 @@ export default function MenuGrid() {
   if (sort === "az") list = [...list].sort((a, b) => a.name.localeCompare(b.name));
   if (sort === "fav") list = list.filter((p) => favs.includes(p.id));
   // Sold-out items sink to the bottom (a stable sort keeps the chosen order otherwise).
-  list = [...list].sort((a, b) => Number(isSold(a, day)) - Number(isSold(b, day)));
-  const soldHere = PRODUCTS.filter((p) => isSold(p, day) && (filter === "all" || p.cat === filter));
+  list = [...list].sort((a, b) => Number(isSold(a, now)) - Number(isSold(b, now)));
+  const soldHere = PRODUCTS.filter((p) => isSold(p, now) && (filter === "all" || p.cat === filter));
 
   return (
     <section className="section" id="menu">
@@ -80,7 +80,7 @@ export default function MenuGrid() {
         <div className="grid" aria-live="polite">
           {list.length ? (
             list.map((p, i) => (
-              <ProductCard key={p.id} p={p} index={i} sold={isSold(p, day)} />
+              <ProductCard key={p.id} p={p} index={i} sold={isSold(p, now)} low={lowStock(p, now)} />
             ))
           ) : (
             <div className="empty">

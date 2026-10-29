@@ -25,6 +25,8 @@ const nextConfig: NextConfig = {
   env: {
     NEXT_PUBLIC_PHOTOS: files.join(","),
     NEXT_PUBLIC_PHOTO_DATA: JSON.stringify(photoData),
+    // Only whether online payment is on; the secret key stays on the server.
+    NEXT_PUBLIC_ONLINE_PAYMENT: process.env.PAYMONGO_SECRET_KEY && !preview ? "1" : "",
   },
   images: {
     unoptimized: preview,

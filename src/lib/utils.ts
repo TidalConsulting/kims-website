@@ -1,4 +1,7 @@
-import { BATCH_TIMES, BUSINESS, CATS, CURRENCY, HOURS, OPT, PRODUCTS, TODAY, VAT_RATE, type OptionChoice, type Product } from "./data";
+import {
+  BATCH_TIMES, BULK_RATE, BUSINESS, CATS, CURRENCY, DELIVERY_FEE, FREE_DELIVERY, HOURS, OPT, PAIRING, PRODUCTS, ROUND_TO, TODAY, VAT_RATE,
+  type OptionChoice, type Product,
+} from "./data";
 
 const fmtWhole = new Intl.NumberFormat(CURRENCY.locale, { style: "currency", currency: CURRENCY.code, maximumFractionDigits: 0 });
 const fmtCents = new Intl.NumberFormat(CURRENCY.locale, { style: "currency", currency: CURRENCY.code, minimumFractionDigits: 2 });
@@ -13,31 +16,69 @@ export const byId = (id: string) => PRODUCTS.find((p) => p.id === id);
 
 export const emojiFor = (p?: Product) => p?.emoji || CATS.find((c) => c.id === p?.cat)?.emoji || "🍪";
 
+/** Bulk prices (half dozen, 4-pack, mixed boxes) round to the nearest ₱5; everything is whole pesos. */
+const roundBulk = (n: number) => Math.round(n / ROUND_TO) * ROUND_TO;
+
 export function calcPrice(p: Product, sel: number[]) {
   let price = p.price;
   OPT[p.opt].forEach((g, i) => {
     const c = g.choices[sel[i]];
     if (c.fixed) price = c.fixed;
-    else if (c.mult) price = price * c.mult;
+    else if (c.mult && c.mult !== 1) price = roundBulk(price * c.mult);
     else price += c.p || 0;
   });
-  return Math.round(price); // whole pesos
+  return Math.round(price);
+}
+
+/** Mixed Build-a-Box price: the picked cookies at the same bulk rate as a single-flavour half dozen or dozen. */
+export function boxPrice(ids: string[], size: 6 | 12) {
+  const sum = ids.reduce((s, id) => s + (byId(id)?.price ?? 0), 0);
+  return roundBulk((sum / size) * BULK_RATE[size]);
 }
 
 export function optLabel(p: Product, c: OptionChoice) {
   if (c.fixed) return money(c.fixed);
-  if (c.mult && c.mult !== 1) return money(Math.round(p.price * c.mult));
+  if (c.mult && c.mult !== 1) return money(roundBulk(p.price * c.mult));
   if (c.p) return "+" + money(c.p);
   return "";
 }
 
-/** Sold out today: listed in TODAY, flagged soldOut, or not baked on this day of the week. */
-export function isSold(p: Product, day: number | null = null) {
-  return TODAY.soldOut.includes(p.id) || !!p.soldOut || (day !== null && !!p.availableDays && !p.availableDays.includes(day));
+export type ShopNow = ReturnType<typeof shopNow>;
+
+/** Is TODAY's sold-out / low-stock list for today? An old list is ignored, so it resets on its own. */
+const todayListActive = (now: ShopNow) => TODAY.date === now.date;
+
+/**
+ * Sold out: flagged soldOut, listed in today's TODAY list, or not baked on this day of the week.
+ * `now` is null during server rendering, where only the permanent soldOut flag applies.
+ */
+export function isSold(p: Product, now: ShopNow | null) {
+  if (p.soldOut) return true;
+  if (!now) return false;
+  return (todayListActive(now) && TODAY.soldOut.includes(p.id)) || (!!p.availableDays && !p.availableDays.includes(now.day));
 }
 
 /** How many are left when stock is low ("Only N left"), otherwise undefined. */
-export const lowStock = (p: Product) => (isSold(p) ? undefined : TODAY.low[p.id]);
+export const lowStock = (p: Product, now: ShopNow | null) =>
+  now && todayListActive(now) && !isSold(p, now) ? TODAY.low[p.id] : undefined;
+
+type Line = { pid: string; price: number; qty: number };
+
+/**
+ * Cart totals. Prices include VAT, so nothing is added on top: the pairing discount comes off,
+ * then delivery is added (free once the discounted subtotal reaches FREE_DELIVERY).
+ */
+export function cartTotals(lines: Line[], mode: "pickup" | "delivery" = "pickup") {
+  const count = (cats: string[]) =>
+    lines.reduce((n, l) => n + (cats.includes(byId(l.pid)?.cat ?? "") ? l.qty : 0), 0);
+  const sub = lines.reduce((s, l) => s + l.price * l.qty, 0);
+  const pairs = Math.min(count(PAIRING.drinks), count(PAIRING.pastries));
+  const discount = pairs * PAIRING.discount;
+  const afterDiscount = sub - discount;
+  const fee = mode === "delivery" && afterDiscount < FREE_DELIVERY ? DELIVERY_FEE : 0;
+  const total = afterDiscount + fee;
+  return { sub, pairs, discount, afterDiscount, fee, total, vat: vatIncluded(total) };
+}
 
 export function fmtHour(h: number) {
   return new Date(2000, 0, 1, h).toLocaleTimeString([], { hour: "numeric" });
@@ -51,10 +92,13 @@ export function shopNow(date = new Date()) {
     hour: "numeric",
     minute: "numeric",
     hourCycle: "h23",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
   }).formatToParts(date);
   const get = (t: string) => parts.find((x) => x.type === t)?.value ?? "0";
   const day = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].indexOf(get("weekday"));
-  return { day, hour: +get("hour") + +get("minute") / 60 };
+  return { day, hour: +get("hour") + +get("minute") / 60, date: `${get("year")}-${get("month")}-${get("day")}` };
 }
 
 export function liveStatus(date = new Date()) {

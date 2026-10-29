@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, type RefObject } from "react";
+import { shopNow } from "@/lib/utils";
 
 /** Adds `.in` to the element when it scrolls into view (CSS handles the animation). */
 export function useReveal<T extends HTMLElement>() {
@@ -76,3 +77,6 @@ export function useClientValue<T>(compute: () => T, intervalMs?: number) {
   }, [intervalMs]);
   return v;
 }
+
+/** The shop's current day, hour and date (Manila time). Null during server rendering. */
+export const useShopNow = () => useClientValue(() => shopNow(), 60_000);

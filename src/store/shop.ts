@@ -3,6 +3,7 @@
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 import type { Filter } from "@/lib/data";
+import type { InfoPage } from "@/lib/info";
 
 export interface CartLine {
   key: string;
@@ -14,10 +15,17 @@ export interface CartLine {
   qty: number;
   /** Emoji shown if the image fails to load. */
   emoji: string;
+  /** Cookie ids in a Build-a-Box box, so the server can price it. */
+  box?: string[];
 }
 
 export type Sort = "featured" | "low" | "high" | "az" | "fav";
-export type Modal = { kind: "quick"; id: string } | { kind: "checkout" } | { kind: "video" };
+export type Modal =
+  | { kind: "quick"; id: string }
+  | { kind: "checkout" }
+  | { kind: "video" }
+  | { kind: "info"; page: InfoPage }
+  | { kind: "paid"; orderNo: string };
 
 interface ShopState {
   // Persisted
@@ -111,5 +119,4 @@ export const useShop = create<ShopState>()(
   ),
 );
 
-export const cartSubtotal = (cart: CartLine[]) => cart.reduce((s, c) => s + c.price * c.qty, 0);
 export const cartCount = (cart: CartLine[]) => cart.reduce((s, c) => s + c.qty, 0);

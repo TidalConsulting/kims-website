@@ -86,7 +86,7 @@ export interface OptionGroup {
 export type OptionPreset = "cookie" | "cake" | "drink" | "cold" | "roll" | "none";
 
 export const OPT: Record<OptionPreset, OptionGroup[]> = {
-  cookie: [{ name: "Quantity", choices: [{ l: "Single", mult: 1 }, { l: "Half dozen", mult: 5.5 }, { l: "Dozen", mult: 10 }] }],
+  cookie: [{ name: "Quantity", choices: [{ l: "Single", mult: 1 }, { l: "Half dozen", mult: 5.5 }, { l: "Dozen", mult: 10 }] }], // keep in line with BULK_RATE
   cake: [{ name: "Size", choices: [{ l: "Slice", p: 0 }, { l: '6" Whole cake', p: 1100 }, { l: '9" Whole cake', p: 1800 }] }],
   drink: [
     { name: "Size", choices: [{ l: "12 oz", p: 0 }, { l: "16 oz", p: 20 }, { l: "20 oz", p: 40 }] },
@@ -167,19 +167,23 @@ export const PRODUCTS: Product[] = [
 ];
 
 /* ---------------------------------------------------------
-   TODAY'S AVAILABILITY: update each morning (later: from the CMS or POS,
-   reset automatically at opening time).
+   TODAY'S AVAILABILITY: update each morning (later: from the CMS or POS).
+   date:    the day this list is for (YYYY-MM-DD, shop time). On any other day
+            it is ignored, so yesterday's sell-outs reset by themselves.
    soldOut: product ids that are gone for the day
    low:     product id -> how many are left (shows "Only N left")
    --------------------------------------------------------- */
 export const TODAY = {
+  date: "2026-10-29",
   soldOut: ["p3", "r9", "c6"],
   low: { c1: 4, p2: 3, r3: 5 } as Record<string, number>,
   restock: "tomorrow at 7am", // shown as "Back tomorrow at 7am"
 };
 
 // PLACEHOLDER reviews for layout only. Replace with real ones (ideally pulled
-// from Google Business Profile) before launch.
+// from Google Business Profile) before launch, then set REVIEWS_ARE_SAMPLES to false.
+// While true, the section is labelled as samples so nobody mistakes them for real customers.
+export const REVIEWS_ARE_SAMPLES = true;
 export const REVIEWS = [
   { s: 5, t: "The brown butter cookie is the best I have ever had. Crispy edge, gooey center, perfect.", n: "Sample Review" },
   { s: 5, t: "Cookie Butter cinnamon roll + oat latte is my Saturday ritual now.", n: "Sample Review" },
@@ -212,7 +216,22 @@ export const SLIDES = [
 /** All prices are in this currency. */
 export const CURRENCY = { code: "PHP", locale: "en-PH" };
 
-export const BOX_PRICE: Record<6 | 12, number> = { 6: 650, 12: 1200 };
+/**
+ * Bulk pricing: a half dozen costs 5.5 singles and a dozen costs 10, rounded to the nearest ₱5.
+ * The same rate prices single-flavour orders and mixed Build-a-Box boxes, so they always agree.
+ */
+export const BULK_RATE: Record<6 | 12, number> = { 6: 5.5, 12: 10 };
+export const ROUND_TO = 5;
+
+/** "Pair any drink with a pastry and save ₱30": one discount per drink + pastry pair. */
+export const PAIRING = {
+  discount: 30,
+  drinks: ["coffee", "refreshments"] as CategoryId[],
+  pastries: ["pastries", "rolls"] as CategoryId[],
+};
+
+/** Delivery is limited to these areas (placeholder: replace with your real barangays/cities). */
+export const DELIVERY_AREAS = ["Your City – Area 1", "Your City – Area 2", "Your City – Area 3"];
 export const FREE_DELIVERY = 1000;
 export const DELIVERY_FEE = 79;
 /** Philippine VAT. Menu prices already include it, so it is shown but never added on top. */

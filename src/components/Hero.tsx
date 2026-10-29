@@ -5,7 +5,6 @@ import { SLIDES } from "@/lib/data";
 import { heroVideo, localOr } from "@/lib/photos";
 import { liveStatus } from "@/lib/utils";
 import CountUp from "./CountUp";
-import Reveal from "./Reveal";
 import SmartImage from "./SmartImage";
 import { useClientValue } from "./hooks";
 import { Arrow, Pause, Play } from "./icons";
@@ -68,7 +67,8 @@ export default function Hero() {
         ))}
       </div>
       <div className="shell hero-inner">
-        <Reveal>
+        {/* Not a scroll-reveal: the hero is on screen at load, so it must show without waiting for JavaScript. */}
+        <div>
           <span className="eyebrow">{s.e}</span>
           <h1 aria-live="polite">
             {s.t[0]}<br />{s.t[1]} <i>{s.t[2]}</i>
@@ -83,7 +83,7 @@ export default function Hero() {
             <div><CountUp end={12} />Min avg pickup</div>
             <div><CountUp end={4.9} dec={1} />Avg rating</div>
           </div>
-        </Reveal>
+        </div>
         <div className="hero-visual">
           <div className="hero-ring" />
           <div className="hero-plate">
