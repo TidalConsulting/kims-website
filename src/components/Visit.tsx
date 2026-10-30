@@ -42,7 +42,7 @@ export default function Visit() {
       <section className="section visit pt-[60px]" id="visit">
         <div className="shell visit-grid">
           <Reveal>
-            <span className="eyebrow text-pink-2">Visit · Reserve · Cater</span>
+            <span className="eyebrow text-gold">Visit · Reserve · Cater</span>
             <h2>Book your <span className="hand">cozy spot</span></h2>
             <p className="mt-3.5 max-w-[42ch] opacity-85">
               Reserve a table, ask about catering, or order a custom celebration cake. We&apos;ll get back to you within a day.

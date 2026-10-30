@@ -32,17 +32,15 @@
 - All prices are **Philippine pesos (₱), whole numbers, VAT-inclusive (12%)**. `money()` formats with `en-PH`, and `vatOf()` shows the VAT portion at checkout. Nothing is added on top.
 - Keep prices as integers. If you move to a database, store them as integer pesos (or centavos) and never as floats.
 
-## Design rules: Candy Pop theme (keep to these)
-All colors are tokens in `:root`. Never hard-code a hex in components.
-- **Plum** `#2B1340` (`--plum`, `--plum-2`): text, dark sections (hero, visit, footer, box panel)
-- **Bubblegum** `#DB1F80` (`--pink`): primary buttons, prices, active tabs, key accents. White text on it passes contrast.
-- `--pink-pop` `#FF5FAE` and `--pink-2` `#FF8AC4` are **decoration only** (rings, hover shadows, text on dark). Don't put white text on them.
-- **Lemon** `#FFD93D`: badges, add buttons, stars, highlights on dark, newsletter band. Always plum text on lemon.
-- **Grape** `#7B3FE4`: secondary accent, gradients (Swirl section, gift banner)
-- **Mint** `#2EC4A0` / `--mint-dark` `#0E5B4C` / `--mint-soft`: **coffee section only**
-- **Sky** `#6EC8FF` and peach `#FF9F6E`: tiny accents only (category rings, sprinkles)
-- Backgrounds: `--paper` `#FFF8FB`, `--cotton` `#FFF0F7`, `--cotton-2` `#FFE1EF`. Photo surface: `--slate` pastel pink.
-- Candy details: candy-stripe announcement bar, rainbow sprinkles falling in the hero, "sticker" hover on cards (offset pink shadow plus a slight tilt), chunky pressed buttons (`box-shadow: 0 5px 0 <darker>`), rainbow category rings, bouncy easing (`--bounce`)
+## Design rules: Cookie & Plum theme (keep to these)
+The palette is built from the logo (plum badge, pink cup, cookie gold, mint steam). It replaced the prototype's Candy Pop palette at the owner's request. All colors are tokens in `:root` of `src/app/globals.css`. Never hard-code a hex in components.
+- **Plum** `#2B1340` (`--plum`, `--plum-2`): text, dark sections (hero, Swirl, box panel, visit, footer, announcement bar), selected tabs and options, prices
+- **Bubblegum** `#DB1F80` (`--pink`): primary buttons, the cart, "add" buttons, hot/low tags. Keep pink for actions so they stand out. White text on it passes contrast. `--pink-dark` `#9E1159` is the pressed-button shade and the colour for warnings on light backgrounds.
+- **Cookie gold** `#F2B544` (`--gold`): badges, stars, highlights and eyebrows on dark, the card "sticker" hover shadow, the newsletter band. Always plum text on gold, never gold text on light backgrounds.
+- **Mint** `#2EC4A0` / `--mint-dark` `#0E5B4C` / `--mint-soft`: **coffee section only**, plus the "open now" dot
+- Backgrounds: `--cream` `#FFFAF2` (page), `--biscuit` `#F7EBD8` and `--biscuit-2` (soft surfaces; `--biscuit` is also the light text colour on plum). Photo surface: `--slate` (biscuit).
+- No other hues (the old grape, sky, peach, lemon and extra pinks are gone).
+- Candy details: rainbow sprinkles falling in the hero (pink, gold, mint, biscuit), "sticker" hover on cards (offset gold shadow plus a slight tilt), chunky pressed buttons (`box-shadow: 0 5px 0 <darker>`), coloured category rings, bouncy easing (`--bounce`)
 - Fonts: **Fredoka** (headlines, rounded and playful), DM Sans (body), Caveat (handwritten accents only)
 
 ## Production notes for these features

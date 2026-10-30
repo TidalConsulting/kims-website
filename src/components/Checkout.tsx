@@ -135,7 +135,7 @@ export default function Checkout() {
           <button className="btn btn-dark w-full justify-center" disabled={busy || !cart.length}>
             {busy ? "Placing order…" : `${ONLINE_PAYMENT ? "Continue to payment" : "Place order"} · ${money(t.total)}`}
           </button>
-          {failed && <p role="alert" className="mt-2.5 text-center text-sm text-grape">{failed}</p>}
+          {failed && <p role="alert" className="mt-2.5 text-center text-sm text-pink-dark">{failed}</p>}
           <p className="mt-2.5 text-center text-xs text-muted">
             {STATIC_PREVIEW
               ? "Demo checkout: no order is sent and no payment is taken."

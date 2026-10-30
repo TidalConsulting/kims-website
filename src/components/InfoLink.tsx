@@ -8,7 +8,7 @@ import { useShop } from "@/store/shop";
 export default function InfoLink({ page, children }: { page: InfoPage; children: ReactNode }) {
   const openModal = useShop((s) => s.openModal);
   return (
-    <button type="button" className="text-left hover:text-pink-2" onClick={() => openModal({ kind: "info", page })}>
+    <button type="button" className="text-left hover:text-gold" onClick={() => openModal({ kind: "info", page })}>
       {children}
     </button>
   );

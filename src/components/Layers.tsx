@@ -132,7 +132,7 @@ function ModalBody({ modal, product }: { modal: ModalState | null; product?: Pro
     );
   if (modal?.kind === "video")
     return (
-      <div className="flex aspect-video items-center justify-center bg-plum p-[30px] text-center text-cotton">
+      <div className="flex aspect-video items-center justify-center bg-plum p-[30px] text-center text-biscuit">
         <div>
           <div className="text-5xl" aria-hidden="true">🎬</div>
           <h3 id="modal-title" className="my-2.5 text-[1.8rem]">Your brand video goes here</h3>

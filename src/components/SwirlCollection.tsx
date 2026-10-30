@@ -31,9 +31,9 @@ export default function SwirlCollection() {
             <h3>{r.emoji} {r.name}</h3>
             <p>{r.desc}</p>
             <div className="row">
-              <span className="price text-pink-2">{money(r.price)}</span>
+              <span className="price text-gold">{money(r.price)}</span>
               {isSold(r, now) ? (
-                <span className="text-sm font-semibold text-pink-2">Sold out today · back {TODAY.restock}</span>
+                <span className="text-sm font-semibold text-gold">Sold out today · back {TODAY.restock}</span>
               ) : (
                 <button className="btn btn-primary" onClick={() => openModal({ kind: "quick", id: r.id })}>Customize &amp; add</button>
               )}

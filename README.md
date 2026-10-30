@@ -21,7 +21,7 @@ Copy `.env.example` to `.env.local` and set `NEXT_PUBLIC_SITE_URL`. The sitemap,
 | Brand name, address, phone, hours, time zone, socials | `src/lib/data.ts` → `BUSINESS`, `HOURS` |
 | Currency (PHP), VAT rate, delivery fee, free-delivery minimum, box prices | `src/lib/data.ts` → `CURRENCY`, `VAT_RATE`, `DELIVERY_FEE`, `FREE_DELIVERY`, `BOX_PRICE` |
 | Products, categories, option presets, reviews, hero slides | `src/lib/data.ts` |
-| Design tokens (colors, fonts, radii) | `:root` in `src/app/globals.css`, also available in Tailwind as `bg-espresso`, `text-caramel`, `font-serif`, and so on |
+| Design tokens (colors, fonts, radii) | `:root` in `src/app/globals.css`, also available in Tailwind as `bg-plum`, `text-pink`, `bg-gold`, `font-display`, and so on |
 | Component styles (ported from the prototype) | `@layer components` in `src/app/globals.css` |
 | Cart and favorites (saved to localStorage), plus UI state | `src/store/shop.ts` |
 | Page sections | `src/components/*` |

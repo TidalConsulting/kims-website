@@ -13,7 +13,7 @@ import { Arrow, Pause, Play } from "./icons";
 const BAKED_DAILY = PRODUCTS.filter((p) => ["cookies", "cakes", "pastries", "rolls"].includes(p.cat)).length;
 
 type Sprinkle = { left: number; size: number; color: string; dur: number; delay: number };
-const SPRINKLE_COLORS = ["var(--pink-pop)", "var(--lemon)", "var(--mint)", "var(--sky)", "#B48CFF", "#FF9F6E", "#fff"];
+const SPRINKLE_COLORS = ["var(--pink)", "var(--gold)", "var(--mint)", "var(--biscuit)", "#fff"];
 
 export default function Hero() {
   const [slide, setSlide] = useState(0);

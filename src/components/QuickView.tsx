@@ -54,7 +54,7 @@ export default function QuickView({ p }: { p: Product }) {
             {p.notes.map((n) => <span key={n}>{n}</span>)}
           </div>
         )}
-        {low && <p className="mt-2.5 text-sm font-semibold text-grape">⏳ Only {low} left from this morning&apos;s batch</p>}
+        {low && <p className="mt-2.5 text-sm font-semibold text-pink-dark">⏳ Only {low} left from this morning&apos;s batch</p>}
         {groups.map((g, gi) => (
           <div className="opt-group" key={g.name} role="radiogroup" aria-label={g.name}>
             <h6>{g.name}</h6>
