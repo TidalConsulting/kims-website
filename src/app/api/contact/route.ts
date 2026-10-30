@@ -15,6 +15,7 @@ export async function POST(req: Request) {
     kind: "contact",
     subject: `${r.type} from ${r.name}${r.date ? ` for ${r.date}` : ""}`,
     text: `${r.type}\nFrom: ${r.name} <${r.email}>\nDate: ${r.date || "not given"}\n\n${r.msg || "(no message)"}`,
+    sms: `${r.type} from ${r.name} (${r.email})${r.date ? ` for ${r.date}` : ""}: ${r.msg || "(no message)"}`,
     replyTo: r.email,
     data: r,
   });

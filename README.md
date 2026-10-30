@@ -36,7 +36,7 @@ Products support `soldOut` and `availableDays` (0 = Sunday), and `TODAY` lists w
 
 Copy `.env.example` to `.env.local` locally, or add the same variables in your host (e.g. Vercel → Settings → Environment Variables).
 
-1. **Where orders go (required).** Set `RESEND_API_KEY` + `SHOP_EMAIL` (email) and/or `NOTIFY_WEBHOOK_URL` (e.g. a Zapier/Make hook that texts or Vibers the kitchen). The live site refuses orders and messages until one works, so nothing is silently lost. In `npm run dev` they're just printed in the terminal.
+1. **Where orders go (required).** Any mix of: `SEMAPHORE_API_KEY` + `KITCHEN_SMS` (text messages to the kitchen's phones), `RESEND_API_KEY` + `SHOP_EMAIL` (email), and `NOTIFY_WEBHOOK_URL` (e.g. a Zapier/Make hook that posts to Viber or Telegram). Step-by-step: `docs/GO-LIVE.md`. The live site refuses orders and messages until one works, so nothing is silently lost. In `npm run dev` they're just printed in the terminal.
 2. **Online payment (optional).** Set `PAYMONGO_SECRET_KEY` and `PAYMONGO_WEBHOOK_SECRET` (webhook → `/api/paymongo/webhook`, event `checkout_session.payment.paid`). The kitchen gets an "awaiting payment" ticket, then a "PAID" message. Without these keys, customers pay at pickup or on delivery. Test with `sk_test_…` keys first: the PayMongo call itself has not been exercised against PayMongo yet.
 3. **Site URL.** Set `NEXT_PUBLIC_SITE_URL` to your domain (used for PayMongo return links, sitemap, social previews).
 

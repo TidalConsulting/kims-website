@@ -90,6 +90,14 @@ export async function POST(req: Request) {
     kind: "order",
     subject: `${online ? "[Awaiting payment] " : ""}New ${mode} order ${orderNo}: ${money(t.total)}`,
     text: ticket,
+    sms: [
+      `${online ? "AWAITING PAYMENT " : ""}${orderNo} ${mode.toUpperCase()} ${time}`,
+      `${name} ${phone}`,
+      mode === "delivery" ? `${addr}, ${area}` : "",
+      items.map((i) => `${i.qty}x ${i.name}${i.opts ? ` (${i.opts})` : ""}`).join("; "),
+      `${money(t.total)}${online ? "" : ` collect at ${mode === "pickup" ? "pickup" : "door"}`}`,
+      notes ? `Notes: ${notes}` : "",
+    ].filter(Boolean).join("\n"),
     data: { orderNo, mode, name, phone, area, addr, time, notes, items: items.map(({ pid, name, opts, qty, price }) => ({ pid, name, opts, qty, price })), totals: t, online },
   });
   if (!delivered && process.env.NODE_ENV === "production") {
